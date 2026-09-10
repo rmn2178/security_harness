@@ -46,7 +46,7 @@ const INDUSTRIAL_DEPLOYMENT_PROFILES = new Set(["warehouse-amr", "industrial-cel
 const MAX_HARDWARE_SAFETY_STALENESS_MS = 5_000;
 
 /** Token resolver — looks up a capability token by ID (sync or async). */
-export type TokenResolver = (tokenId: string) => NosihCapabilityToken | undefined | Promise<NosihCapabilityToken | undefined>;
+export type TokenResolver = (tokenId: string, request?: NosihRequest) => NosihCapabilityToken | undefined | Promise<NosihCapabilityToken | undefined>;
 
 /** Event emitter for ledger integration. */
 export type LedgerEmitter = (event: {
@@ -452,7 +452,7 @@ export class PolicyGateway {
     }
 
     // 2. Resolve the capability token
-    const token = await this.config.resolveToken(request.tokenId);
+    const token = await this.config.resolveToken(request.tokenId, request);
     if (!token) {
       return this.deny(requestId, timestamp, "TOKEN_NOT_FOUND", "Capability token not found");
     }

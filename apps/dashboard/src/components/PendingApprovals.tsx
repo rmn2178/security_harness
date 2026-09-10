@@ -9,6 +9,7 @@ import { useState } from "react";
 import type { ApprovalRequest } from "../api/types.js";
 import { resolveApproval } from "../api/client.js";
 import { useAuth } from "../contexts/AuthContext.js";
+import { KNOWN_AGENTS } from "../utils/interceptScenarios.js";
 
 interface PendingApprovalsProps {
   requests: ApprovalRequest[];
@@ -22,11 +23,14 @@ const TIER_COLORS: Record<string, string> = {
   T3_COMMIT: "var(--tier-3)",
 };
 
-function tierColor(tier: string): string {
-  return TIER_COLORS[tier] ?? "var(--text-muted)";
+function tierColor(tier?: string): string {
+  if (!tier) return "var(--tier-2)";
+  const norm = tier.toUpperCase();
+  return TIER_COLORS[norm] ?? "var(--tier-2)";
 }
 
-function timeRemaining(expiresAt: string): string {
+function timeRemaining(expiresAt?: string): string {
+  if (!expiresAt) return "30s";
   const ms = new Date(expiresAt).getTime() - Date.now();
   if (ms <= 0) return "expired";
   const seconds = Math.floor(ms / 1000);
@@ -79,59 +83,72 @@ export function PendingApprovals({ requests, onResolved }: PendingApprovalsProps
       </h2>
 
       <div className="approval-list">
-        {requests.map((req) => (
-          <div key={req.requestId} className="approval-card">
-            <div className="approval-header">
-              <span
-                className="tier-badge"
-                style={{ background: tierColor(req.requiredTier) }}
-              >
-                {req.requiredTier}
-              </span>
-              <span className="approval-timer">
-                &#x23F1; {timeRemaining(req.expiresAt)}
-              </span>
-            </div>
+        {requests.map((rawReq) => {
+          const req = rawReq as any;
+          const resource = req.resource || req.request?.resource || "unknown";
+          const action = req.action || req.request?.action || "unknown";
+          const agentId = req.agentId || req.request?.agentId || "unknown";
+          const rawTier = req.requiredTier || req.decision?.assignedTier || req.decision?.escalation?.requiredTier || "T2_ACT";
+          const tier = String(rawTier).toUpperCase();
+          const reason = req.reason || req.decision?.escalation?.reason || "Requires human review";
+          const agentInfo = KNOWN_AGENTS.find((a) => a.id === agentId);
 
-            <div className="approval-body">
-              <div className="approval-field">
-                <span className="field-label">Resource</span>
-                <code className="field-value">{req.resource}</code>
+          return (
+            <div key={req.requestId} className="approval-card">
+              <div className="approval-header">
+                <span
+                  className="tier-badge"
+                  style={{ background: tierColor(tier) }}
+                >
+                  {tier}
+                </span>
+                <span className="approval-timer">
+                  &#x23F1; {timeRemaining(req.expiresAt)}
+                </span>
               </div>
-              <div className="approval-field">
-                <span className="field-label">Action</span>
-                <code className="field-value">{req.action}</code>
-              </div>
-              <div className="approval-field">
-                <span className="field-label">Agent</span>
-                <code className="field-value agent-id">{req.agentId}</code>
-              </div>
-              {req.reason && (
+
+              <div className="approval-body">
                 <div className="approval-field">
-                  <span className="field-label">Reason</span>
-                  <span className="field-value">{req.reason}</span>
+                  <span className="field-label">Resource</span>
+                  <code className="field-value">{resource}</code>
                 </div>
-              )}
-            </div>
+                <div className="approval-field">
+                  <span className="field-label">Action</span>
+                  <code className="field-value">{action}</code>
+                </div>
+                <div className="approval-field">
+                  <span className="field-label">Agent</span>
+                  <code className="field-value agent-id" title={agentId}>
+                    {agentInfo ? `${agentInfo.name} (${agentId.slice(0, 12)}...)` : agentId}
+                  </code>
+                </div>
+                {reason && (
+                  <div className="approval-field">
+                    <span className="field-label">Reason</span>
+                    <span className="field-value">{reason}</span>
+                  </div>
+                )}
+              </div>
 
-            <div className="approval-actions">
-              <button
-                className="btn btn-approve"
-                disabled={resolving.has(req.requestId)}
-                onClick={() => void handleResolve(req.requestId, "approved")}
-              >
-                {resolving.has(req.requestId) ? "..." : "Approve"}
-              </button>
-              <button
-                className="btn btn-deny"
-                disabled={resolving.has(req.requestId)}
-                onClick={() => void handleResolve(req.requestId, "denied")}
-              >
-                {resolving.has(req.requestId) ? "..." : "Deny"}
-              </button>
+              <div className="approval-actions">
+                <button
+                  className="btn btn-approve"
+                  disabled={resolving.has(req.requestId)}
+                  onClick={() => void handleResolve(req.requestId, "approved")}
+                >
+                  {resolving.has(req.requestId) ? "..." : "Approve"}
+                </button>
+                <button
+                  className="btn btn-deny"
+                  disabled={resolving.has(req.requestId)}
+                  onClick={() => void handleResolve(req.requestId, "denied")}
+                >
+                  {resolving.has(req.requestId) ? "..." : "Deny"}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

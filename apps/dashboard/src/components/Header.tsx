@@ -5,8 +5,10 @@
  * and the authenticated operator identity with logout.
  */
 
+import { useState } from "react";
 import type { HealthResponse } from "../api/types.js";
 import { useAuth } from "../contexts/AuthContext.js";
+import { useLogs } from "../contexts/LogsContext.js";
 
 interface HeaderProps {
   health: HealthResponse | null;
@@ -16,6 +18,8 @@ interface HeaderProps {
 
 export function Header({ health, sseConnected, pendingCount }: HeaderProps) {
   const { session, logout } = useAuth();
+  const { logs, downloadLogsJson, downloadLogsText } = useLogs();
+  const [downloadOpen, setDownloadOpen] = useState(false);
 
   return (
     <header className="header">
@@ -57,6 +61,59 @@ export function Header({ health, sseConnected, pendingCount }: HeaderProps) {
           </div>
         )}
 
+        {/* Top-Right Download Logs Option */}
+        <div className="header-download-wrapper">
+          <button
+            type="button"
+            className={`btn-header-download ${logs.length > 0 ? "has-logs" : ""}`}
+            onClick={() => setDownloadOpen((v) => !v)}
+            title={logs.length > 0 ? `Download ${logs.length} Intercept logs` : "No intercept logs yet"}
+          >
+            <span className="download-icon">&#x21E9;</span>
+            <span className="download-label">Download Logs</span>
+            {logs.length > 0 && <span className="download-pill">{logs.length}</span>}
+          </button>
+
+          {downloadOpen && (
+            <div className="download-dropdown-menu">
+              <div className="dropdown-header">
+                <span>Export Intercept Logs</span>
+                <span className="dropdown-count">{logs.length} entries</span>
+              </div>
+              <button
+                type="button"
+                className="dropdown-item"
+                disabled={logs.length === 0}
+                onClick={() => {
+                  downloadLogsJson();
+                  setDownloadOpen(false);
+                }}
+              >
+                <span className="dropdown-item-icon">&#x1F4C4;</span>
+                <div className="dropdown-item-text">
+                  <strong>JSON Format</strong>
+                  <small>Full payload with request & response objects</small>
+                </div>
+              </button>
+              <button
+                type="button"
+                className="dropdown-item"
+                disabled={logs.length === 0}
+                onClick={() => {
+                  downloadLogsText();
+                  setDownloadOpen(false);
+                }}
+              >
+                <span className="dropdown-item-icon">&#x1F4DD;</span>
+                <div className="dropdown-item-text">
+                  <strong>Terminal Log (.log)</strong>
+                  <small>Formatted lines with timestamps & status</small>
+                </div>
+              </button>
+            </div>
+          )}
+        </div>
+
         {session && (
           <div className="operator-badge">
             <span className="operator-icon">&#x1F464;</span>
@@ -74,3 +131,4 @@ export function Header({ health, sseConnected, pendingCount }: HeaderProps) {
     </header>
   );
 }
+

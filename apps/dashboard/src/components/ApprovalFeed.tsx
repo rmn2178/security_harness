@@ -71,8 +71,11 @@ function eventLabel(event: ApprovalStreamEvent): string {
 
 /** Tier badge background colour from design tokens. */
 function tierBadgeColor(tier: string): string {
-  if (tier === "T2_ACT") return "var(--tier-2)";
-  if (tier === "T3_COMMIT") return "var(--tier-3)";
+  const norm = tier?.toUpperCase();
+  if (norm === "T2_ACT") return "var(--tier-2)";
+  if (norm === "T3_COMMIT") return "var(--tier-3)";
+  if (norm === "T1_PREPARE") return "var(--tier-1)";
+  if (norm === "T0_OBSERVE") return "var(--tier-0)";
   return "var(--text-muted)";
 }
 

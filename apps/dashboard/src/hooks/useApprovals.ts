@@ -60,11 +60,29 @@ export function useApprovals(): UseApprovalsResult {
           const data = JSON.parse(event.data) as ApprovalSSEEvent;
 
           if (data.type === "queued" && data.request) {
+            const raw = data.request as any;
+            const normalized: ApprovalRequest = {
+              requestId: raw.requestId,
+              reason: raw.reason ?? "Requires human approval",
+              requiredTier: (raw.requiredTier ?? raw.decision?.assignedTier ?? raw.decision?.escalation?.requiredTier ?? "T2_act").toUpperCase(),
+              resource: raw.resource ?? raw.request?.resource ?? "unknown",
+              action: raw.action ?? raw.request?.action ?? "unknown",
+              agentId: raw.agentId ?? raw.request?.agentId ?? "unknown",
+              params: raw.params ?? raw.request?.params,
+              physicalContext: raw.physicalContext ?? raw.request?.physicalContext,
+              executionContext: raw.executionContext ?? raw.request?.executionContext,
+              fallbackAction: raw.fallbackAction,
+              approvalQuorum: raw.approvalQuorum ?? raw.quorum,
+              approvalCount: raw.approvalCount,
+              createdAt: raw.createdAt ?? new Date().toISOString(),
+              expiresAt: raw.expiresAt ?? new Date(Date.now() + 30000).toISOString(),
+            };
+
             setPending((prev) => {
-              if (prev.some((r) => r.requestId === data.request!.requestId)) {
+              if (prev.some((r) => r.requestId === normalized.requestId)) {
                 return prev;
               }
-              return [...prev, data.request!];
+              return [...prev, normalized];
             });
           } else if (data.type === "resolved" || data.type === "timeout") {
             setPending((prev) => prev.filter((r) => r.requestId !== data.requestId));

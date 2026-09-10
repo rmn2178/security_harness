@@ -45,15 +45,38 @@ export function approvalRoutes(ctx: ServerContext): Hono {
           }
         }, 30_000);
 
+        function formatApproval(r: any) {
+          return {
+            requestId: r.requestId,
+            reason: r.reason,
+            requiredTier: r.decision?.assignedTier ?? r.requiredTier ?? "T2_act",
+            resource: r.request?.resource ?? r.resource ?? "",
+            action: r.request?.action ?? r.action ?? "",
+            agentId: r.request?.agentId ?? r.agentId ?? "",
+            params: r.request?.params ?? r.params,
+            physicalContext: r.request?.physicalContext ?? r.physicalContext,
+            executionContext: r.request?.executionContext ?? r.executionContext,
+            fallbackAction: r.fallbackAction,
+            approvalQuorum: r.quorum ?? r.approvalQuorum,
+            approvalCount: ctx.approvalQueue.getApprovalCount(r.requestId),
+            createdAt: r.createdAt,
+            expiresAt: r.expiresAt,
+          };
+        }
+
         // Send initial pending state
         const pending = ctx.approvalQueue.getPending();
         for (const req of pending) {
-          send(JSON.stringify({ type: "queued", request: req }));
+          send(JSON.stringify({ type: "queued", request: formatApproval(req) }));
         }
 
         // Subscribe to future events
         const unsubscribe = ctx.approvalQueue.on((event) => {
-          send(JSON.stringify(event));
+          if (event.type === "queued" && event.request) {
+            send(JSON.stringify({ type: "queued", request: formatApproval(event.request) }));
+          } else {
+            send(JSON.stringify(event));
+          }
         });
 
         // Clean up when client disconnects
@@ -84,13 +107,13 @@ export function approvalRoutes(ctx: ServerContext): Hono {
       requests: pending.map((r) => ({
         requestId: r.requestId,
         reason: r.reason,
-        requiredTier: r.decision.assignedTier,
-        resource: r.request.resource,
-        action: r.request.action,
-        agentId: r.request.agentId,
-        params: r.request.params,
-        physicalContext: r.request.physicalContext,
-        executionContext: r.request.executionContext,
+        requiredTier: r.decision?.assignedTier ?? (r as any).requiredTier ?? "T2_act",
+        resource: r.request?.resource ?? (r as any).resource ?? "",
+        action: r.request?.action ?? (r as any).action ?? "",
+        agentId: r.request?.agentId ?? (r as any).agentId ?? "",
+        params: r.request?.params ?? (r as any).params,
+        physicalContext: r.request?.physicalContext ?? (r as any).physicalContext,
+        executionContext: r.request?.executionContext ?? (r as any).executionContext,
         fallbackAction: r.fallbackAction,
         approvalQuorum: r.quorum,
         approvalCount: ctx.approvalQueue.getApprovalCount(r.requestId),

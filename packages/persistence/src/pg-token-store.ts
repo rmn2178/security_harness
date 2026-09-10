@@ -8,6 +8,10 @@ import type pg from "pg";
 import type { NosihCapabilityToken, UUIDv7 } from "@pshkv/core";
 import type { TokenStore } from "./interfaces.js";
 
+function cleanField<T>(val: T | null | undefined): T | undefined {
+  return val === null ? undefined : val;
+}
+
 /** Map a database row to a NosihCapabilityToken. */
 function rowToToken(row: any): NosihCapabilityToken {
   return {
@@ -15,22 +19,22 @@ function rowToToken(row: any): NosihCapabilityToken {
     issuer: row.issuer,
     subject: row.subject,
     resource: row.resource,
-    actions: row.actions,
-    constraints: row.constraints,
-    modelConstraints: row.model_constraints,
-    attestationRequirements: row.attestation_requirements,
-    verifiableComputeRequirements: row.verifiable_compute_requirements,
-    executionEnvelope: row.execution_envelope,
-    behavioralConstraints: row.behavioral_constraints,
-    passportId: row.passport_id,
-    delegationDepth: row.delegation_depth,
-    delegationChain: row.delegation_chain,
+    actions: typeof row.actions === "string" ? JSON.parse(row.actions) : row.actions,
+    constraints: typeof row.constraints === "string" ? JSON.parse(row.constraints) : row.constraints,
+    modelConstraints: cleanField(typeof row.model_constraints === "string" ? JSON.parse(row.model_constraints) : row.model_constraints),
+    attestationRequirements: cleanField(typeof row.attestation_requirements === "string" ? JSON.parse(row.attestation_requirements) : row.attestation_requirements),
+    verifiableComputeRequirements: cleanField(typeof row.verifiable_compute_requirements === "string" ? JSON.parse(row.verifiable_compute_requirements) : row.verifiable_compute_requirements),
+    executionEnvelope: cleanField(typeof row.execution_envelope === "string" ? JSON.parse(row.execution_envelope) : row.execution_envelope),
+    behavioralConstraints: cleanField(typeof row.behavioral_constraints === "string" ? JSON.parse(row.behavioral_constraints) : row.behavioral_constraints),
+    passportId: cleanField(row.passport_id),
+    delegationDepth: cleanField(row.delegation_depth),
+    delegationChain: typeof row.delegation_chain === "string" ? JSON.parse(row.delegation_chain) : row.delegation_chain,
     issuedAt: row.issued_at,
     expiresAt: row.expires_at,
     revocable: row.revocable,
-    revocationEndpoint: row.revocation_endpoint,
-    cryptoProfile: row.crypto_profile ?? undefined,
-    postQuantumSignatures: row.post_quantum_signatures ?? undefined,
+    revocationEndpoint: cleanField(row.revocation_endpoint),
+    cryptoProfile: cleanField(row.crypto_profile),
+    postQuantumSignatures: cleanField(typeof row.post_quantum_signatures === "string" ? JSON.parse(row.post_quantum_signatures) : row.post_quantum_signatures),
     signature: row.signature,
   };
 }

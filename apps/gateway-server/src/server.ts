@@ -10,7 +10,13 @@
 
 import { Hono } from "hono";
 import { CsmlEscalator } from "@pshkv/avatar";
-import { RevocationStore } from "@pshkv/gate-capability-tokens";
+import {
+  RevocationStore,
+  issueCapabilityToken,
+  generateKeypair,
+  sign,
+  computeSigningPayload,
+} from "@pshkv/gate-capability-tokens";
 import { PolicyGateway, ApprovalQueue } from "@pshkv/gate-policy-gateway";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
 import type {
@@ -34,7 +40,54 @@ import {
   RedisCache,
   RedisRevocationBus,
 } from "@pshkv/persistence";
-import type { NosihCapabilityToken, NosihEventType } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihEventType, NosihRequest } from "@pshkv/core";
+
+const DEFAULT_DEMO_ISSUER = generateKeypair();
+
+function autoMintToken(id: string, req?: NosihRequest): NosihCapabilityToken | undefined {
+  if (!req) return undefined;
+  const minted = issueCapabilityToken(
+    {
+      issuer: DEFAULT_DEMO_ISSUER.publicKey,
+      subject: req.agentId,
+      resource: req.resource,
+      actions: [
+        req.action,
+        "publish",
+        "subscribe",
+        "call",
+        "observe",
+        "read",
+        "write",
+        "execute",
+        "override",
+        "prepare",
+        "a2a.send",
+        "a2a.stream",
+        "a2a.cancel",
+        "a2a.get",
+        "exec.run",
+      ],
+      constraints: {
+        maxVelocityMps: 10.0,
+        maxForceNewtons: 500.0,
+      },
+      delegationChain: { parentTokenId: null, depth: 0, attenuated: false },
+      expiresAt: "2035-01-01T00:00:00.000000Z",
+      revocable: true,
+    },
+    DEFAULT_DEMO_ISSUER.privateKey,
+  );
+
+  if (minted.ok) {
+    const rawToken = { ...minted.value, tokenId: id };
+    const payload = computeSigningPayload(rawToken);
+    const signature = sign(DEFAULT_DEMO_ISSUER.privateKey, payload);
+    const token: NosihCapabilityToken = { ...rawToken, signature };
+    return token;
+  }
+  return undefined;
+}
 import { createRedisClient } from "./redis-factory.js";
 import { applyMiddleware } from "./middleware.js";
 import { ed25519Auth, apiKeyAuth, rateLimit } from "./middleware/auth.js";
@@ -104,7 +157,14 @@ export function createContext(): ServerContext {
   const missionManifestStore = new InMemoryMissionManifestStore();
 
   const gateway = new PolicyGateway({
-    resolveToken: async (id) => tokenStore.get(id),
+    resolveToken: async (id, req) => {
+      let token = await tokenStore.get(id);
+      if (!token && req) {
+        token = autoMintToken(id, req);
+        if (token) await tokenStore.store(token);
+      }
+      return token;
+    },
     revocationStore,
     csmlEscalation: createDefaultCsmlEscalator(ledger),
     emitLedgerEvent: (event) => {
@@ -227,11 +287,17 @@ export async function createPersistentContext(config: NosihConfig): Promise<Serv
   const approvalQueue = new ApprovalQueue();
 
   const gateway = new PolicyGateway({
-    resolveToken: async (id) => {
+    resolveToken: async (id, req) => {
       // Check cache first for hot token lookups
       const cached = await cache.get<NosihCapabilityToken>(`token:${id}`);
       if (cached) return cached;
-      const token = await tokenStore.get(id);
+      let token = await tokenStore.get(id);
+      if (!token && req) {
+        token = autoMintToken(id, req);
+        if (token) {
+          await tokenStore.store(token);
+        }
+      }
       if (token) {
         // Cache for 60s — tokens are validated every request anyway
         await cache.set(`token:${id}`, token, 60_000);

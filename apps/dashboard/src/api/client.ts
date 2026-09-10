@@ -104,3 +104,12 @@ export async function interceptRequest(request: InterceptRequest): Promise<unkno
     body: JSON.stringify(request),
   });
 }
+
+/** Send a batch of requests through policy interception (batch runner). */
+export async function interceptBatch(requests: InterceptRequest[]): Promise<unknown[]> {
+  return fetchJSON("/v1/intercept/batch", {
+    method: "POST",
+    body: JSON.stringify(requests),
+  });
+}
+

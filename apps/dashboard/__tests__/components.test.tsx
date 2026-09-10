@@ -9,14 +9,21 @@ import { PendingApprovals } from "../src/components/PendingApprovals.js";
 import { AuditLog } from "../src/components/AuditLog.js";
 import { OverviewCards } from "../src/components/OverviewCards.js";
 import { TierLegend } from "../src/components/TierLegend.js";
+import { PolicyPlayground } from "../src/components/PolicyPlayground.js";
 import { AuthProvider } from "../src/contexts/AuthContext.js";
+import { LogsProvider } from "../src/contexts/LogsContext.js";
 import type { ApprovalRequest, HealthResponse, LedgerResponse } from "../src/api/types.js";
 import type { ReactNode } from "react";
 
-/** Wrapper that provides auth context for components that require it. */
+/** Wrapper that provides auth and logs context for components that require it. */
 function WithAuth({ children }: { children: ReactNode }) {
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <LogsProvider>{children}</LogsProvider>
+    </AuthProvider>
+  );
 }
+
 
 const mockHealth: HealthResponse = {
   status: "ok",
@@ -193,3 +200,23 @@ describe("TierLegend", () => {
     expect(manualLabels).toHaveLength(2); // T2 and T3
   });
 });
+
+describe("Header Download Option & PolicyPlayground", () => {
+  it("renders download logs button in header", () => {
+    render(
+      <Header health={mockHealth} sseConnected={true} pendingCount={0} />,
+      { wrapper: WithAuth },
+    );
+    expect(screen.getByText("Download Logs")).toBeDefined();
+  });
+
+  it("renders PolicyPlayground with runner controls and presets", () => {
+    render(<PolicyPlayground />, { wrapper: WithAuth });
+    expect(screen.getByText(/Policy Playground/)).toBeDefined();
+    expect(screen.getByText("Run 5 Intercepts")).toBeDefined();
+    expect(screen.getByText("5x")).toBeDefined();
+    expect(screen.getByText("10x")).toBeDefined();
+    expect(screen.getByText("Custom")).toBeDefined();
+  });
+});
+

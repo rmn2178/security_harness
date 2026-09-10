@@ -72,7 +72,9 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
       ADD COLUMN IF NOT EXISTS behavioral_constraints JSONB,
       ADD COLUMN IF NOT EXISTS passport_id TEXT,
       ADD COLUMN IF NOT EXISTS delegation_depth INTEGER,
-      ADD COLUMN IF NOT EXISTS revocation_endpoint TEXT;
+      ADD COLUMN IF NOT EXISTS revocation_endpoint TEXT,
+      ADD COLUMN IF NOT EXISTS crypto_profile TEXT,
+      ADD COLUMN IF NOT EXISTS post_quantum_signatures JSONB;
   `);
 
   await pool.query(`
