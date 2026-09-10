@@ -1,0 +1,37 @@
+{
+  "name": "@pshkv/bridge-iot",
+  "version": "0.1.0",
+  "description": "SINT Bridge \u2014 MQTT/CoAP edge IoT bridge for constrained devices",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:fixtures": "vitest run __tests__/mqtt-session.test.ts",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@pshkv/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sint-ai/sint-protocol",
+    "directory": "packages/bridge-iot"
+  }
+}

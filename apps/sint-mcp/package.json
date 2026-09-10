@@ -1,0 +1,60 @@
+{
+  "name": "sint-mcp",
+  "version": "0.1.1",
+  "mcpName": "io.github.pshkv/sint-mcp",
+  "description": "SINT MCP — Security-first multi-MCP proxy server with policy enforcement",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "bin": {
+    "sint-mcp": "./dist/index.cjs"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/index.cjs"
+    },
+    "./server": {
+      "default": "./dist/server.cjs"
+    }
+  },
+  "files": [
+    "dist/index.cjs",
+    "dist/server.cjs",
+    "README.md",
+    "sint-mcp.config.example.json"
+  ],
+  "scripts": {
+    "build": "tsc --build && node build.mjs",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.cjs",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sint-ai/sint-protocol",
+    "directory": "apps/sint-mcp"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@pshkv/bridge-mcp": "workspace:*",
+    "@pshkv/core": "workspace:*",
+    "@pshkv/gate-capability-tokens": "workspace:*",
+    "@pshkv/gate-evidence-ledger": "workspace:*",
+    "@pshkv/gate-policy-gateway": "workspace:*",
+    "@pshkv/interface-bridge": "workspace:*",
+    "@pshkv/memory": "workspace:*",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "zod": "^3.24.0"
+  }
+}

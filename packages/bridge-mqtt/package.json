@@ -1,0 +1,45 @@
+{
+  "name": "@pshkv/bridge-mqtt",
+  "version": "0.1.0",
+  "description": "SINT Protocol MQTT bridge with QoS-to-tier mapping for IoT devices",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "sint",
+    "mqtt",
+    "iot",
+    "approval-tier",
+    "qos"
+  ],
+  "author": "SINT Labs",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@pshkv/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "peerDependencies": {
+    "mqtt": "^5.0.0"
+  }
+}

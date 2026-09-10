@@ -1,0 +1,51 @@
+{
+  "name": "@pshkv/gate-policy-gateway",
+  "version": "0.1.0",
+  "description": "SINT Gate — Policy Gateway: the single choke point for all agent actions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "bench": "vitest bench"
+  },
+  "dependencies": {
+    "@pshkv/core": "workspace:*",
+    "@pshkv/gate-capability-tokens": "workspace:*",
+    "@pshkv/gate-evidence-ledger": "workspace:*",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@pshkv/persistence": "workspace:*",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sint-ai/sint-protocol",
+    "directory": "packages/policy-gateway"
+  },
+  "homepage": "https://github.com/sint-ai/sint-protocol#readme",
+  "bugs": {
+    "url": "https://github.com/sint-ai/sint-protocol/issues"
+  },
+  "license": "Apache-2.0"
+}

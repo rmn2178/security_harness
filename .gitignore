@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.turbo/
+.env
+.env.*
+!.env.example
+coverage/
+.DS_Store
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+docs/*.pdf
+.DS_Store
+__pycache__/
+*.pyc
+.codex/

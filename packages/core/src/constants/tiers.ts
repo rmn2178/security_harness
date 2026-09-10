@@ -1,0 +1,792 @@
+/**
+ * SINT Protocol — Tier constants and mappings.
+ *
+ * @module @sint/core/constants/tiers
+ */
+
+import { ApprovalTier, RiskTier } from "../types/policy.js";
+import type { TierAssignmentRule } from "../types/policy.js";
+
+/** Maximum allowed delegation depth for capability tokens. */
+export const MAX_DELEGATION_DEPTH = 3;
+
+/** Default approval timeout in milliseconds (30 seconds). */
+export const DEFAULT_APPROVAL_TIMEOUT_MS = 30_000;
+
+/** Maximum approval timeout in milliseconds (5 minutes). */
+export const MAX_APPROVAL_TIMEOUT_MS = 300_000;
+
+/**
+ * Default tier assignment rules for common ROS 2 resources.
+ * These can be extended or overridden by policy configuration.
+ *
+ * @example
+ * ```ts
+ * const rules = DEFAULT_TIER_RULES;
+ * const cmdVelRule = rules.find(r => r.resourcePattern === "ros2:///cmd_vel");
+ * // cmdVelRule.baseTier === ApprovalTier.T2_ACT
+ * ```
+ */
+export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
+  // Sensor reads — always OBSERVE
+  {
+    resourcePattern: "ros2:///camera/*",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "ros2:///sensor/*",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "ros2:///battery/*",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "ros2:///diagnostics",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "ros2://*/status",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // Navigation planning — PREPARE
+  {
+    resourcePattern: "ros2:///plan",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "ros2:///waypoints",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // Movement commands — ACT (physical state change)
+  {
+    resourcePattern: "ros2:///cmd_vel",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "ros2:///cmd_wheels",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "ros2:///joint_commands",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "ros2:///enc_wheels",
+    actions: ["subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "ros2:///gripper/*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // Humanoid robotics profile — canonical, vendor-neutral resources
+  {
+    resourcePattern: "humanoid://*/status",
+    actions: ["observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "humanoid://*/battery",
+    actions: ["observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "humanoid://*/plan",
+    actions: ["prepare"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "humanoid://*/workspace/*/reserve",
+    actions: ["prepare"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "humanoid://*/base/cmd_vel",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "humanoid://*/arm/*/joint_commands",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "humanoid://*/end-effector/*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "humanoid://*/handoff",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "humanoid://*/battery/swap",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+  {
+    resourcePattern: "humanoid://*/workspace/novel/enter",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "humanoid://*/safety/envelope",
+    actions: ["call", "override"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "humanoid://*/estop",
+    actions: ["override"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Mode changes / E-stop — COMMIT (irreversible consequences)
+  {
+    resourcePattern: "ros2:///mode_change",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // ── Industrial interoperability (Sparkplug, OPC UA, Open-RMF) ───────────
+  //
+  // These default mappings align gateway behavior with published bridge
+  // profiles so industrial traffic does not rely on incidental force context.
+
+  // MQTT Sparkplug telemetry/state channels
+  {
+    resourcePattern: "mqtt-sparkplug:///*/*/*/state",
+    actions: ["observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt-sparkplug:///*/*/*/ndata",
+    actions: ["publish", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt-sparkplug:///*/*/*/ddata",
+    actions: ["publish", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt-sparkplug://*",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "mqtt-sparkplug://*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // Generic MQTT IoT bridge defaults (`mqtt://`) used by @sint/bridge-iot
+  // Safety-critical publish/call paths are irreversible.
+  {
+    resourcePattern: "mqtt://*/*estop*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*emergency*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*interlock*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*shutdown*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*ota*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*firmware*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mqtt://*/*update*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  // Common telemetry paths remain observe tier.
+  {
+    resourcePattern: "mqtt://*/*sensor*",
+    actions: ["publish", "subscribe", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt://*/*telemetry*",
+    actions: ["publish", "subscribe", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt://*/*status*",
+    actions: ["publish", "subscribe", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  // Actuator/control command channels require human-review escalation.
+  {
+    resourcePattern: "mqtt://*/*cmd*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mqtt://*/*valve*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mqtt://*/*pump*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mqtt://*/*motor*",
+    actions: ["publish", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  // MQTT fallback defaults.
+  {
+    resourcePattern: "mqtt://*",
+    actions: ["subscribe", "observe", "read"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mqtt://*",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "mqtt://*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // OPC UA — read/observe channels are T0, writes/calls are T2 by default
+  {
+    resourcePattern: "opcua://*",
+    actions: ["read", "observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "opcua://*",
+    actions: ["write", "call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  // Safety-critical OPC UA write/call paths are irreversible.
+  {
+    resourcePattern: "opcua://*/*safety*",
+    actions: ["write", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "opcua://*/*emergency*",
+    actions: ["write", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "opcua://*/*estop*",
+    actions: ["write", "call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Open-RMF fleet and facility workflows
+  {
+    resourcePattern: "open-rmf://*",
+    actions: ["observe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "open-rmf://*",
+    actions: ["prepare"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+  {
+    resourcePattern: "open-rmf://*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "open-rmf://*",
+    actions: ["override"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // MCP tool calls — default to PREPARE, escalated by specific tools
+  {
+    resourcePattern: "mcp://*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+    escalateOnNewAgent: true,
+  },
+
+  // MCP read-only tools — OBSERVE
+  {
+    resourcePattern: "mcp://filesystem/readFile",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mcp://filesystem/readDirectory",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mcp://filesystem/getFileInfo",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "mcp://database/query",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // MCP write tools — PREPARE
+  {
+    resourcePattern: "mcp://filesystem/writeFile",
+    actions: ["call"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // MCP execution tools — COMMIT (code execution is irreversible)
+  {
+    resourcePattern: "mcp://exec/*",
+    actions: ["call", "exec.run"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // MCP credential tools — COMMIT (credential access is sensitive)
+  {
+    resourcePattern: "mcp://credential/*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Financial operations — always COMMIT
+  {
+    resourcePattern: "mcp://*/trade.*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "mcp://*/transfer.*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Engine — System 1 inference (read-only perception)
+  {
+    resourcePattern: "engine://system1/*",
+    actions: ["inference", "subscribe"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // Engine — System 2 planning (idempotent)
+  {
+    resourcePattern: "engine://system2/plan",
+    actions: ["create", "validate"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // Engine — System 2 execution (physical state change)
+  {
+    resourcePattern: "engine://system2/execute",
+    actions: ["execute"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // Engine — Capsule loading/execution
+  {
+    resourcePattern: "engine://capsule/*",
+    actions: ["load", "execute", "unload"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // Engine — HAL hardware detection (read-only)
+  {
+    resourcePattern: "engine://hal/*",
+    actions: ["detect", "monitor"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // ── Google A2A (Agent-to-Agent) tasks ──────────────────────────────────────
+  //
+  // Default: read/status tasks → OBSERVE, sending tasks → PREPARE.
+  // Physical or irreversible A2A tasks escalated by skill tags via EconomyPlugin.
+  //
+  // Resource format: a2a://<agent-hostname>/<skillId>
+
+  // Generic A2A task send (unknown skill) — defaults to PREPARE
+  {
+    resourcePattern: "a2a://*",
+    actions: ["a2a.send", "a2a.stream"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+    escalateOnNewAgent: true,
+  },
+
+  // A2A task cancel / status (idempotent operations) — PREPARE
+  {
+    resourcePattern: "a2a://*",
+    actions: ["a2a.cancel", "a2a.get"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // A2A physical movement tasks — ACT (tagged "movement" or "physical")
+  // Operators can tag their skills; these rules apply based on skillId paths
+  {
+    resourcePattern: "a2a://*/navigate",
+    actions: ["a2a.send", "a2a.stream"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "a2a://*/move",
+    actions: ["a2a.send", "a2a.stream"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "a2a://*/gripper",
+    actions: ["a2a.send", "a2a.stream"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // A2A read-only tasks (report, status, inspect) — OBSERVE
+  {
+    resourcePattern: "a2a://*/report",
+    actions: ["a2a.send"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "a2a://*/status",
+    actions: ["a2a.send"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+  {
+    resourcePattern: "a2a://*/inspect",
+    actions: ["a2a.send"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // A2A irreversible tasks (configure, provision, deploy) — COMMIT
+  {
+    resourcePattern: "a2a://*/configure",
+    actions: ["a2a.send"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+  {
+    resourcePattern: "a2a://*/provision",
+    actions: ["a2a.send"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // ── MAVLink (bridge-mavlink) — UAV/drone commands ─────────────────────────
+  //
+  // Resource format: mavlink://<system_id>/<command_path>
+  // Safety rationale: propulsion commands directly affect physical safety of
+  // drone in flight. The critical invariant: ARM must NEVER be T0/T1 auto-allow.
+
+  // ARM / DISARM — COMMIT (arming/disarming propulsion is irreversible mid-flight)
+  {
+    resourcePattern: "mavlink://*/cmd/arm",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Mission start — COMMIT (begins autonomous BVLOS operation)
+  {
+    resourcePattern: "mavlink://*/cmd/mission",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Mode changes (OFFBOARD, MANUAL, AUTO) — COMMIT (irreversible behavior change)
+  {
+    resourcePattern: "mavlink://*/cmd/mode",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Geofence disable — COMMIT (removes safety boundary)
+  {
+    resourcePattern: "mavlink://*/cmd/fence",
+    actions: ["call"],
+    baseTier: ApprovalTier.T3_COMMIT,
+    baseRisk: RiskTier.T3_IRREVERSIBLE,
+  },
+
+  // Navigation (takeoff, land, waypoint, RTL, loiter) — ACT (physical movement)
+  {
+    resourcePattern: "mavlink://*/cmd/takeoff",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mavlink://*/cmd/land",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mavlink://*/cmd/nav",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mavlink://*/cmd/rtl",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // Velocity / attitude control — ACT (continuous physical control)
+  {
+    resourcePattern: "mavlink://*/cmd_vel",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+  {
+    resourcePattern: "mavlink://*/cmd_att",
+    actions: ["publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+    escalateOnHumanPresence: true,
+  },
+
+  // Speed change — ACT
+  {
+    resourcePattern: "mavlink://*/cmd/speed",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // Gimbal control — ACT (physical actuator)
+  {
+    resourcePattern: "mavlink://*/cmd/gimbal",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // Camera/imaging — OBSERVE (no physical side effects)
+  {
+    resourcePattern: "mavlink://*/cmd/camera",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // Unknown MAVLink commands — ACT (conservative fallback; never auto-allow)
+  {
+    resourcePattern: "mavlink://*",
+    actions: ["call", "publish"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // ── Operator Interface tools (@sint/interface-bridge) ─────────────────────
+  //
+  // Resource format: sint://interface/<path>
+  // Read-only status and memory recall → T0_OBSERVE (auto-approved, logged)
+  // TTS output, HUD updates, memory store → T1_PREPARE (low-impact writes)
+  // Proactive notifications, mode changes, memory delete → T2_ACT (stateful)
+
+  // Interface status — read-only
+  {
+    resourcePattern: "sint://interface/status",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // Memory recall — read-only search
+  {
+    resourcePattern: "sint://interface/memory/recall",
+    actions: ["call"],
+    baseTier: ApprovalTier.T0_OBSERVE,
+    baseRisk: RiskTier.T0_READ,
+  },
+
+  // TTS output to operator — low-impact write
+  {
+    resourcePattern: "sint://interface/speak",
+    actions: ["call"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // HUD panel updates — low-impact write
+  {
+    resourcePattern: "sint://interface/hud/*",
+    actions: ["call"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // Memory store — low-impact write
+  {
+    resourcePattern: "sint://interface/memory/store",
+    actions: ["call"],
+    baseTier: ApprovalTier.T1_PREPARE,
+    baseRisk: RiskTier.T1_WRITE_LOW,
+  },
+
+  // Proactive notification to operator — stateful (push action)
+  {
+    resourcePattern: "sint://interface/notify",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // Interface mode change — stateful
+  {
+    resourcePattern: "sint://interface/mode",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+
+  // Memory delete — stateful (destructive)
+  {
+    resourcePattern: "sint://interface/memory/delete",
+    actions: ["call"],
+    baseTier: ApprovalTier.T2_ACT,
+    baseRisk: RiskTier.T2_STATEFUL,
+  },
+] as const;

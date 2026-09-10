@@ -1,0 +1,49 @@
+{
+  "name": "@pshkv/client",
+  "version": "0.1.0",
+  "description": "SINT Client SDK — TypeScript client for the SINT Gateway",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@pshkv/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@pshkv/gateway-server": "workspace:*",
+    "@pshkv/gate-capability-tokens": "workspace:*",
+    "hono": "^4.12.27",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sint-ai/sint-protocol",
+    "directory": "packages/client"
+  },
+  "homepage": "https://github.com/sint-ai/sint-protocol#readme",
+  "bugs": {
+    "url": "https://github.com/sint-ai/sint-protocol/issues"
+  },
+  "license": "Apache-2.0"
+}

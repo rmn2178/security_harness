@@ -1,0 +1,218 @@
+{
+  "fixtureId": "sint.economy.payment-governance.v1",
+  "schemaVersion": "2026-04-07",
+  "description": "Canonical conformance fixture for Economic Layer v1 payment governance: budget caps, rolling window controls, recipient allowlist, receipt replay rejection, and reserve/commit consistency.",
+  "defaults": {
+    "dailyBudgetTokens": 100,
+    "rollingWindowMs": 60000,
+    "rollingWindowCapTokens": 25,
+    "approvedRecipients": [
+      "vendor://trusted-api-alpha",
+      "vendor://trusted-api-beta"
+    ]
+  },
+  "cases": [
+    {
+      "name": "allow within daily budget and rolling window for allowlisted recipient",
+      "payment": {
+        "txId": "tx-allow-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 8,
+        "receiptId": "r-allow-001"
+      },
+      "flow": {
+        "reserve": true,
+        "commit": true
+      },
+      "expected": {
+        "allowed": true,
+        "reason": "ALLOW"
+      }
+    },
+    {
+      "name": "deny when daily budget exceeded",
+      "setup": {
+        "usedTodayTokens": 96
+      },
+      "payment": {
+        "txId": "tx-budget-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 10,
+        "receiptId": "r-budget-001"
+      },
+      "flow": {
+        "reserve": true,
+        "commit": true
+      },
+      "expected": {
+        "allowed": false,
+        "reason": "BUDGET_EXCEEDED"
+      }
+    },
+    {
+      "name": "deny when rolling window spend cap exceeded by micro-transactions",
+      "setup": {
+        "priorTxsInWindow": [
+          { "tokens": 9, "atOffsetMs": -5000 },
+          { "tokens": 9, "atOffsetMs": -4000 },
+          { "tokens": 6, "atOffsetMs": -3000 }
+        ]
+      },
+      "payment": {
+        "txId": "tx-window-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 3,
+        "receiptId": "r-window-001"
+      },
+      "flow": {
+        "reserve": true,
+        "commit": true
+      },
+      "expected": {
+        "allowed": false,
+        "reason": "ROLLING_WINDOW_EXCEEDED"
+      }
+    },
+    {
+      "name": "deny when recipient is not on allowlist",
+      "payment": {
+        "txId": "tx-recipient-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://attacker-relay",
+        "tokens": 5,
+        "receiptId": "r-recipient-001"
+      },
+      "flow": {
+        "reserve": true,
+        "commit": true
+      },
+      "expected": {
+        "allowed": false,
+        "reason": "RECIPIENT_NOT_ALLOWLISTED"
+      }
+    },
+    {
+      "name": "deny replayed receipt id across transactions",
+      "setup": {
+        "usedReceiptIds": ["r-replay-001"]
+      },
+      "payment": {
+        "txId": "tx-replay-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 4,
+        "receiptId": "r-replay-001"
+      },
+      "flow": {
+        "reserve": true,
+        "commit": true
+      },
+      "expected": {
+        "allowed": false,
+        "reason": "RECEIPT_REPLAY"
+      }
+    },
+    {
+      "name": "deny settlement when commit occurs without prior reserve",
+      "payment": {
+        "txId": "tx-mismatch-001",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 6,
+        "receiptId": "r-mismatch-001"
+      },
+      "flow": {
+        "reserve": false,
+        "commit": true
+      },
+      "expected": {
+        "allowed": false,
+        "reason": "SETTLEMENT_MISMATCH"
+      }
+    }
+  ],
+  "adversarial_cases": [
+    {
+      "id": "D-005",
+      "name": "deny parallel micro-spend drain below individual threshold",
+      "description": "Attacker fragments a large payment into N micro-transactions each below the T2 approval threshold, submitted in parallel, to bypass escalation. Aggregate window check must catch this even though no single transaction exceeds the threshold.",
+      "source": "msaleme/red-team-blue-team-agent-fabric",
+      "setup": {
+        "approvalThreshold": 1.00,
+        "maxPaymentsPerWindowMs": 60000,
+        "maxPaymentsPerWindow": 10
+      },
+      "attack": {
+        "parallelRequests": 50,
+        "amountEach": 0.99,
+        "totalAmount": 49.50,
+        "allWithinWindowMs": 5000
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "RATE_LIMIT_EXCEEDED",
+        "policy_violated": "payment.maxFrequencyPerWindow",
+        "note": "Aggregate window check triggers after 10th request; requests 11-50 denied. First 10 may be allowed if individually valid."
+      },
+      "sint_enforcement": "EconomyPlugin.maxPaymentsPerWindow rolling aggregate, not per-transaction threshold",
+      "coverage_status": "covered"
+    },
+    {
+      "id": "D-006",
+      "name": "deny receipt replay across different agent identities",
+      "description": "Attacker captures a valid payment receipt signed for AgentA and attempts to replay it as AgentB to claim the same payment credit. Ed25519 signature subject binding must catch this.",
+      "source": "msaleme/red-team-blue-team-agent-fabric",
+      "attack": {
+        "originalAgentId": "agent://agent-alpha",
+        "replayingAgentId": "agent://agent-beta",
+        "receipt": {
+          "receiptId": "r-cross-006",
+          "subject": "agent://agent-alpha",
+          "signature": "<valid Ed25519 signature over {receiptId, subject: agent-alpha, amount, recipient, timestamp}>",
+          "amount": 10,
+          "recipient": "vendor://trusted-api-alpha"
+        },
+        "claimingAgentId": "agent://agent-beta"
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "RECEIPT_SUBJECT_MISMATCH",
+        "policy_violated": "receipt.subjectBinding",
+        "note": "Receipt Ed25519 signature verifies against agent-alpha's public key. Verification fails for agent-beta's agentId."
+      },
+      "sint_enforcement": "MemoryIntegrityPlugin ASI06 credential-funnel check; receipt.subject must match request.agentId",
+      "coverage_status": "covered"
+    },
+    {
+      "id": "D-007",
+      "name": "deny double-spend via reserve/commit desync after operation failure",
+      "description": "Payment is reserved, the downstream operation fails, the refund path is manual/asynchronous. Agent retries the operation and attempts to commit a second time against the original reserve, double-spending. Two-phase commit must detect reserve-not-released state.",
+      "source": "msaleme/red-team-blue-team-agent-fabric",
+      "attack": {
+        "txId": "tx-desync-007",
+        "agentId": "agent://warehouse-controller-17",
+        "recipient": "vendor://trusted-api-alpha",
+        "tokens": 20,
+        "receiptId": "r-desync-007",
+        "flow": {
+          "reserve": true,
+          "operationSuccess": false,
+          "rollback": false,
+          "retryCommit": true
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "RESERVE_NOT_RELEASED",
+        "policy_violated": "payment.reserveCommitParity",
+        "note": "Reserve was not rolled back after operation failure. Second commit attempt against same reserveId must be denied."
+      },
+      "sint_enforcement": "EconomyPlugin.reservePayment() / commitPayment() / rollbackPayment() two-phase protocol; reserve state tracked per txId",
+      "coverage_status": "partial",
+      "coverage_note": "EconomyPlugin has reserve/commit/rollback primitives. Desync detection (rollback not called before retry) is not yet enforced — this fixture currently fails and represents a known gap."
+    }
+  ]
+}
