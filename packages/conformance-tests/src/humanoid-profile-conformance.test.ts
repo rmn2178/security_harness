@@ -1,15 +1,15 @@
 /**
  * Humanoid robotics profile conformance.
  *
- * Locks the first vendor-neutral humanoid profile to existing SINT bridge
+ * Locks the first vendor-neutral humanoid profile to existing NOSIH bridge
  * semantics before any proprietary Arc/Helix/BrainNet adapters are added.
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
 import {
   ApprovalTier,
-  type SintCapabilityToken,
-  type SintCapabilityTokenRequest,
+  type NosihCapabilityToken,
+  type NosihCapabilityTokenRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -47,14 +47,14 @@ describe("Humanoid profile fixture v1", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let emitted: Array<{ eventType: string; payload: Record<string, unknown> }>;
 
   function issueAndStore(
-    overrides: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "humanoid://*",

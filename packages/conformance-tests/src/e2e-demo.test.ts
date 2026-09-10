@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — End-to-End Demo Test
+ * NOSIH Protocol — End-to-End Demo Test
  *
  * Exercises every major subsystem in one cohesive scenario:
  * 1. Capability token lifecycle (issue → validate → delegate → revoke)
@@ -9,7 +9,7 @@
  * 5. Forbidden combo detection
  * 6. Approval queue workflow
  *
- * This is both a test suite and a demo of the full SINT Protocol stack.
+ * This is both a test suite and a demo of the full NOSIH Protocol stack.
  */
 
 import { describe, it, expect } from "vitest";
@@ -24,10 +24,10 @@ import {
 } from "@pshkv/gate-capability-tokens";
 import { PolicyGateway, ApprovalQueue } from "@pshkv/gate-policy-gateway";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
-import { toResourceUri, toSintAction, getRiskHint, type MCPToolCall } from "@pshkv/bridge-mcp";
-import { ApprovalTier, type SintRequest } from "@pshkv/core";
+import { toResourceUri, toNosihAction, getRiskHint, type MCPToolCall } from "@pshkv/bridge-mcp";
+import { ApprovalTier, type NosihRequest } from "@pshkv/core";
 
-describe("SINT Protocol End-to-End", () => {
+describe("NOSIH Protocol End-to-End", () => {
   // Shared state — built up through the test sequence
   const operator = generateKeypair();
   const agent = generateKeypair();
@@ -104,7 +104,7 @@ describe("SINT Protocol End-to-End", () => {
   // ── 2. Policy Gateway ──
 
   it("allows read operations (T0_OBSERVE, auto-approved)", async () => {
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: agent.publicKey,
@@ -122,7 +122,7 @@ describe("SINT Protocol End-to-End", () => {
 
   it("escalates dangerous operations (T3_COMMIT, needs human)", async () => {
     // Resource mcp://exec/* matches the T3_COMMIT tier rule for execution tools
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: agent.publicKey,
@@ -144,7 +144,7 @@ describe("SINT Protocol End-to-End", () => {
   it("detects forbidden combination: write → exec (code injection)", async () => {
     // The forbidden combo sequence is ["filesystem.write", "exec.run"]
     // recentActions uses the same action identifiers as the combo patterns
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: agent.publicKey,
@@ -162,7 +162,7 @@ describe("SINT Protocol End-to-End", () => {
 
   // ── 4. MCP Bridge ──
 
-  it("maps MCP tool calls to SINT requests correctly", () => {
+  it("maps MCP tool calls to NOSIH requests correctly", () => {
     const toolCall: MCPToolCall = {
       callId: generateUUIDv7(),
       serverName: "filesystem",
@@ -172,7 +172,7 @@ describe("SINT Protocol End-to-End", () => {
     };
 
     const resourceUri = toResourceUri(toolCall);
-    const action = toSintAction(toolCall);
+    const action = toNosihAction(toolCall);
     const risk = getRiskHint(toolCall);
 
     expect(resourceUri).toContain("filesystem");
@@ -187,7 +187,7 @@ describe("SINT Protocol End-to-End", () => {
   it("enqueues, resolves, and drains approval requests", () => {
     const queue = new ApprovalQueue({ defaultTimeoutMs: 30_000 });
 
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: agent.publicKey,
@@ -235,7 +235,7 @@ describe("SINT Protocol End-to-End", () => {
     const revocationCheck = revocationStore.checkRevocation(rootTokenId);
     expect(revocationCheck.ok).toBe(false);
 
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: agent.publicKey,

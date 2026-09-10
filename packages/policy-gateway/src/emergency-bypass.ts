@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Emergency bypass controls for safety-critical contexts.
+ * NOSIH Protocol — Emergency bypass controls for safety-critical contexts.
  *
  * Provides a tightly scoped, time-bounded override path with mandatory
  * post-hoc audit records.

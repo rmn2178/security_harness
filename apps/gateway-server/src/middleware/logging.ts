@@ -1,9 +1,9 @@
 /**
- * SINT Gateway Server — Structured Logging Middleware.
+ * NOSIH Gateway Server — Structured Logging Middleware.
  *
  * JSON-formatted request/response logging with latency tracking.
  *
- * @module @sint/gateway-server/middleware/logging
+ * @module @nosih/gateway-server/middleware/logging
  */
 
 import type { Context, Next } from "hono";

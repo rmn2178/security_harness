@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Agent identity types.
+ * NOSIH Protocol — Agent identity types.
  *
- * Every SINT agent has a cryptographic identity (Ed25519 passport)
+ * Every NOSIH agent has a cryptographic identity (Ed25519 passport)
  * and optional on-chain identity (ERC-8004).
  *
- * @module @sint/core/types/agent
+ * @module @nosih/core/types/agent
  */
 
 import type {
@@ -25,9 +25,9 @@ export enum AgentTrustLevel {
 }
 
 /**
- * A registered SINT agent's identity profile.
+ * A registered NOSIH agent's identity profile.
  */
-export interface SintAgentIdentity {
+export interface NosihAgentIdentity {
   /** Unique agent identifier. */
   readonly agentId: UUIDv7;
 

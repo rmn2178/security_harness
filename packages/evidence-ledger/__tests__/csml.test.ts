@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from "vitest";
 import { computeCsml, computeCsmlPerModel } from "../src/csml.js";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 import { DEFAULT_CSML_COEFFICIENTS } from "@pshkv/core";
 
 const GENESIS = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -12,9 +12,9 @@ const AGENT = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
 
 function makeEvent(
   seq: bigint,
-  eventType: SintLedgerEvent["eventType"],
-  overrides: Partial<SintLedgerEvent> = {}
-): SintLedgerEvent {
+  eventType: NosihLedgerEvent["eventType"],
+  overrides: Partial<NosihLedgerEvent> = {}
+): NosihLedgerEvent {
   return {
     eventId: `0190${seq.toString().padStart(20, "0")}-0000-7000-8000-000000000000` as any,
     sequenceNumber: seq,

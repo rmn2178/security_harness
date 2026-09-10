@@ -1,7 +1,7 @@
 /**
- * @sint/bridge-a2a — SINT security bridge for the Google A2A Protocol.
+ * @nosih/bridge-a2a — NOSIH security bridge for the Google A2A Protocol.
  *
- * Makes SINT the security layer for agent-to-agent task delegation.
+ * Makes NOSIH the security layer for agent-to-agent task delegation.
  * Every A2A `tasks/send` call flows through the PolicyGateway before
  * being forwarded to the target agent.
  *
@@ -75,6 +75,6 @@ export {
   isExternalEvidenceFresh,
 } from "./agent-card-registry.js";
 
-// APS ↔ SINT interoperability mapping
-export { apsScopeToSintMapping, sintTokenToApsProjection } from "./aps-mapping.js";
+// APS ↔ NOSIH interoperability mapping
+export { apsScopeToNosihMapping, nosihTokenToApsProjection } from "./aps-mapping.js";
 export type { ApsDelegationScope, ApsMappingResult } from "./aps-mapping.js";

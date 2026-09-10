@@ -1,9 +1,9 @@
 /**
- * SINT Bridge MCP — Middleware tests.
+ * NOSIH Bridge MCP — Middleware tests.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
-import { createSintMiddleware } from "../src/mcp-middleware.js";
+import { createNosihMiddleware } from "../src/mcp-middleware.js";
 import { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import {
   generateKeypair,
@@ -12,7 +12,7 @@ import {
   nowISO8601,
 } from "@pshkv/gate-capability-tokens";
 import { RevocationStore } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityTokenRequest, SintCapabilityToken } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest, NosihCapabilityToken } from "@pshkv/core";
 import type { MCPToolCall } from "../src/types.js";
 
 function futureISO(hours: number): string {
@@ -20,10 +20,10 @@ function futureISO(hours: number): string {
   return d.toISOString().replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-describe("createSintMiddleware", () => {
+describe("createNosihMiddleware", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let revocationStore: RevocationStore;
   let gateway: PolicyGateway;
 
@@ -37,8 +37,8 @@ describe("createSintMiddleware", () => {
     });
   });
 
-  function issueToken(overrides?: Partial<SintCapabilityTokenRequest>) {
-    const request: SintCapabilityTokenRequest = {
+  function issueToken(overrides?: Partial<NosihCapabilityTokenRequest>) {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://test-server/readFile",
@@ -68,7 +68,7 @@ describe("createSintMiddleware", () => {
 
   it("intercept() forwards allowed tool calls", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });
@@ -84,7 +84,7 @@ describe("createSintMiddleware", () => {
 
   it("intercept() denies calls with revoked tokens", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });
@@ -103,7 +103,7 @@ describe("createSintMiddleware", () => {
 
   it("protect() wraps handler and allows valid calls", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });
@@ -119,7 +119,7 @@ describe("createSintMiddleware", () => {
 
   it("protect() throws on denied calls", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });
@@ -129,12 +129,12 @@ describe("createSintMiddleware", () => {
     const handler = async () => ({ content: "should not reach" });
     const protected_ = middleware.protect(handler, agent.publicKey, token.tokenId);
 
-    await expect(protected_(makeToolCall())).rejects.toThrow("SINT: Tool call denied");
+    await expect(protected_(makeToolCall())).rejects.toThrow("NOSIH: Tool call denied");
   });
 
   it("auto-creates sessions per agent", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });
@@ -161,7 +161,7 @@ describe("createSintMiddleware", () => {
 
   it("removeSession() cleans up agent sessions", async () => {
     const token = issueToken();
-    const middleware = createSintMiddleware({
+    const middleware = createNosihMiddleware({
       gateway,
       serverName: "test-server",
     });

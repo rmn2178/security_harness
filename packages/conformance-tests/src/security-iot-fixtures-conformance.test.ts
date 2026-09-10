@@ -8,9 +8,9 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -40,10 +40,10 @@ describe("Security and IoT Fixture Conformance", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
 
-  function issueAndStore(overrides: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "*",
@@ -216,7 +216,7 @@ describe("Security and IoT Fixture Conformance", () => {
         resource: scenario.request.resource,
         action: scenario.request.action,
         params: scenario.request.params ?? {},
-        executionContext: executionContext as SintRequest["executionContext"],
+        executionContext: executionContext as NosihRequest["executionContext"],
       });
 
       expect(decision.action).toBe(scenario.expected.decisionAction);

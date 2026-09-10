@@ -1,7 +1,7 @@
 /**
- * SINT Dashboard — Header Component.
+ * NOSIH Dashboard — Header Component.
  *
- * Shows the SINT logo, connection status, health stats,
+ * Shows the NOSIH logo, connection status, health stats,
  * and the authenticated operator identity with logout.
  */
 
@@ -22,7 +22,7 @@ export function Header({ health, sseConnected, pendingCount }: HeaderProps) {
       <div className="header-left">
         <h1 className="logo">
           <span className="logo-icon">&#x1F6E1;</span>
-          <span className="logo-text">SINT</span>
+          <span className="logo-text">NOSIH</span>
           <span className="logo-sub">Approval Dashboard</span>
         </h1>
       </div>

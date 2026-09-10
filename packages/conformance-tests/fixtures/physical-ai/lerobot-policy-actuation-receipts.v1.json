@@ -6,7 +6,7 @@
     "bridge": "ros2",
     "projectContext": "lerobot",
     "boundary": "learned policy rollout to hardware actuation",
-    "goal": "Test whether learned-policy execution can carry auditable policy receipts without making SINT a required LeRobot runtime dependency.",
+    "goal": "Test whether learned-policy execution can carry auditable policy receipts without making NOSIH a required LeRobot runtime dependency.",
     "nonGoal": "This fixture does not propose changes to LeRobot training pipelines or model architectures."
   },
   "requirements": {
@@ -22,8 +22,8 @@
     "robotId": "so100-01",
     "checkpointRef": "hf://lerobot/so100-pick-place-v3",
     "datasetRef": "hf://datasets/lerobot/pick-place-warehouse-v2",
-    "rolloutRef": "sint://rollout/lerobot/so100-01/pick-4481",
-    "hardwareProfileRef": "sint://hardware/so100/gripper-v1",
+    "rolloutRef": "nosih://rollout/lerobot/so100-01/pick-4481",
+    "hardwareProfileRef": "nosih://hardware/so100/gripper-v1",
     "workspaceId": "cell-b",
     "endEffectorId": "gripper"
   },
@@ -56,8 +56,8 @@
       "robotId": "so100-01",
       "checkpointRef": "hf://lerobot/so100-pick-place-v3",
       "datasetRef": "hf://datasets/lerobot/pick-place-warehouse-v2",
-      "rolloutRef": "sint://rollout/lerobot/so100-01/pick-4481",
-      "hardwareProfileRef": "sint://hardware/so100/gripper-v1",
+      "rolloutRef": "nosih://rollout/lerobot/so100-01/pick-4481",
+      "hardwareProfileRef": "nosih://hardware/so100/gripper-v1",
       "workspaceId": "cell-b",
       "decisionDigest": "digest:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "eventHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

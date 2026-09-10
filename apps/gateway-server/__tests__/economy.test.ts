@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Economy route tests.
+ * NOSIH Gateway Server — Economy route tests.
  *
  * Tests the economy HTTP endpoints using Hono's built-in test client.
  */

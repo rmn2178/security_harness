@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Pending Approvals Component.
+ * NOSIH Dashboard — Pending Approvals Component.
  *
  * Shows all pending approval requests with approve/deny buttons.
  * Updates in real-time via SSE.

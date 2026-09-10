@@ -1,15 +1,15 @@
 /**
- * SINT Protocol — Capsule Sandbox types.
+ * NOSIH Protocol — Capsule Sandbox types.
  *
  * Defines the capsule lifecycle states, instance metadata,
  * error codes, and the restricted API surface exposed to capsules.
  *
- * @module @sint/engine-capsule-sandbox/types
+ * @module @nosih/engine-capsule-sandbox/types
  */
 
 import type {
-  SintCapsuleManifest,
-  SintSensorReading,
+  NosihCapsuleManifest,
+  NosihSensorReading,
   UUIDv7,
 } from "@pshkv/core";
 
@@ -23,7 +23,7 @@ export type CapsuleState =
 
 /** Metadata for a registered or loaded capsule. */
 export interface CapsuleInstance {
-  readonly manifest: SintCapsuleManifest;
+  readonly manifest: NosihCapsuleManifest;
   readonly state: CapsuleState;
   readonly loadedAt?: string;
   readonly lastExecutedAt?: string;
@@ -54,7 +54,7 @@ export interface CapsuleError {
  */
 export interface CapsuleApi {
   /** Read a sensor value by ID. Returns null if unavailable. */
-  readSensor(sensorId: string): Promise<SintSensorReading | null>;
+  readSensor(sensorId: string): Promise<NosihSensorReading | null>;
 
   /** Request permission to perform an action on a resource. */
   requestAction(

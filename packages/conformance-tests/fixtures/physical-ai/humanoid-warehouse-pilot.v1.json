@@ -1,7 +1,7 @@
 {
   "fixtureId": "humanoid-warehouse-pilot-v1",
   "schemaVersion": "1.0.0",
-  "description": "Per-shift warehouse/RaaS pilot evidence export contract for humanoid deployments using SINT.",
+  "description": "Per-shift warehouse/RaaS pilot evidence export contract for humanoid deployments using NOSIH.",
   "pilot": {
     "siteId": "gxo-flowery-branch-style-lab",
     "shiftId": "shift-2026-08-02-a",

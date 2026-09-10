@@ -1,11 +1,11 @@
--- SINT Protocol — expand evidence event taxonomy for v0.2 runtime paths.
+-- NOSIH Protocol — expand evidence event taxonomy for v0.2 runtime paths.
 -- Adds verifiable-compute and hardware safety handshake event types.
 
-ALTER TABLE sint_evidence_ledger
-  DROP CONSTRAINT IF EXISTS sint_evidence_ledger_event_type_check;
+ALTER TABLE nosih_evidence_ledger
+  DROP CONSTRAINT IF EXISTS nosih_evidence_ledger_event_type_check;
 
-ALTER TABLE sint_evidence_ledger
-  ADD CONSTRAINT sint_evidence_ledger_event_type_check
+ALTER TABLE nosih_evidence_ledger
+  ADD CONSTRAINT nosih_evidence_ledger_event_type_check
   CHECK (event_type IN (
     'agent.registered',
     'agent.capability.granted',

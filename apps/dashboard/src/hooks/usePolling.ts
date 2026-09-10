@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Polling Hook.
+ * NOSIH Dashboard — Polling Hook.
  *
  * Periodically fetches data from an async function.
  * Used for non-SSE endpoints (ledger, health, etc.)

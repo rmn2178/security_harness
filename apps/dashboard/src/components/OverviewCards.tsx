@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Overview Cards Component.
+ * NOSIH Dashboard — Overview Cards Component.
  *
  * Displays key metrics in card format at the top of the dashboard.
  */

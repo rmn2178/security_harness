@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Live Approval Feed Component.
+ * NOSIH Dashboard — Live Approval Feed Component.
  *
  * Shows a real-time feed of T2/T3 gateway decisions and escalations
  * delivered via the WebSocket approval stream.

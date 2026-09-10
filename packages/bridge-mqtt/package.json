@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-mqtt",
   "version": "0.1.0",
-  "description": "SINT Protocol MQTT bridge with QoS-to-tier mapping for IoT devices",
+  "description": "NOSIH Protocol MQTT bridge with QoS-to-tier mapping for IoT devices",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,13 +24,13 @@
     "LICENSE"
   ],
   "keywords": [
-    "sint",
+    "nosih",
     "mqtt",
     "iot",
     "approval-tier",
     "qos"
   ],
-  "author": "SINT Labs",
+  "author": "NOSIH Labs",
   "license": "Apache-2.0",
   "dependencies": {
     "@pshkv/core": "workspace:*"

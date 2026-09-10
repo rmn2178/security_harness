@@ -1,29 +1,29 @@
 /**
- * SINT ↔ APS Interoperability Mapping.
+ * NOSIH ↔ APS Interoperability Mapping.
  *
  * Defines the formal mapping between:
  *   - APS (Agent Passport System) DelegationScope — digital governance layer
- *   - SINT SintPhysicalConstraints — physical governance layer
+ *   - NOSIH NosihPhysicalConstraints — physical governance layer
  *
  * These two protocols arrived at identical cryptographic primitives
  * (Ed25519, did:key, monotonic attenuation) independently. This module
  * is the "narrow waist" that connects them at the constraint layer.
  *
  * Key invariant: attenuation composes across protocols.
- *   scope(SINT_child) ⊆ scope(SINT_parent)
+ *   scope(NOSIH_child) ⊆ scope(NOSIH_parent)
  *   scope(APS_child) ⊆ scope(APS_parent)
- *   scope(SINT_child) ⊆ scope(APS_digital_projection(APS_delegation))
+ *   scope(NOSIH_child) ⊆ scope(APS_digital_projection(APS_delegation))
  *
  * Ref: https://github.com/a2aproject/A2A/issues/1713#issuecomment-4186524108
- *      SINT ↔ APS cross-verification: packages/capability-tokens/__tests__/aps-crossverify.test.ts
+ *      NOSIH ↔ APS cross-verification: packages/capability-tokens/__tests__/aps-crossverify.test.ts
  *
- * @module @sint/bridge-a2a/aps-mapping
+ * @module @nosih/bridge-a2a/aps-mapping
  */
 
 import type {
   ISO8601,
-  SintCapabilityToken,
-  SintPhysicalConstraints,
+  NosihCapabilityToken,
+  NosihPhysicalConstraints,
 } from "@pshkv/core";
 
 // ─── APS Delegation Scope types ───────────────────────────────────────────────
@@ -33,25 +33,25 @@ import type {
  * Represents the digital governance layer of an APS delegation chain.
  *
  * Source: APS v1.32.0 specification (draft-pidlisnyi-aps-00, IETF Internet-Draft)
- * These fields are the APS analog to SINT's SintPhysicalConstraints.
+ * These fields are the APS analog to NOSIH's NosihPhysicalConstraints.
  */
 export interface ApsDelegationScope {
   /**
    * Digital resource scope — what the agent is allowed to access/invoke.
    * E.g. ["logistics:dispatch", "inventory:read"]
-   * Maps to SINT resource URI patterns.
+   * Maps to NOSIH resource URI patterns.
    */
   readonly resourceScope: readonly string[];
 
   /**
    * Digital action verbs permitted.
-   * E.g. ["read", "write"] — maps to SINT token.actions.
+   * E.g. ["read", "write"] — maps to NOSIH token.actions.
    */
   readonly allowedActions?: readonly string[];
 
   /**
    * Temporal validity window for the delegation.
-   * Maps to SINT token.expiresAt (uses the `end` timestamp).
+   * Maps to NOSIH token.expiresAt (uses the `end` timestamp).
    */
   readonly temporalValidity?: {
     readonly start: ISO8601;
@@ -60,7 +60,7 @@ export interface ApsDelegationScope {
 
   /**
    * Spend limit in the domain's currency unit.
-   * Maps to SINT rateLimit.maxCalls as a proxy for operation budget.
+   * Maps to NOSIH rateLimit.maxCalls as a proxy for operation budget.
    * (Physical cost per action must be estimated by the deployment.)
    */
   readonly spendLimit?: number;
@@ -68,30 +68,30 @@ export interface ApsDelegationScope {
   /**
    * Data access terms — sensitivity classifications this delegation permits.
    * E.g. ["PII:none", "confidential:no"] — these become physical context
-   * escalation factors in SINT (Δ_trust or Δ_novelty).
+   * escalation factors in NOSIH (Δ_trust or Δ_novelty).
    */
   readonly dataAccessTerms?: readonly string[];
 
   /**
    * Attestation grade (0-3) from APS.
    * 0=self-attested, 1=peer-vouched, 2=infrastructure-attested, 3=legal-entity-attested
-   * Maps to SINT tier escalation: grade < 2 → Δ_trust = +1
+   * Maps to NOSIH tier escalation: grade < 2 → Δ_trust = +1
    */
   readonly attestationGrade?: 0 | 1 | 2 | 3;
 }
 
 /**
- * Result of mapping an APS delegation to a SINT constraint envelope.
+ * Result of mapping an APS delegation to a NOSIH constraint envelope.
  */
 export interface ApsMappingResult {
   /**
-   * The SINT resource URI pattern derived from APS resourceScope.
+   * The NOSIH resource URI pattern derived from APS resourceScope.
    * Uses the A2A URI scheme if the scope suggests agent-to-agent delegation.
    */
   readonly resource: string;
 
   /**
-   * SINT token actions derived from APS allowedActions.
+   * NOSIH token actions derived from APS allowedActions.
    */
   readonly actions: readonly string[];
 
@@ -101,7 +101,7 @@ export interface ApsMappingResult {
    * APS — they must be set by the physical deployment operator.
    * This function returns what CAN be derived from APS fields.
    */
-  readonly constraints: SintPhysicalConstraints;
+  readonly constraints: NosihPhysicalConstraints;
 
   /**
    * Recommended tier escalation based on APS attestation grade.
@@ -117,18 +117,18 @@ export interface ApsMappingResult {
   readonly warnings: readonly string[];
 }
 
-// ─── APS resource scope → SINT URI ────────────────────────────────────────────
+// ─── APS resource scope → NOSIH URI ────────────────────────────────────────────
 
 /**
- * Map APS resource scope tokens to a SINT resource URI.
+ * Map APS resource scope tokens to a NOSIH resource URI.
  *
  * APS uses domain-scoped identifiers like "logistics:dispatch".
- * SINT uses URI schemes like "a2a://warehouse.example.com/dispatch".
+ * NOSIH uses URI schemes like "a2a://warehouse.example.com/dispatch".
  *
  * This mapping is convention-based. Production deployments should
  * configure an explicit scope registry.
  */
-function apsScopeToSintResource(resourceScope: readonly string[]): string {
+function apsScopeToNosihResource(resourceScope: readonly string[]): string {
   if (resourceScope.length === 0) return "a2a://*";
 
   // If all scopes share a domain prefix, use it
@@ -148,10 +148,10 @@ function apsScopeToSintResource(resourceScope: readonly string[]): string {
 }
 
 /**
- * Map APS allowedActions to SINT token actions.
- * APS uses REST-style verbs; SINT uses protocol-specific verbs.
+ * Map APS allowedActions to NOSIH token actions.
+ * APS uses REST-style verbs; NOSIH uses protocol-specific verbs.
  */
-function apsActionsToSintActions(apsActions?: readonly string[]): string[] {
+function apsActionsToNosihActions(apsActions?: readonly string[]): string[] {
   if (!apsActions || apsActions.length === 0) {
     return ["a2a.send"]; // default: basic task delegation
   }
@@ -172,11 +172,11 @@ function apsActionsToSintActions(apsActions?: readonly string[]): string[] {
 // ─── Main mapping function ────────────────────────────────────────────────────
 
 /**
- * Map an APS DelegationScope to SINT token fields.
+ * Map an APS DelegationScope to NOSIH token fields.
  *
  * This is the formal mapping layer between the two protocols' constraint
  * dimensions. Digital constraints (spend limit, temporal validity) are
- * translated to their SINT analogs. Physical constraints (velocity, force,
+ * translated to their NOSIH analogs. Physical constraints (velocity, force,
  * geofence) CANNOT be derived from APS and must be set by the operator.
  *
  * @example
@@ -190,21 +190,21 @@ function apsActionsToSintActions(apsActions?: readonly string[]): string[] {
  * };
  *
  * const { resource, actions, constraints, tierEscalation, warnings } =
- *   apsScopeToSintMapping(apsScope);
+ *   apsScopeToNosihMapping(apsScope);
  *
  * // Operator must ALSO set:
  * //   constraints.maxVelocityMps = 0.5  (human-shared workspace)
  * //   constraints.geofence = warehousePolygon
  * ```
  */
-export function apsScopeToSintMapping(scope: ApsDelegationScope): ApsMappingResult {
+export function apsScopeToNosihMapping(scope: ApsDelegationScope): ApsMappingResult {
   const warnings: string[] = [];
 
   // Resource URI
-  const resource = apsScopeToSintResource(scope.resourceScope);
+  const resource = apsScopeToNosihResource(scope.resourceScope);
 
   // Actions
-  const actions = apsActionsToSintActions(scope.allowedActions);
+  const actions = apsActionsToNosihActions(scope.allowedActions);
 
   // Constraints — only what can be derived from APS fields
   const constraintsMutable: Record<string, unknown> = {};
@@ -232,7 +232,7 @@ export function apsScopeToSintMapping(scope: ApsDelegationScope): ApsMappingResu
     };
   }
 
-  const constraints = constraintsMutable as SintPhysicalConstraints;
+  const constraints = constraintsMutable as NosihPhysicalConstraints;
 
   // Physical constraints — cannot be derived from APS
   warnings.push(
@@ -256,40 +256,40 @@ export function apsScopeToSintMapping(scope: ApsDelegationScope): ApsMappingResu
   return { resource, actions, constraints, tierEscalation, warnings };
 }
 
-// ─── SINT token → APS attestation projection ─────────────────────────────────
+// ─── NOSIH token → APS attestation projection ─────────────────────────────────
 
 /**
- * Project a SINT capability token into an APS-compatible attestation object.
+ * Project a NOSIH capability token into an APS-compatible attestation object.
  *
- * Used when a SINT-governed agent enters an APS-governed workflow.
+ * Used when a NOSIH-governed agent enters an APS-governed workflow.
  * The physical constraint fields (maxVelocityMps, geofence) are included
  * in dataAccessTerms as metadata — APS cannot enforce them, but the
  * receiving APS gateway can log and audit them.
  *
  * @example
  * ```ts
- * // Robot has SINT token, needs to interact with APS warehouse system
- * const apsProjection = sintTokenToApsProjection(robotToken);
+ * // Robot has NOSIH token, needs to interact with APS warehouse system
+ * const apsProjection = nosihTokenToApsProjection(robotToken);
  * // apsProjection can be passed to APS importExternalAttestation()
  * ```
  */
-export function sintTokenToApsProjection(token: SintCapabilityToken): {
+export function nosihTokenToApsProjection(token: NosihCapabilityToken): {
   did: string;
   resourceScope: string[];
   allowedActions: string[];
   temporalValidity: { start: string; end: string };
   dataAccessTerms: string[];
-  attestationGrade: 2; // SINT tokens are infrastructure-attested
-  sintPhysicalConstraints: SintPhysicalConstraints; // APS preserves but doesn't enforce
+  attestationGrade: 2; // NOSIH tokens are infrastructure-attested
+  nosihPhysicalConstraints: NosihPhysicalConstraints; // APS preserves but doesn't enforce
 } {
-  // Convert did:key format (SINT stores subject as hex public key — derive DID)
+  // Convert did:key format (NOSIH stores subject as hex public key — derive DID)
   // Note: in practice, call keyToDid(token.subject) — imported separately to avoid circular dep
-  const did = `sint:subject:${token.subject}`; // placeholder; caller should use keyToDid()
+  const did = `nosih:subject:${token.subject}`; // placeholder; caller should use keyToDid()
 
-  // Resource scope: SINT URI → APS domain:path format
+  // Resource scope: NOSIH URI → APS domain:path format
   const resourceScope = [token.resource];
 
-  // Actions: SINT verbs → APS verbs (reverse mapping)
+  // Actions: NOSIH verbs → APS verbs (reverse mapping)
   const actionReverseMap: Record<string, string> = {
     "a2a.send": "execute",
     "a2a.get": "read",
@@ -306,16 +306,16 @@ export function sintTokenToApsProjection(token: SintCapabilityToken): {
   // Physical constraints as APS data access terms (metadata only)
   const dataAccessTerms: string[] = [];
   if (token.constraints.maxVelocityMps !== undefined) {
-    dataAccessTerms.push(`sint:maxVelocityMps:${token.constraints.maxVelocityMps}`);
+    dataAccessTerms.push(`nosih:maxVelocityMps:${token.constraints.maxVelocityMps}`);
   }
   if (token.constraints.maxForceNewtons !== undefined) {
-    dataAccessTerms.push(`sint:maxForceNewtons:${token.constraints.maxForceNewtons}`);
+    dataAccessTerms.push(`nosih:maxForceNewtons:${token.constraints.maxForceNewtons}`);
   }
   if (token.constraints.geofence !== undefined) {
-    dataAccessTerms.push("sint:geofence:present");
+    dataAccessTerms.push("nosih:geofence:present");
   }
   if (token.constraints.requiresHumanPresence) {
-    dataAccessTerms.push("sint:requiresHumanPresence:true");
+    dataAccessTerms.push("nosih:requiresHumanPresence:true");
   }
 
   return {
@@ -327,7 +327,7 @@ export function sintTokenToApsProjection(token: SintCapabilityToken): {
       end: token.expiresAt,
     },
     dataAccessTerms,
-    attestationGrade: 2, // SINT tokens are Ed25519-signed by infrastructure
-    sintPhysicalConstraints: token.constraints,
+    attestationGrade: 2, // NOSIH tokens are Ed25519-signed by infrastructure
+    nosihPhysicalConstraints: token.constraints,
   };
 }

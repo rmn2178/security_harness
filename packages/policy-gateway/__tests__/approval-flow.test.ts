@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ApprovalQueue unit tests.
+ * NOSIH Protocol — ApprovalQueue unit tests.
  *
  * Tests the human approval queue for T2/T3 escalations.
  */
@@ -8,9 +8,9 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { ApprovalQueue } from "../src/approval-flow.js";
 import type { ApprovalEvent } from "../src/approval-flow.js";
 import { ApprovalTier, RiskTier } from "@pshkv/core";
-import type { PolicyDecision, SintRequest } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest } from "@pshkv/core";
 
-function makeRequest(id = "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7"): SintRequest {
+function makeRequest(id = "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7"): NosihRequest {
   return {
     requestId: id,
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

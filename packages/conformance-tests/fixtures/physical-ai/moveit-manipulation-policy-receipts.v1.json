@@ -6,7 +6,7 @@
     "bridge": "ros2",
     "projectContext": "moveit",
     "boundary": "manipulation plan to physical execution",
-    "goal": "Test whether manipulation execution requests can carry auditable policy receipts without making SINT a required MoveIt runtime dependency.",
+    "goal": "Test whether manipulation execution requests can carry auditable policy receipts without making NOSIH a required MoveIt runtime dependency.",
     "nonGoal": "This fixture does not propose changes to MoveIt core APIs."
   },
   "requirements": {
@@ -22,8 +22,8 @@
     "planningGroup": "manipulator",
     "workspaceId": "cell-a",
     "endEffectorId": "gripper",
-    "planRef": "sint://plan/moveit/arm-07/pick-4481",
-    "trajectoryRef": "sint://trajectory/moveit/arm-07/pick-4481"
+    "planRef": "nosih://plan/moveit/arm-07/pick-4481",
+    "trajectoryRef": "nosih://trajectory/moveit/arm-07/pick-4481"
   },
   "receiptSchema": {
     "requiredFields": [
@@ -56,8 +56,8 @@
       "planningGroup": "manipulator",
       "workspaceId": "cell-a",
       "endEffectorId": "gripper",
-      "planRef": "sint://plan/moveit/arm-07/pick-4481",
-      "trajectoryRef": "sint://trajectory/moveit/arm-07/pick-4481",
+      "planRef": "nosih://plan/moveit/arm-07/pick-4481",
+      "trajectoryRef": "nosih://trajectory/moveit/arm-07/pick-4481",
       "constraintsDigest": "digest:sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
       "decisionDigest": "digest:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "eventHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

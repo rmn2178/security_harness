@@ -1,5 +1,5 @@
 /**
- * SINT Persistence — PostgreSQL Store tests.
+ * NOSIH Persistence — PostgreSQL Store tests.
  *
  * These tests require a running PostgreSQL instance.
  * Set DATABASE_URL env var to run them.
@@ -13,8 +13,8 @@ import { PgTokenStore } from "../src/pg-token-store.js";
 import { PgMissionManifestStore } from "../src/pg-mission-manifest-store.js";
 import type {
   MissionManifest,
-  SintLedgerEvent,
-  SintCapabilityToken,
+  NosihLedgerEvent,
+  NosihCapabilityToken,
 } from "@pshkv/core";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -25,7 +25,7 @@ const DATABASE_URL = process.env.DATABASE_URL;
 
 const describeWithPg = DATABASE_URL ? describe : describe.skip;
 
-function makeLedgerEvent(seq: number, overrides?: Partial<SintLedgerEvent>): SintLedgerEvent {
+function makeLedgerEvent(seq: number, overrides?: Partial<NosihLedgerEvent>): NosihLedgerEvent {
   return {
     eventId: `event-${seq}`,
     sequenceNumber: BigInt(seq),
@@ -36,10 +36,10 @@ function makeLedgerEvent(seq: number, overrides?: Partial<SintLedgerEvent>): Sin
     previousHash: seq === 0 ? "0".repeat(64) : `hash-${seq - 1}`,
     hash: `hash-${seq}`,
     ...overrides,
-  } as SintLedgerEvent;
+  } as NosihLedgerEvent;
 }
 
-function makeToken(id: string): SintCapabilityToken {
+function makeToken(id: string): NosihCapabilityToken {
   return {
     tokenId: id,
     issuer: "issuer-pub-key",
@@ -52,7 +52,7 @@ function makeToken(id: string): SintCapabilityToken {
     expiresAt: "2026-03-16T22:00:00.000000Z",
     revocable: true,
     signature: "sig-" + id,
-  } as SintCapabilityToken;
+  } as NosihCapabilityToken;
 }
 
 describeWithPg("PgLedgerStore", () => {
@@ -70,12 +70,12 @@ describeWithPg("PgLedgerStore", () => {
   });
 
   afterAll(async () => {
-    await pool.query("DROP TABLE IF EXISTS sint_ledger_events");
+    await pool.query("DROP TABLE IF EXISTS nosih_ledger_events");
     await pool.end();
   });
 
   beforeEach(async () => {
-    await pool.query("DELETE FROM sint_ledger_events");
+    await pool.query("DELETE FROM nosih_ledger_events");
   });
 
   it("append and getById", async () => {
@@ -167,12 +167,12 @@ describeWithPg("PgTokenStore", () => {
   });
 
   afterAll(async () => {
-    await pool.query("DROP TABLE IF EXISTS sint_tokens");
+    await pool.query("DROP TABLE IF EXISTS nosih_tokens");
     await pool.end();
   });
 
   beforeEach(async () => {
-    await pool.query("DELETE FROM sint_tokens");
+    await pool.query("DELETE FROM nosih_tokens");
   });
 
   it("store and get", async () => {
@@ -194,7 +194,7 @@ describeWithPg("PgTokenStore", () => {
     await store.store({
       ...makeToken("tok-3"),
       subject: "other-subject",
-    } as SintCapabilityToken);
+    } as NosihCapabilityToken);
 
     const results = await store.getBySubject("subject-pub-key");
     expect(results).toHaveLength(2);
@@ -223,7 +223,7 @@ describeWithPg("PgTokenStore", () => {
     await store.store({
       ...makeToken("tok-1"),
       resource: "ros2:///cmd_vel",
-    } as SintCapabilityToken);
+    } as NosihCapabilityToken);
     const retrieved = await store.get("tok-1");
     expect(retrieved!.resource).toBe("ros2:///cmd_vel");
   });
@@ -232,7 +232,7 @@ describeWithPg("PgTokenStore", () => {
     await store.store({
       ...makeToken("tok-1"),
       actions: ["publish", "subscribe"],
-    } as SintCapabilityToken);
+    } as NosihCapabilityToken);
     const retrieved = await store.get("tok-1");
     expect(retrieved!.actions).toEqual(["publish", "subscribe"]);
   });
@@ -285,16 +285,16 @@ describeWithPg("PgMissionManifestStore", () => {
   });
 
   afterAll(async () => {
-    await pool.query("DROP TABLE IF EXISTS sint_mission_manifest_revocations");
-    await pool.query("DROP TABLE IF EXISTS sint_mission_authority_heads");
-    await pool.query("DROP TABLE IF EXISTS sint_mission_manifests");
+    await pool.query("DROP TABLE IF EXISTS nosih_mission_manifest_revocations");
+    await pool.query("DROP TABLE IF EXISTS nosih_mission_authority_heads");
+    await pool.query("DROP TABLE IF EXISTS nosih_mission_manifests");
     await pool.end();
   });
 
   beforeEach(async () => {
-    await pool.query("DELETE FROM sint_mission_manifest_revocations");
-    await pool.query("DELETE FROM sint_mission_authority_heads");
-    await pool.query("DELETE FROM sint_mission_manifests");
+    await pool.query("DELETE FROM nosih_mission_manifest_revocations");
+    await pool.query("DELETE FROM nosih_mission_authority_heads");
+    await pool.query("DELETE FROM nosih_mission_manifests");
   });
 
   it("persists immutable manifests and append-only revocations", async () => {

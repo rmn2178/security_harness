@@ -1,18 +1,18 @@
 /**
- * SINT Protocol — Approval Flow.
+ * NOSIH Protocol — Approval Flow.
  *
  * WebSocket-ready human approval queue for T2/T3 escalations.
  * Manages pending approval requests with timeout handling and
  * configurable fallback actions (deny or safe-stop).
  *
- * @module @sint/gate-policy-gateway/approval-flow
+ * @module @nosih/gate-policy-gateway/approval-flow
  */
 
 import type {
   DurationMs,
   ISO8601,
   PolicyDecision,
-  SintRequest,
+  NosihRequest,
   UUIDv7,
 } from "@pshkv/core";
 
@@ -31,7 +31,7 @@ export interface ApprovalQuorum {
 /** Parameters for creating an approval request. */
 export interface ApprovalRequest {
   readonly requestId: UUIDv7;
-  readonly request: SintRequest;
+  readonly request: NosihRequest;
   readonly decision: PolicyDecision;
   readonly reason: string;
   readonly timeoutMs: DurationMs;
@@ -116,7 +116,7 @@ export class ApprovalQueue {
    * @param quorum  Optional K-of-N quorum configuration.  When supplied, the
    *                request is not resolved until `required` approvers have voted.
    */
-  enqueue(request: SintRequest, decision: PolicyDecision, quorum?: ApprovalQuorum): ApprovalRequest {
+  enqueue(request: NosihRequest, decision: PolicyDecision, quorum?: ApprovalQuorum): ApprovalRequest {
     const timeoutMs = decision.escalation?.timeoutMs ?? this.defaultTimeoutMs;
     const fallbackAction = decision.escalation?.fallbackAction ?? this.defaultFallback;
     const now = nowISO8601();

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { PlanExecutor } from "../../src/planner/plan-executor.js";
 import { ApprovalTier, ok, err } from "@pshkv/core";
-import type { SintPlan, SintPlanStep } from "@pshkv/core";
+import type { NosihPlan, NosihPlanStep } from "@pshkv/core";
 
-function makePlan(stepCount: number): SintPlan {
-  const steps: SintPlanStep[] = [];
+function makePlan(stepCount: number): NosihPlan {
+  const steps: NosihPlanStep[] = [];
   for (let i = 0; i < stepCount; i++) {
     steps.push({
       action: `action${i}`,
@@ -112,13 +112,13 @@ describe("PlanExecutor", () => {
     const plan = makePlan(1);
     await executor.execute(plan);
 
-    const calledStep = onAction.mock.calls[0]![0] as SintPlanStep;
+    const calledStep = onAction.mock.calls[0]![0] as NosihPlanStep;
     expect(calledStep.params).toEqual({ index: 0 });
   });
 
   it("aborts remaining steps after failure", async () => {
     const executedSteps: number[] = [];
-    const onAction = vi.fn().mockImplementation(async (step: SintPlanStep) => {
+    const onAction = vi.fn().mockImplementation(async (step: NosihPlanStep) => {
       const idx = step.params["index"] as number;
       executedSteps.push(idx);
       if (idx === 1) {

@@ -14,7 +14,7 @@ esac
 
 COMPOSE_FILE="$ROOT_DIR/docker/compose/${PROFILE}.yml"
 
-echo "[SINT] Starting ${PROFILE} stack using ${COMPOSE_FILE}"
+echo "[NOSIH] Starting ${PROFILE} stack using ${COMPOSE_FILE}"
 docker compose -f "$COMPOSE_FILE" up --build -d
-echo "[SINT] Stack started. Check health:"
+echo "[NOSIH] Stack started. Check health:"
 echo "  docker compose -f $COMPOSE_FILE ps"

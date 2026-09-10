@@ -1,23 +1,23 @@
 /**
- * SINT Persistence — In-Memory Ledger Store.
+ * NOSIH Persistence — In-Memory Ledger Store.
  *
  * Reference implementation of LedgerStore for testing and development.
  * Uses the same contract that PG/Redis adapters must satisfy.
  *
- * @module @sint/persistence/in-memory-ledger-store
+ * @module @nosih/persistence/in-memory-ledger-store
  */
 
-import type { LedgerQuery, SintLedgerEvent, UUIDv7 } from "@pshkv/core";
+import type { LedgerQuery, NosihLedgerEvent, UUIDv7 } from "@pshkv/core";
 import type { LedgerStore } from "./interfaces.js";
 
 export class InMemoryLedgerStore implements LedgerStore {
-  private events: SintLedgerEvent[] = [];
+  private events: NosihLedgerEvent[] = [];
 
-  async append(event: SintLedgerEvent): Promise<void> {
+  async append(event: NosihLedgerEvent): Promise<void> {
     this.events.push(event);
   }
 
-  async query(query: LedgerQuery): Promise<readonly SintLedgerEvent[]> {
+  async query(query: LedgerQuery): Promise<readonly NosihLedgerEvent[]> {
     let result = [...this.events];
 
     if (query.agentId) {
@@ -46,11 +46,11 @@ export class InMemoryLedgerStore implements LedgerStore {
     return result;
   }
 
-  async getById(eventId: UUIDv7): Promise<SintLedgerEvent | undefined> {
+  async getById(eventId: UUIDv7): Promise<NosihLedgerEvent | undefined> {
     return this.events.find((e) => e.eventId === eventId);
   }
 
-  async getHead(): Promise<SintLedgerEvent | undefined> {
+  async getHead(): Promise<NosihLedgerEvent | undefined> {
     if (this.events.length === 0) return undefined;
     return this.events[this.events.length - 1];
   }

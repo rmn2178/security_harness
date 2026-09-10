@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Phase 4 Conformance Regression Tests.
+ * NOSIH Protocol — Phase 4 Conformance Regression Tests.
  *
  * Encodes the security invariants introduced in Phase 4:
  * - Rate limiting via token constraints
@@ -10,7 +10,7 @@
  * These tests must never fail. Any regression here indicates a
  * security-critical bug in the protocol implementation.
  *
- * @module @sint/conformance-tests/phase4-regression
+ * @module @nosih/conformance-tests/phase4-regression
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -25,9 +25,9 @@ import {
   isValidDid,
 } from "@pshkv/gate-capability-tokens";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   A2AInterceptor,
@@ -44,7 +44,7 @@ function futureISO(hours: number): string {
   return new Date(Date.now() + hours * 3600_000).toISOString();
 }
 
-function makeRequest(overrides: Partial<SintRequest> & { tokenId: string; agentId: string }): SintRequest {
+function makeRequest(overrides: Partial<NosihRequest> & { tokenId: string; agentId: string }): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-000000000001" as any,
     timestamp: new Date().toISOString(),
@@ -71,12 +71,12 @@ const ROBOT_CARD: A2AAgentCard = {
 describe("Phase 4 Invariant: Rate limiting", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let rateLimitStore: InMemoryRateLimitStore;
   let gateway: PolicyGateway;
 
-  function issueToken(maxCalls: number, windowMs: number): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueToken(maxCalls: number, windowMs: number): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",
@@ -169,7 +169,7 @@ describe("Phase 4 Invariant: Multi-party quorum approval", () => {
   it("INVARIANT: 2-of-3 quorum requires exactly 2 approvals", () => {
     const queue = new ApprovalQueue();
 
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: "req-001" as any,
       timestamp: new Date().toISOString(),
       agentId: "agent-1", tokenId: "token-1" as any,
@@ -196,7 +196,7 @@ describe("Phase 4 Invariant: Multi-party quorum approval", () => {
 
   it("INVARIANT: unauthorized operator cannot vote", () => {
     const queue = new ApprovalQueue();
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: "req-002" as any, timestamp: new Date().toISOString(),
       agentId: "agent-1", tokenId: "token-1" as any,
       resource: "ros2:///cmd_vel", action: "publish", params: {},
@@ -216,7 +216,7 @@ describe("Phase 4 Invariant: Multi-party quorum approval", () => {
 
   it("INVARIANT: any denial immediately blocks regardless of prior approvals", () => {
     const queue = new ApprovalQueue();
-    const req: SintRequest = {
+    const req: NosihRequest = {
       requestId: "req-003" as any, timestamp: new Date().toISOString(),
       agentId: "agent-1", tokenId: "token-1" as any,
       resource: "ros2:///cmd_vel", action: "publish", params: {},
@@ -280,11 +280,11 @@ describe("Phase 4 Invariant: W3C DID identity", () => {
 describe("Phase 4 Invariant: A2A bridge security", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
-  function issueA2AToken(resource: string): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueA2AToken(resource: string): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey, subject: agent.publicKey,
       resource, actions: ["a2a.send", "a2a.get"],
       constraints: {},

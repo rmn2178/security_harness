@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { SintGovernanceHandler } from "../src/handler.js";
-import { SintDeniedError } from "../src/errors.js";
+import { NosihGovernanceHandler } from "../src/handler.js";
+import { NosihDeniedError } from "../src/errors.js";
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -21,11 +21,11 @@ function mockGatewayResponse(
   });
 }
 
-describe("SintGovernanceHandler", () => {
-  let handler: SintGovernanceHandler;
+describe("NosihGovernanceHandler", () => {
+  let handler: NosihGovernanceHandler;
 
   beforeEach(() => {
-    handler = new SintGovernanceHandler({
+    handler = new NosihGovernanceHandler({
       gatewayUrl: "http://localhost:4100",
       agentId: "test-agent",
     });
@@ -55,7 +55,7 @@ describe("SintGovernanceHandler", () => {
     expect(body.action).toBe("execute");
   });
 
-  it("throws SintDeniedError on denied tool calls", async () => {
+  it("throws NosihDeniedError on denied tool calls", async () => {
     mockGatewayResponse("deny", {
       reason: "Insufficient capability scope",
       tier: 3,
@@ -67,7 +67,7 @@ describe("SintGovernanceHandler", () => {
         '{"path": "/etc/passwd"}',
         "run-2"
       )
-    ).rejects.toThrow(SintDeniedError);
+    ).rejects.toThrow(NosihDeniedError);
 
     try {
       mockGatewayResponse("deny", {
@@ -80,8 +80,8 @@ describe("SintGovernanceHandler", () => {
         "run-3"
       );
     } catch (err) {
-      expect(err).toBeInstanceOf(SintDeniedError);
-      const denied = err as SintDeniedError;
+      expect(err).toBeInstanceOf(NosihDeniedError);
+      const denied = err as NosihDeniedError;
       expect(denied.toolName).toBe("delete_file");
       expect(denied.reason).toBe("Insufficient capability scope");
       expect(denied.tier).toBe(3);
@@ -89,7 +89,7 @@ describe("SintGovernanceHandler", () => {
   });
 
   it("does not throw when throwOnDeny is false", async () => {
-    const lenientHandler = new SintGovernanceHandler({
+    const lenientHandler = new NosihGovernanceHandler({
       gatewayUrl: "http://localhost:4100",
       agentId: "test-agent",
       throwOnDeny: false,
@@ -106,7 +106,7 @@ describe("SintGovernanceHandler", () => {
   });
 
   it("uses custom resource and action mappers", async () => {
-    const customHandler = new SintGovernanceHandler({
+    const customHandler = new NosihGovernanceHandler({
       gatewayUrl: "http://localhost:4100",
       agentId: "test-agent",
       resourceMapper: (name) => `langchain:${name}`,
@@ -155,7 +155,7 @@ describe("SintGovernanceHandler", () => {
 
     await expect(
       handler.handleToolStart({ name: "slow_tool" }, "{}", "run-8")
-    ).rejects.toThrow(SintDeniedError);
+    ).rejects.toThrow(NosihDeniedError);
   });
 
   it("handles gateway connection error gracefully", async () => {
@@ -163,11 +163,11 @@ describe("SintGovernanceHandler", () => {
 
     await expect(
       handler.handleToolStart({ name: "any_tool" }, "{}", "run-9")
-    ).rejects.toThrow(SintDeniedError);
+    ).rejects.toThrow(NosihDeniedError);
   });
 
   it("sends token when configured", async () => {
-    const tokenHandler = new SintGovernanceHandler({
+    const tokenHandler = new NosihGovernanceHandler({
       gatewayUrl: "http://localhost:4100",
       agentId: "test-agent",
       token: "cap-token-xyz",
@@ -186,7 +186,7 @@ describe("SintGovernanceHandler", () => {
   });
 
   it("sends API key header when configured", async () => {
-    const apiKeyHandler = new SintGovernanceHandler({
+    const apiKeyHandler = new NosihGovernanceHandler({
       gatewayUrl: "http://localhost:4100",
       agentId: "test-agent",
       apiKey: "admin-key-123",

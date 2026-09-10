@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Authentication middleware tests.
+ * NOSIH Gateway Server — Authentication middleware tests.
  */
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
@@ -10,7 +10,7 @@ import {
   issueCapabilityToken,
   sign,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 import { clearRateLimits } from "../src/middleware/auth.js";
 
 function futureISO(hoursFromNow: number): string {
@@ -38,7 +38,7 @@ describe("Authentication Middleware", () => {
     });
 
     async function storeToken() {
-      const request: SintCapabilityTokenRequest = {
+      const request: NosihCapabilityTokenRequest = {
         issuer: root.publicKey,
         subject: agent.publicKey,
         resource: "ros2:///camera/front",
@@ -131,8 +131,8 @@ describe("Authentication Middleware", () => {
       expect(res.status).toBe(200);
     });
 
-    it("exempts /.well-known/sint.json from signature requirement", async () => {
-      const res = await app.request("/.well-known/sint.json");
+    it("exempts /.well-known/nosih.json from signature requirement", async () => {
+      const res = await app.request("/.well-known/nosih.json");
       expect(res.status).toBe(200);
     });
 
@@ -184,8 +184,8 @@ describe("Authentication Middleware", () => {
       expect(res.status).toBe(200);
     });
 
-    it("exempts /.well-known/sint.json from API key requirement", async () => {
-      const res = await app.request("/.well-known/sint.json");
+    it("exempts /.well-known/nosih.json from API key requirement", async () => {
+      const res = await app.request("/.well-known/nosih.json");
       expect(res.status).toBe(200);
     });
 

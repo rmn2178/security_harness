@@ -162,7 +162,7 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.15)(jsdom@25.0.1)(tsx@4.21.0)
 
-  apps/sint-interface:
+  apps/nosih-interface:
     dependencies:
       react:
         specifier: ^19.0.0
@@ -199,7 +199,7 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.15)(jsdom@25.0.1)(tsx@4.21.0)
 
-  apps/sint-mcp:
+  apps/nosih-mcp:
     devDependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.29.0
@@ -241,7 +241,7 @@ importers:
         specifier: ^3.24.0
         version: 3.25.76
 
-  apps/sint-mcp-scanner:
+  apps/nosih-mcp-scanner:
     devDependencies:
       '@pshkv/bridge-mcp':
         specifier: workspace:*
@@ -259,7 +259,7 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.15)(jsdom@25.0.1)(tsx@4.21.0)
 
-  apps/sintctl:
+  apps/nosihctl:
     devDependencies:
       esbuild:
         specifier: ^0.25.0
@@ -719,9 +719,9 @@ importers:
       '@pshkv/persistence':
         specifier: workspace:*
         version: link:../persistence
-      '@pshkv/sint-edge-agent':
+      '@pshkv/nosih-edge-agent':
         specifier: workspace:*
-        version: link:../sint-edge-agent
+        version: link:../nosih-edge-agent
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -971,7 +971,7 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.15)(jsdom@25.0.1)(tsx@4.21.0)
 
-  packages/sint-edge-agent:
+  packages/nosih-edge-agent:
     dependencies:
       '@noble/hashes':
         specifier: ^1.7.0
@@ -993,7 +993,7 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.15)(jsdom@25.0.1)(tsx@4.21.0)
 
-  packages/sint-pdp-interceptor:
+  packages/nosih-pdp-interceptor:
     dependencies:
       '@pshkv/core':
         specifier: workspace:*

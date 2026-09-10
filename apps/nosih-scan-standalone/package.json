@@ -1,0 +1,14 @@
+{
+  "name": "nosih-scan",
+  "version": "0.1.0",
+  "description": "Scan any MCP server for risky tools in seconds — maps tools to NOSIH tiers (T0-T3), detects shell-exec risks, OWASP ASI05 coverage",
+  "keywords": ["mcp","security","ai-agents","nosih","governance","audit","owasp","llm","claude","agents"],
+  "homepage": "https://nosih.gg",
+  "repository": {"type":"git","url":"https://github.com/nosih-ai/nosih-protocol","directory":"apps/nosih-mcp-scanner"},
+  "author": "NOSIH Labs <hello@nosih.gg>",
+  "license": "Apache-2.0",
+  "bin": {"nosih-scan": "./cli.js"},
+  "main": "./scanner.js",
+  "engines": {"node": ">=18"},
+  "files": ["cli.js","scanner.js","README.md"]
+}

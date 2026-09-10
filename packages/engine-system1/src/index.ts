@@ -1,8 +1,8 @@
 /**
- * SINT Protocol — Engine System 1 (Neural Perception).
+ * NOSIH Protocol — Engine System 1 (Neural Perception).
  *
  * System 1 provides the fast, reactive perception pipeline for the
- * SINT Protocol Engine Layer (L3). It handles sensor fusion, ONNX-based
+ * NOSIH Protocol Engine Layer (L3). It handles sensor fusion, ONNX-based
  * neural inference, anomaly detection, and action prediction.
  *
  * @example
@@ -15,7 +15,7 @@
  * pipeline.start();
  * ```
  *
- * @module @sint/engine-system1
+ * @module @nosih/engine-system1
  */
 
 export type {

@@ -7,9 +7,9 @@ import {
 } from "@pshkv/gate-capability-tokens";
 import {
   ApprovalTier,
-  type SintCapabilityToken,
-  type SintCapabilityTokenRequest,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihCapabilityTokenRequest,
+  type NosihRequest,
 } from "@pshkv/core";
 import { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import {
@@ -29,17 +29,17 @@ type Harness = {
   readonly gateway: PolicyGateway;
   readonly plugin: PolicyGatewayAutonomySupervisor;
   readonly ledger: LedgerWriter;
-  readonly token: SintCapabilityToken;
+  readonly token: NosihCapabilityToken;
   readonly agentId: string;
   setRuntime(runtime: AutonomyRuntimeSignals): void;
   setExternalAuthorization(signal: ExternalAuthorizationSignal | undefined): void;
-  request(overrides?: Partial<SintRequest>): SintRequest;
+  request(overrides?: Partial<NosihRequest>): NosihRequest;
 };
 
 function makeHarness(options: {
   readonly resource?: string;
   readonly action?: string;
-  readonly autonomyPolicy?: SintCapabilityTokenRequest["autonomyPolicy"];
+  readonly autonomyPolicy?: NosihCapabilityTokenRequest["autonomyPolicy"];
 } = {}): Harness {
   const issuer = generateKeypair();
   const agent = generateKeypair();

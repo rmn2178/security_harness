@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Avatar Layer (L5) types.
+ * NOSIH Protocol — Avatar Layer (L5) types.
  *
  * The Avatar layer is the behavioral identity layer — the persistent record
  * of who an agent *is* based on what it has *done*. Unlike capability tokens
@@ -14,7 +14,7 @@
  * Invariant: avatar tier adjustment is ADDITIVE — it can only increase the
  * assigned tier, never decrease it.
  *
- * @module @sint/avatar/types
+ * @module @nosih/avatar/types
  */
 
 import type { ApprovalTier } from "@pshkv/core";
@@ -47,7 +47,7 @@ export interface CsmlSnapshot {
 }
 
 /**
- * Persistent behavioral identity profile for a SINT agent.
+ * Persistent behavioral identity profile for a NOSIH agent.
  *
  * Computed from the Evidence Ledger. Updated incrementally as new events arrive.
  * Drives CSML-based tier escalation in PolicyGateway.
@@ -133,4 +133,4 @@ export interface CsmlEscalationDecision {
 export type AgentEventQuery = (
   agentId: string,
   windowSize: number
-) => readonly import("@pshkv/core").SintLedgerEvent[] | Promise<readonly import("@pshkv/core").SintLedgerEvent[]>;
+) => readonly import("@pshkv/core").NosihLedgerEvent[] | Promise<readonly import("@pshkv/core").NosihLedgerEvent[]>;

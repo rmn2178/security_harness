@@ -1,9 +1,9 @@
 /**
- * SINT Protocol — Selector behavior tree node.
+ * NOSIH Protocol — Selector behavior tree node.
  *
  * Ticks children until one succeeds. Returns failure only when ALL children fail.
  *
- * @module @sint/engine-system2/bt/nodes/selector
+ * @module @nosih/engine-system2/bt/nodes/selector
  */
 
 import type { Blackboard } from "../blackboard.js";

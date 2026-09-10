@@ -1,7 +1,7 @@
 /**
  * Evidence HUD — real-time evidence ledger viewer.
  *
- * Connects to the SINT gateway's SSE stream and maintains
+ * Connects to the NOSIH gateway's SSE stream and maintains
  * a rolling window of evidence entries for the holographic HUD.
  */
 

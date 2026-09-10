@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/avatar",
   "version": "0.1.0",
-  "description": "SINT Protocol Avatar Layer (L5) — behavioral identity profiles, CSML-driven tier escalation",
+  "description": "NOSIH Protocol Avatar Layer (L5) — behavioral identity profiles, CSML-driven tier escalation",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

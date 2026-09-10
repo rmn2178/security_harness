@@ -1,7 +1,7 @@
 /**
- * SINT Gateway — Delegation Tree API routes.
+ * NOSIH Gateway — Delegation Tree API routes.
  *
- * Exposes the DelegationTree for SINT Console visualization.
+ * Exposes the DelegationTree for NOSIH Console visualization.
  *
  * GET /v1/delegations          — list all delegation nodes
  * GET /v1/delegations/:tokenId — get specific node

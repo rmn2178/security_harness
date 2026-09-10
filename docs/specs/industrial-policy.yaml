@@ -1,4 +1,4 @@
-policy_id: sint.factory.robot.motion.v1
+policy_id: nosih.factory.robot.motion.v1
 status: draft
 risk_tier: T3_commit
 description: >

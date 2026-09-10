@@ -1,17 +1,17 @@
 import { describe, it, expect, vi } from "vitest";
 import { ActionPredictor } from "../src/action-predictor.js";
-import type { SintWorldState, SintPerceivedObject, SintPose, SintAnomalyFlag } from "@pshkv/core";
+import type { NosihWorldState, NosihPerceivedObject, NosihPose, NosihAnomalyFlag } from "@pshkv/core";
 
-const DEFAULT_POSE: SintPose = {
+const DEFAULT_POSE: NosihPose = {
   position: { x: 0, y: 0, z: 0 },
   orientation: { roll: 0, pitch: 0, yaw: 0 },
 };
 
 function makeWorldState(
-  objects: SintPerceivedObject[] = [],
-  anomalyFlags: SintAnomalyFlag[] = [],
+  objects: NosihPerceivedObject[] = [],
+  anomalyFlags: NosihAnomalyFlag[] = [],
   humanPresent = false,
-): SintWorldState {
+): NosihWorldState {
   return {
     timestamp: "2026-03-17T10:00:00.000000Z",
     objects,
@@ -25,7 +25,7 @@ function makeObject(
   classLabel: string,
   confidence: number,
   isHuman = false,
-): SintPerceivedObject {
+): NosihPerceivedObject {
   return {
     classLabel,
     confidence,
@@ -38,7 +38,7 @@ function makeObject(
 }
 
 describe("ActionPredictor", () => {
-  it("predict returns valid SintActionRecommendation", () => {
+  it("predict returns valid NosihActionRecommendation", () => {
     const predictor = new ActionPredictor();
     const ws = makeWorldState([makeObject("box", 0.9)]);
     const rec = predictor.predict(ws);
@@ -53,7 +53,7 @@ describe("ActionPredictor", () => {
 
   it("isSafetyRelevant is true when anomaly flags present", () => {
     const predictor = new ActionPredictor();
-    const anomalyFlag: SintAnomalyFlag = {
+    const anomalyFlag: NosihAnomalyFlag = {
       type: "low_confidence",
       severity: 0.7,
       source: "anomaly_detector",
@@ -127,7 +127,7 @@ describe("ActionPredictor", () => {
 
   it("handles world state with no objects", () => {
     const predictor = new ActionPredictor();
-    const ws: SintWorldState = {
+    const ws: NosihWorldState = {
       timestamp: "2026-03-17T10:00:00.000000Z",
       objects: [],
       robotPose: DEFAULT_POSE,

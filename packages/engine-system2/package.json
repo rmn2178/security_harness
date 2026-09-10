@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/engine-system2",
   "version": "0.1.0",
-  "description": "SINT Protocol System 2 — Symbolic reasoning with behavior trees, task planning, and System 1/2 arbitration",
+  "description": "NOSIH Protocol System 2 — Symbolic reasoning with behavior trees, task planning, and System 1/2 arbitration",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

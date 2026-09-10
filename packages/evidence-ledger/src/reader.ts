@@ -1,15 +1,15 @@
 /**
- * SINT Protocol — Evidence Ledger Reader.
+ * NOSIH Protocol — Evidence Ledger Reader.
  *
  * Query interface for the Evidence Ledger.
  * Supports filtering by agent, event type, time range, and sequence range.
  *
- * @module @sint/gate-evidence-ledger/reader
+ * @module @nosih/gate-evidence-ledger/reader
  */
 
 import type {
   LedgerQuery,
-  SintLedgerEvent,
+  NosihLedgerEvent,
 } from "@pshkv/core";
 
 /**
@@ -29,9 +29,9 @@ import type {
  * ```
  */
 export function queryLedger(
-  events: readonly SintLedgerEvent[],
+  events: readonly NosihLedgerEvent[],
   query: LedgerQuery,
-): readonly SintLedgerEvent[] {
+): readonly NosihLedgerEvent[] {
   let filtered = events;
 
   if (query.agentId) {
@@ -87,8 +87,8 @@ export function queryLedger(
  * ```
  */
 export function replayEvents(
-  events: readonly SintLedgerEvent[],
-  callback: (event: SintLedgerEvent) => void,
+  events: readonly NosihLedgerEvent[],
+  callback: (event: NosihLedgerEvent) => void,
 ): void {
   const sorted = [...events].sort((a, b) =>
     a.sequenceNumber < b.sequenceNumber ? -1 : 1,

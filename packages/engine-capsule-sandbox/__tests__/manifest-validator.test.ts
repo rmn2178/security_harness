@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Manifest validator unit tests.
+ * NOSIH Protocol — Manifest validator unit tests.
  *
  * Validates the Zod-based manifest validation logic.
  */
 
 import { describe, it, expect } from "vitest";
 import { validateManifest } from "../src/manifest-validator.js";
-import type { SintCapsuleManifest } from "@pshkv/core";
+import type { NosihCapsuleManifest } from "@pshkv/core";
 
 /** A valid UUIDv7 for test fixtures. */
 const VALID_UUID = "01905f7c-0000-7000-8000-000000000001";
@@ -18,12 +18,12 @@ const VALID_HASH = "a".repeat(64);
  * Returns a complete, valid manifest for use as a test fixture.
  * Individual tests override specific fields to trigger validation errors.
  */
-function validManifest(): SintCapsuleManifest {
+function validManifest(): NosihCapsuleManifest {
   return {
     capsuleId: VALID_UUID,
     version: "1.0.0",
     name: "test-capsule",
-    author: "sint-labs",
+    author: "nosih-labs",
     sensors: ["camera_rgb"],
     actuators: [],
     safetyDeclarations: {},
@@ -142,7 +142,7 @@ describe("validateManifest", () => {
   });
 
   it("validates manifest with all optional fields", () => {
-    const manifest: SintCapsuleManifest = {
+    const manifest: NosihCapsuleManifest = {
       ...validManifest(),
       description: "A detailed description of the capsule",
       safetyDeclarations: {

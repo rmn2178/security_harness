@@ -1,7 +1,7 @@
 /**
  * Regulated agent runtime profile conformance.
  *
- * Proves that regulated data workflows can use the same SINT guarantees as
+ * Proves that regulated data workflows can use the same NOSIH guarantees as
  * physical-effect workflows: one intercept path, scoped authority, attenuated
  * delegation, transform receipts, and minimized evidence.
  */

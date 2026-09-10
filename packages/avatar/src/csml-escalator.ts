@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — CSML Escalator.
+ * NOSIH Protocol — CSML Escalator.
  *
  * Implements the CSML-driven auto-escalation hook for PolicyGateway.
  * When an agent's Composite Safety-Model Latency score exceeds θ (default 0.3),
@@ -13,7 +13,7 @@
  * Integration: set as `csmlEscalation` on PolicyGatewayConfig. Called after
  * tier assignment (step 5), before forbidden combo check (step 6).
  *
- * @module @sint/avatar/csml-escalator
+ * @module @nosih/avatar/csml-escalator
  */
 
 import { ApprovalTier } from "@pshkv/core";

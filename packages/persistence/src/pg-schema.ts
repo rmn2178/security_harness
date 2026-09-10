@@ -1,10 +1,10 @@
 /**
- * SINT Persistence — PostgreSQL schema bootstrap.
+ * NOSIH Persistence — PostgreSQL schema bootstrap.
  *
  * Ensures required tables exist for production startup when
- * running with SINT_STORE=postgres and/or SINT_CACHE=redis.
+ * running with NOSIH_STORE=postgres and/or NOSIH_CACHE=redis.
  *
- * @module @sint/persistence/pg-schema
+ * @module @nosih/persistence/pg-schema
  */
 
 import type pg from "pg";
@@ -15,7 +15,7 @@ import type pg from "pg";
  */
 export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_ledger_events (
+    CREATE TABLE IF NOT EXISTS nosih_ledger_events (
       id BIGSERIAL PRIMARY KEY,
       event_id TEXT NOT NULL UNIQUE,
       sequence_number BIGINT NOT NULL UNIQUE,
@@ -30,17 +30,17 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_ledger_agent_seq
-      ON sint_ledger_events (agent_id, sequence_number);
+    CREATE INDEX IF NOT EXISTS idx_nosih_ledger_agent_seq
+      ON nosih_ledger_events (agent_id, sequence_number);
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_ledger_event_type_seq
-      ON sint_ledger_events (event_type, sequence_number);
+    CREATE INDEX IF NOT EXISTS idx_nosih_ledger_event_type_seq
+      ON nosih_ledger_events (event_type, sequence_number);
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_tokens (
+    CREATE TABLE IF NOT EXISTS nosih_tokens (
       token_id TEXT PRIMARY KEY,
       issuer TEXT NOT NULL,
       subject TEXT NOT NULL,
@@ -64,7 +64,7 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    ALTER TABLE sint_tokens
+    ALTER TABLE nosih_tokens
       ADD COLUMN IF NOT EXISTS model_constraints JSONB,
       ADD COLUMN IF NOT EXISTS attestation_requirements JSONB,
       ADD COLUMN IF NOT EXISTS verifiable_compute_requirements JSONB,
@@ -76,12 +76,12 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_tokens_subject
-      ON sint_tokens (subject);
+    CREATE INDEX IF NOT EXISTS idx_nosih_tokens_subject
+      ON nosih_tokens (subject);
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_revocations (
+    CREATE TABLE IF NOT EXISTS nosih_revocations (
       token_id TEXT PRIMARY KEY,
       reason TEXT NOT NULL,
       revoked_by TEXT NOT NULL,
@@ -90,7 +90,7 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_rate_limit_counters (
+    CREATE TABLE IF NOT EXISTS nosih_rate_limit_counters (
       bucket_key TEXT PRIMARY KEY,
       count BIGINT NOT NULL DEFAULT 1,
       expires_at TIMESTAMPTZ NOT NULL
@@ -98,12 +98,12 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_rate_limit_expires_at
-      ON sint_rate_limit_counters (expires_at);
+    CREATE INDEX IF NOT EXISTS idx_nosih_rate_limit_expires_at
+      ON nosih_rate_limit_counters (expires_at);
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_mission_manifests (
+    CREATE TABLE IF NOT EXISTS nosih_mission_manifests (
       manifest_id TEXT PRIMARY KEY,
       platform_id TEXT NOT NULL,
       mission_class TEXT NOT NULL,
@@ -115,24 +115,24 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_mission_manifests_platform
-      ON sint_mission_manifests (platform_id);
+    CREATE INDEX IF NOT EXISTS idx_nosih_mission_manifests_platform
+      ON nosih_mission_manifests (platform_id);
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_mission_manifests_class
-      ON sint_mission_manifests (mission_class);
+    CREATE INDEX IF NOT EXISTS idx_nosih_mission_manifests_class
+      ON nosih_mission_manifests (mission_class);
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_mission_manifests_validity
-      ON sint_mission_manifests (valid_from, valid_until);
+    CREATE INDEX IF NOT EXISTS idx_nosih_mission_manifests_validity
+      ON nosih_mission_manifests (valid_from, valid_until);
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_mission_manifest_revocations (
+    CREATE TABLE IF NOT EXISTS nosih_mission_manifest_revocations (
       manifest_id TEXT PRIMARY KEY
-        REFERENCES sint_mission_manifests (manifest_id),
+        REFERENCES nosih_mission_manifests (manifest_id),
       reason TEXT NOT NULL,
       revoked_by TEXT NOT NULL,
       revoked_at TEXT NOT NULL
@@ -140,23 +140,23 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_mission_authority_heads (
+    CREATE TABLE IF NOT EXISTS nosih_mission_authority_heads (
       platform_identity TEXT PRIMARY KEY,
       manifest_id TEXT NOT NULL UNIQUE
-        REFERENCES sint_mission_manifests (manifest_id),
+        REFERENCES nosih_mission_manifests (manifest_id),
       manifest_version INTEGER NOT NULL CHECK (manifest_version > 0),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `);
 
   await pool.query(`
-    INSERT INTO sint_mission_authority_heads
+    INSERT INTO nosih_mission_authority_heads
       (platform_identity, manifest_id, manifest_version)
     SELECT DISTINCT ON (manifest->>'platformIdentity')
       manifest->>'platformIdentity',
       manifest_id,
       (manifest->>'manifestVersion')::INTEGER
-    FROM sint_mission_manifests
+    FROM nosih_mission_manifests
     WHERE manifest ? 'platformIdentity'
       AND manifest ? 'manifestVersion'
     ORDER BY
@@ -167,27 +167,27 @@ export async function ensurePgSchema(pool: pg.Pool): Promise<void> {
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_mission_action_claims (
+    CREATE TABLE IF NOT EXISTS nosih_mission_action_claims (
       action_ref TEXT PRIMARY KEY,
       manifest_id TEXT NOT NULL
-        REFERENCES sint_mission_manifests (manifest_id),
+        REFERENCES nosih_mission_manifests (manifest_id),
       effect_id TEXT,
       claimed_at TEXT NOT NULL
     );
   `);
 
   await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_sint_mission_action_claims_effect
-      ON sint_mission_action_claims (manifest_id, effect_id)
+    CREATE INDEX IF NOT EXISTS idx_nosih_mission_action_claims_effect
+      ON nosih_mission_action_claims (manifest_id, effect_id)
       WHERE effect_id IS NOT NULL;
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS sint_mission_action_outcomes (
+    CREATE TABLE IF NOT EXISTS nosih_mission_action_outcomes (
       action_ref TEXT PRIMARY KEY
-        REFERENCES sint_mission_action_claims (action_ref),
+        REFERENCES nosih_mission_action_claims (action_ref),
       manifest_id TEXT NOT NULL
-        REFERENCES sint_mission_manifests (manifest_id),
+        REFERENCES nosih_mission_manifests (manifest_id),
       outcome TEXT NOT NULL,
       completed_at TEXT NOT NULL,
       report JSONB NOT NULL

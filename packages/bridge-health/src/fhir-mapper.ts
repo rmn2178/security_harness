@@ -1,7 +1,7 @@
 /**
- * SINT bridge-health — FHIR Resource Mapper
+ * NOSIH bridge-health — FHIR Resource Mapper
  *
- * Maps FHIR R5 resources to SINT resource URIs and actions.
+ * Maps FHIR R5 resources to NOSIH resource URIs and actions.
  * Implements consent-based health data governance per Physical AI
  * Governance Roadmap Phase 5.
  *
@@ -61,12 +61,12 @@ export interface FHIRAccessContext {
 }
 
 /**
- * SINT resource mapping for FHIR access.
+ * NOSIH resource mapping for FHIR access.
  */
 export interface FHIRResourceMapping {
-  /** SINT resource URI (e.g., fhir://server.example.org/Patient/123) */
+  /** NOSIH resource URI (e.g., fhir://server.example.org/Patient/123) */
   resource: string;
-  /** SINT action (e.g., 'read', 'create', 'update') */
+  /** NOSIH action (e.g., 'read', 'create', 'update') */
   action: string;
   /** Minimum required approval tier */
   tier: ApprovalTier;
@@ -132,14 +132,14 @@ export const FHIR_INTERACTION_TIER_OVERRIDES: Record<FHIRInteraction, number> = 
 };
 
 /**
- * Map a FHIR resource access to a SINT resource URI and action.
+ * Map a FHIR resource access to a NOSIH resource URI and action.
  *
  * @param context - FHIR access context
- * @returns SINT resource mapping with tier and context
+ * @returns NOSIH resource mapping with tier and context
  *
  * @example
  * ```ts
- * const mapping = mapFHIRToSint({
+ * const mapping = mapFHIRToNosih({
  *   serverUrl: 'https://fhir.example.org',
  *   resourceType: 'Observation',
  *   resourceId: 'blood-pressure-123',
@@ -155,10 +155,10 @@ export const FHIR_INTERACTION_TIER_OVERRIDES: Record<FHIRInteraction, number> = 
  * // }
  * ```
  */
-export function mapFHIRToSint(context: FHIRAccessContext): FHIRResourceMapping {
+export function mapFHIRToNosih(context: FHIRAccessContext): FHIRResourceMapping {
   const { serverUrl, resourceType, resourceId, interaction, patientId, searchParams } = context;
   
-  // Construct SINT resource URI
+  // Construct NOSIH resource URI
   const baseUrl = serverUrl.replace(/^https?:\/\//, ""); // Remove protocol
   let resource = `fhir://${baseUrl}/${resourceType}`;
   

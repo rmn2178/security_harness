@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Engine Hardware Abstraction Layer (HAL).
+ * NOSIH Protocol — Engine Hardware Abstraction Layer (HAL).
  *
  * Auto-detects hardware capabilities, selects the optimal deployment
  * profile, monitors system resources, and loads engine configuration.
  *
  * @packageDocumentation
- * @module @sint/engine-hal
+ * @module @nosih/engine-hal
  */
 
 export type { ResourceSnapshot, ResourceThresholds, EngineConfig } from "./types.js";

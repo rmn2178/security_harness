@@ -2,11 +2,17 @@ import { useState } from "react";
 import { interceptRequest } from "../api/client.js";
 import type { InterceptRequest } from "../api/types.js";
 
+function utcTimestamp(): string {
+  return new Date().toISOString().replace("Z", "000Z");
+}
+
 const SAMPLE_REQUEST: InterceptRequest = {
   requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6b0",
-  timestamp: new Date().toISOString(),
-  agentId: "replace-with-agent-public-key",
-  tokenId: "replace-with-token-id",
+  timestamp: utcTimestamp(),
+  // Schema-valid development identifiers. Replace tokenId with an issued token
+  // before testing an authorization decision.
+  agentId: "4f1c9a7e6b3d2f8a5c0e1d9b7a6f4c2e8d1a3b5f7c9e0d2a4b6c8e1f3a5d7b9c",
+  tokenId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6b0",
   resource: "ros2:///cmd_vel",
   action: "publish",
   params: {
@@ -41,7 +47,7 @@ export function PolicyPlayground() {
   }
 
   function resetTemplate() {
-    setRequestJson(JSON.stringify({ ...SAMPLE_REQUEST, timestamp: new Date().toISOString() }, null, 2));
+    setRequestJson(JSON.stringify({ ...SAMPLE_REQUEST, timestamp: utcTimestamp() }, null, 2));
     setResponseJson("");
     setError(null);
   }
@@ -55,7 +61,8 @@ export function PolicyPlayground() {
 
       <p className="playground-help text-muted">
         Paste or edit a request payload, then run it through the live policy engine.
-        Use this for rule testing before wiring a new agent/tool/bridge.
+        The template uses valid identifier formats; replace its tokenId with an issued
+        token before testing an authorization decision.
       </p>
 
       <div className="playground-grid">

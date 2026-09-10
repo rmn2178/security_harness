@@ -1,7 +1,7 @@
 /**
  * MAVLink interceptor tests.
  *
- * Verifies that SINT correctly gates all safety-critical drone commands:
+ * Verifies that NOSIH correctly gates all safety-critical drone commands:
  * - ARM/DISARM → T3_COMMIT (explicit human approval required)
  * - MISSION_START → T3_COMMIT
  * - NAV_TAKEOFF / NAV_LAND → T2_ACT (review)
@@ -15,12 +15,12 @@ import { describe, it, expect } from "vitest";
 import { MAVLinkInterceptor } from "../src/mavlink-interceptor.js";
 import { MAV_CMD } from "../src/mavlink-types.js";
 import type { MavlinkIntercept, MavCommandLong, MavSetPositionTargetLocalNed } from "../src/mavlink-types.js";
-import { mapMavlinkToSint } from "../src/mavlink-resource-mapper.js";
+import { mapMavlinkToNosih } from "../src/mavlink-resource-mapper.js";
 import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken } from "@pshkv/core";
+import type { NosihCapabilityToken } from "@pshkv/core";
 import { PolicyGateway } from "@pshkv/gate-policy-gateway";
 
 function futureISO(h = 1): string {
@@ -34,7 +34,7 @@ function makeToken(overrides: {
   resource?: string;
   actions?: string[];
   maxVelocityMps?: number;
-} = {}): SintCapabilityToken {
+} = {}): NosihCapabilityToken {
   const result = issueCapabilityToken({
     issuer: root.publicKey,
     subject: drone.publicKey,
@@ -304,7 +304,7 @@ describe("MAVLinkInterceptor velocity constraint", () => {
 
 describe("MAVLink spatial context mapping", () => {
   it("maps SET_POSITION_TARGET_LOCAL_NED position/yaw fields into spatial context", () => {
-    const mapped = mapMavlinkToSint(makePositionTarget(), false);
+    const mapped = mapMavlinkToNosih(makePositionTarget(), false);
 
     expect(mapped.physicalContext?.currentPosition).toEqual({ x: 12, y: 3, z: 4 });
     expect(mapped.physicalContext?.currentHeadingDeg).toBeCloseTo(90);
@@ -313,7 +313,7 @@ describe("MAVLink spatial context mapping", () => {
   });
 
   it("does not claim position proof for velocity-only SET_POSITION_TARGET_LOCAL_NED messages", () => {
-    const mapped = mapMavlinkToSint(makeVelocityCmd(2, 0, 0), false);
+    const mapped = mapMavlinkToNosih(makeVelocityCmd(2, 0, 0), false);
 
     expect(mapped.physicalContext?.currentVelocityMps).toBe(2);
     expect(mapped.physicalContext?.currentPosition).toBeUndefined();

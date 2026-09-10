@@ -1,5 +1,5 @@
 /**
- * @pshkv/bridge-health — SINT Bridge for Health & Wellbeing
+ * @pshkv/bridge-health — NOSIH Bridge for Health & Wellbeing
  *
  * FHIR + HealthKit/Health Connect governance with consent primitives,
  * differential privacy, and caregiver delegation. Implements Phase 5
@@ -10,7 +10,7 @@
 
 // FHIR resource mapping
 export {
-  mapFHIRToSint,
+  mapFHIRToNosih,
   parseFHIRUrl,
   containsPHI,
   requiresConsent,
@@ -24,7 +24,7 @@ export {
 
 // HealthKit/Health Connect mapping
 export {
-  mapHealthKitToSint,
+  mapHealthKitToNosih,
   requiresCaregiverDelegation,
   computePrivacyBudget,
   getHealthKitDescription,

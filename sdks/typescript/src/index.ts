@@ -1,12 +1,12 @@
 /**
- * SINT Protocol TypeScript SDK v0.2
+ * NOSIH Protocol TypeScript SDK v0.2
  *
- * Zero-dependency HTTP client for the SINT Protocol gateway.
+ * Zero-dependency HTTP client for the NOSIH Protocol gateway.
  * Works in Node.js (18+) and browser environments via fetch.
  *
  * @example
- * const sint = new SintClient({ baseUrl: "http://localhost:3000" });
- * const decision = await sint.intercept({
+ * const nosih = new NosihClient({ baseUrl: "http://localhost:3000" });
+ * const decision = await nosih.intercept({
  *   agentId: "agent-public-key-hex",
  *   tokenId: "uuid-v7",
  *   resource: "ros2:///cmd_vel",
@@ -14,20 +14,20 @@
  *   params: { linear: { x: 0.5 } },
  * });
  *
- * @module @sint/sdk
+ * @module @nosih/sdk
  */
 
 // ---------------------------------------------------------------------------
 // Configuration & Request types
 // ---------------------------------------------------------------------------
 
-export interface SintClientConfig {
+export interface NosihClientConfig {
   baseUrl: string;
   apiKey?: string;
   timeoutMs?: number;
 }
 
-export interface SintInterceptRequest {
+export interface NosihInterceptRequest {
   requestId?: string;
   timestamp?: string;
   agentId: string;
@@ -49,7 +49,7 @@ export interface SintInterceptRequest {
 // Response types
 // ---------------------------------------------------------------------------
 
-export interface SintDecision {
+export interface NosihDecision {
   action: "allow" | "deny" | "escalate" | "transform";
   assignedTier: string;
   assignedRisk: string;
@@ -63,7 +63,7 @@ export interface SintDecision {
   approvalRequestId?: string;
 }
 
-export interface SintPendingApproval {
+export interface NosihPendingApproval {
   requestId: string;
   reason: string;
   requiredTier: string;
@@ -77,7 +77,7 @@ export interface SintPendingApproval {
   expiresAt: string;
 }
 
-export interface SintDiscovery {
+export interface NosihDiscovery {
   name: string;
   version: string;
   boundary: string;
@@ -89,20 +89,20 @@ export interface SintDiscovery {
   openapi: string;
 }
 
-export interface SintSchemaIndex {
+export interface NosihSchemaIndex {
   total: number;
   schemas: Array<{ name: string; path: string }>;
 }
 
-export interface SintBatchResult {
+export interface NosihBatchResult {
   status: number;
-  decision?: SintDecision;
+  decision?: NosihDecision;
   approvalRequestId?: string;
   error?: string;
   details?: unknown;
 }
 
-export type SintApprovalResolutionResponse =
+export type NosihApprovalResolutionResponse =
   | {
       requestId: string;
       resolution: {
@@ -118,7 +118,7 @@ export type SintApprovalResolutionResponse =
       approvalCount: number;
     };
 
-export interface SintHealth {
+export interface NosihHealth {
   status: string;
   version: string;
   protocol: string;
@@ -132,16 +132,16 @@ export interface SintHealth {
 // ---------------------------------------------------------------------------
 
 /**
- * SintError is thrown when the gateway returns a 4xx or 5xx response.
+ * NosihError is thrown when the gateway returns a 4xx or 5xx response.
  */
-export class SintError extends Error {
+export class NosihError extends Error {
   constructor(
     public readonly status: number,
     public readonly code: string,
     message: string,
   ) {
     super(message);
-    this.name = "SintError";
+    this.name = "NosihError";
   }
 }
 
@@ -193,8 +193,8 @@ function nowIsoUtc(): string {
   return new Date().toISOString();
 }
 
-/** Parse an error body from a failed response and throw SintError. */
-async function throwSintError(res: Response): Promise<never> {
+/** Parse an error body from a failed response and throw NosihError. */
+async function throwNosihError(res: Response): Promise<never> {
   let code = "GATEWAY_ERROR";
   let message = `HTTP ${res.status}`;
   try {
@@ -205,17 +205,17 @@ async function throwSintError(res: Response): Promise<never> {
   } catch {
     // body is not JSON — keep defaults
   }
-  throw new SintError(res.status, code, message);
+  throw new NosihError(res.status, code, message);
 }
 
 // ---------------------------------------------------------------------------
 // Main client
 // ---------------------------------------------------------------------------
 
-export class SintClient {
-  private readonly config: Required<SintClientConfig>;
+export class NosihClient {
+  private readonly config: Required<NosihClientConfig>;
 
-  constructor(config: SintClientConfig) {
+  constructor(config: NosihClientConfig) {
     this.config = {
       baseUrl: config.baseUrl.replace(/\/$/, ""),
       apiKey: config.apiKey ?? "",
@@ -248,7 +248,7 @@ export class SintClient {
     }
 
     if (!res.ok) {
-      await throwSintError(res);
+      await throwNosihError(res);
     }
 
     // 204 No Content — return empty object cast to T
@@ -263,14 +263,14 @@ export class SintClient {
   // Public API
   // -------------------------------------------------------------------------
 
-  /** Fetch the SINT well-known discovery document. */
-  async discovery(): Promise<SintDiscovery> {
-    return this.request<SintDiscovery>("GET", "/.well-known/sint.json");
+  /** Fetch the NOSIH well-known discovery document. */
+  async discovery(): Promise<NosihDiscovery> {
+    return this.request<NosihDiscovery>("GET", "/.well-known/nosih.json");
   }
 
   /** Health check — returns gateway status and uptime. */
-  async health(): Promise<SintHealth> {
-    return this.request<SintHealth>("GET", "/v1/health");
+  async health(): Promise<NosihHealth> {
+    return this.request<NosihHealth>("GET", "/v1/health");
   }
 
   /**
@@ -278,30 +278,30 @@ export class SintClient {
    *
    * `requestId` (UUIDv7) and `timestamp` are auto-filled when omitted.
    */
-  async intercept(req: SintInterceptRequest): Promise<SintDecision> {
+  async intercept(req: NosihInterceptRequest): Promise<NosihDecision> {
     const payload = {
       requestId: req.requestId ?? generateUuidV7(),
       timestamp: req.timestamp ?? nowIsoUtc(),
       ...req,
     };
-    return this.request<SintDecision>("POST", "/v1/intercept", payload);
+    return this.request<NosihDecision>("POST", "/v1/intercept", payload);
   }
 
   /** Intercept multiple actions in a single round-trip. */
   async interceptBatch(
-    requests: SintInterceptRequest[],
-  ): Promise<SintBatchResult[]> {
+    requests: NosihInterceptRequest[],
+  ): Promise<NosihBatchResult[]> {
     const payload = requests.map((req) => ({
       requestId: req.requestId ?? generateUuidV7(),
       timestamp: req.timestamp ?? nowIsoUtc(),
       ...req,
     }));
-    return this.request<SintBatchResult[]>("POST", "/v1/intercept/batch", payload);
+    return this.request<NosihBatchResult[]>("POST", "/v1/intercept/batch", payload);
   }
 
   /** List approvals currently waiting for human resolution. */
-  async pendingApprovals(): Promise<{ count: number; requests: SintPendingApproval[] }> {
-    return this.request<{ count: number; requests: SintPendingApproval[] }>(
+  async pendingApprovals(): Promise<{ count: number; requests: NosihPendingApproval[] }> {
+    return this.request<{ count: number; requests: NosihPendingApproval[] }>(
       "GET",
       "/v1/approvals/pending",
     );
@@ -316,8 +316,8 @@ export class SintClient {
   async resolveApproval(
     requestId: string,
     resolution: { status: "approved" | "denied"; by: string; reason?: string },
-  ): Promise<SintApprovalResolutionResponse> {
-    return this.request<SintApprovalResolutionResponse>(
+  ): Promise<NosihApprovalResolutionResponse> {
+    return this.request<NosihApprovalResolutionResponse>(
       "POST",
       `/v1/approvals/${encodeURIComponent(requestId)}/resolve`,
       resolution,
@@ -337,14 +337,14 @@ export class SintClient {
   }
 
   /** Fetch all JSON schemas served by the gateway. */
-  async schemas(): Promise<SintSchemaIndex> {
-    return this.request<SintSchemaIndex>("GET", "/v1/schemas");
+  async schemas(): Promise<NosihSchemaIndex> {
+    return this.request<NosihSchemaIndex>("GET", "/v1/schemas");
   }
 
   /**
    * Fetch a single JSON schema by name.
    *
-   * @param name - Schema name (e.g. "SintRequest", "PolicyDecision")
+   * @param name - Schema name (e.g. "NosihRequest", "PolicyDecision")
    */
   async schema(name: string): Promise<Record<string, unknown>> {
     return this.request<Record<string, unknown>>(
@@ -359,11 +359,11 @@ export class SintClient {
 // ---------------------------------------------------------------------------
 
 /**
- * Create a SintClient instance.
+ * Create a NosihClient instance.
  *
  * @example
- * const sint = createSintClient({ baseUrl: "http://localhost:3000" });
+ * const nosih = createNosihClient({ baseUrl: "http://localhost:3000" });
  */
-export function createSintClient(config: SintClientConfig): SintClient {
-  return new SintClient(config);
+export function createNosihClient(config: NosihClientConfig): NosihClient {
+  return new NosihClient(config);
 }

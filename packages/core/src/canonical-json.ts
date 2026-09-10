@@ -1,5 +1,5 @@
 /**
- * Canonical JSON serialization for SINT signing and hashing flows.
+ * Canonical JSON serialization for NOSIH signing and hashing flows.
  *
  * This is intentionally strict:
  * - object keys are serialized in lexicographic order

@@ -1,5 +1,5 @@
 /**
- * SINT bridge-health — Caregiver Delegation Tokens
+ * NOSIH bridge-health — Caregiver Delegation Tokens
  *
  * Time-bounded, scoped, revocable health data access for caregivers.
  * Implements Phase 5 caregiver delegation per Physical AI Governance
@@ -30,7 +30,7 @@ export type CaregiverRelationship =
 export type AccessScope = "read" | "read-write" | "emergency-only";
 
 /**
- * Caregiver delegation extension for SINT capability tokens.
+ * Caregiver delegation extension for NOSIH capability tokens.
  */
 export interface CaregiverDelegationExtension {
   /** Patient DID (delegator - data owner) */
@@ -78,7 +78,7 @@ export interface CaregiverDelegationExtension {
 }
 
 /**
- * Caregiver Delegation Token = SINT Capability Token + Delegation Extension.
+ * Caregiver Delegation Token = NOSIH Capability Token + Delegation Extension.
  */
 export interface CaregiverDelegationToken extends CapabilityToken {
   caregiverDelegation: CaregiverDelegationExtension;

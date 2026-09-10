@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — HTTP Balance Adapter.
+ * NOSIH Protocol — HTTP Balance Adapter.
  *
  * Implements IBalancePort by calling the product API's balance endpoints:
  * - GET  /balance/:userId      → getBalance
  * - POST /balance/withdraw     → withdraw
  * - POST /balance/deposit      → deposit
  *
- * @module @sint/bridge-economy/adapters/http-balance-adapter
+ * @module @nosih/bridge-economy/adapters/http-balance-adapter
  */
 
 import { err, type Result } from "@pshkv/core";
@@ -19,7 +19,7 @@ import { HttpClient, type HttpClientConfig } from "./http-client.js";
  * @example
  * ```ts
  * const adapter = new HttpBalanceAdapter({
- *   baseUrl: "https://api.sint.gg",
+ *   baseUrl: "https://api.nosih.gg",
  *   authToken: keycloakToken,
  * });
  * const result = await adapter.getBalance("user1");

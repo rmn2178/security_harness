@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Plan Constraint Checker.
+ * NOSIH Protocol — Plan Constraint Checker.
  *
  * Validates plan steps against token-defined physical constraints
  * (force limits, velocity limits, geofence boundaries).
  *
- * @module @sint/engine-system2/planner/constraint-checker
+ * @module @nosih/engine-system2/planner/constraint-checker
  */
 
-import type { Result, SintPlan } from "@pshkv/core";
+import type { Result, NosihPlan } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 
 /** Physical constraints derived from capability tokens. */
@@ -51,9 +51,9 @@ export class PlanConstraintChecker {
    * ```
    */
   checkPlanConstraints(
-    plan: SintPlan,
+    plan: NosihPlan,
     constraints: TokenConstraints,
-  ): Result<SintPlan, Error> {
+  ): Result<NosihPlan, Error> {
     for (let i = 0; i < plan.steps.length; i++) {
       const step = plan.steps[i];
       if (step === undefined) {

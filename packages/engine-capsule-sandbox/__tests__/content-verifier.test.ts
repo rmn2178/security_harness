@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Content verifier unit tests.
+ * NOSIH Protocol — Content verifier unit tests.
  *
  * Tests SHA-256 hash verification for capsule content.
  */

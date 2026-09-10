@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Capability Token Validator.
+ * NOSIH Protocol — Capability Token Validator.
  *
  * Validates capability tokens: signature verification, expiry checks,
  * delegation depth enforcement, and physical constraint checking.
@@ -8,7 +8,7 @@
  * No side effects, no I/O, deterministic output for same inputs.
  * This ensures the security boundary is testable and auditable.
  *
- * @module @sint/gate-capability-tokens/validator
+ * @module @nosih/gate-capability-tokens/validator
  */
 
 import {
@@ -16,9 +16,9 @@ import {
   type GeoPolygon,
   MAX_DELEGATION_DEPTH,
   type Result,
-  type SintCapabilityToken,
-  type SintPhysicalConstraints,
-  type SintVerifiableComputeProofType,
+  type NosihCapabilityToken,
+  type NosihPhysicalConstraints,
+  type NosihVerifiableComputeProofType,
   capabilityTokenSchema,
   err,
   ok,
@@ -50,7 +50,7 @@ export interface ModelRuntimeContext {
   readonly modelFingerprintHash?: string;
   readonly attestationGrade?: 0 | 1 | 2 | 3;
   readonly teeBackend?: "intel-sgx" | "arm-trustzone" | "amd-sev" | "tpm2" | "none";
-  readonly verifiableComputeProofType?: SintVerifiableComputeProofType;
+  readonly verifiableComputeProofType?: NosihVerifiableComputeProofType;
   readonly verifiableComputeProofRef?: string;
   readonly verifiableComputeProofHash?: string;
   readonly verifiableComputePublicInputsHash?: string;
@@ -71,12 +71,12 @@ export interface ModelRuntimeContext {
  */
 export function validateTokenSchema(
   token: unknown,
-): Result<SintCapabilityToken, CapabilityTokenError> {
+): Result<NosihCapabilityToken, CapabilityTokenError> {
   const parsed = capabilityTokenSchema.safeParse(token);
   if (!parsed.success) {
     return err("MALFORMED_TOKEN");
   }
-  return ok(parsed.data as SintCapabilityToken);
+  return ok(parsed.data as NosihCapabilityToken);
 }
 
 /**
@@ -90,7 +90,7 @@ export function validateTokenSchema(
  * ```
  */
 export function validateTokenSignature(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   cryptoProfileVerifiers: CryptoProfileVerifierRegistry = {},
 ): Result<true, CapabilityTokenError> {
   const { signature, ...rest } = token;
@@ -112,7 +112,7 @@ export function validateTokenSignature(
  * ```
  */
 export function validateTokenExpiry(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   now: Date = new Date(),
 ): Result<true, CapabilityTokenError> {
   const expiresAt = new Date(token.expiresAt);
@@ -133,7 +133,7 @@ export function validateTokenExpiry(
  * ```
  */
 export function validateDelegationDepth(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   maxDepth: number = MAX_DELEGATION_DEPTH,
 ): Result<true, CapabilityTokenError> {
   if (token.delegationChain.depth > maxDepth) {
@@ -183,7 +183,7 @@ export function isPointInPolygon(
  * ```
  */
 export function validatePhysicalConstraints(
-  constraints: SintPhysicalConstraints,
+  constraints: NosihPhysicalConstraints,
   context: PhysicalActionContext,
 ): Result<true, CapabilityTokenError> {
   // Force limit check
@@ -251,7 +251,7 @@ export function validatePhysicalConstraints(
  * ```
  */
 export function validatePermissions(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   resource: string,
   action: string,
 ): Result<true, CapabilityTokenError> {
@@ -302,7 +302,7 @@ function semverGt(a: string, b: string): boolean {
  * Validate model identity and attestation requirements when present.
  */
 export function validateModelAndAttestation(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   runtime?: ModelRuntimeContext,
 ): Result<true, CapabilityTokenError> {
   const mc = token.modelConstraints;
@@ -421,7 +421,7 @@ export function validateModelAndAttestation(
  * ```
  */
 export function validateCapabilityToken(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   params: {
     resource: string;
     action: string;

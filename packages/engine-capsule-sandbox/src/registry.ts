@@ -1,18 +1,18 @@
 /**
- * SINT Protocol — Capsule Registry.
+ * NOSIH Protocol — Capsule Registry.
  *
  * In-memory catalog of registered capsule instances. Supports
  * registration, lookup, listing, and filtering by sensor modality.
  *
  * All methods return `Result<T, CapsuleError>` — never throw.
  *
- * @module @sint/engine-capsule-sandbox/registry
+ * @module @nosih/engine-capsule-sandbox/registry
  */
 
 import type {
   Result,
-  SintCapsuleManifest,
-  SintSensorModality,
+  NosihCapsuleManifest,
+  NosihSensorModality,
   UUIDv7,
 } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
@@ -51,7 +51,7 @@ export class CapsuleRegistry {
    * const result = registry.register(manifest);
    * ```
    */
-  register(manifest: SintCapsuleManifest): Result<void, CapsuleError> {
+  register(manifest: NosihCapsuleManifest): Result<void, CapsuleError> {
     // Validate manifest structure
     const validation = validateManifest(manifest);
     if (!validation.ok) {
@@ -153,7 +153,7 @@ export class CapsuleRegistry {
    * const cameraCapsules = registry.filterBySensor("camera_rgb");
    * ```
    */
-  filterBySensor(modality: SintSensorModality): readonly CapsuleInstance[] {
+  filterBySensor(modality: NosihSensorModality): readonly CapsuleInstance[] {
     return Array.from(this._capsules.values()).filter((instance) =>
       instance.manifest.sensors.includes(modality),
     );

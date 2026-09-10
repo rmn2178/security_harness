@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Capability Token Delegator.
+ * NOSIH Protocol — Capability Token Delegator.
  *
  * Manages delegation chains — creating child tokens that are
  * attenuated (reduced) versions of parent tokens. Enforces
@@ -8,7 +8,7 @@
  * Key invariant: A delegated token can NEVER have more permissions
  * than its parent. Delegation can only attenuate (reduce), never amplify.
  *
- * @module @sint/gate-capability-tokens/delegator
+ * @module @nosih/gate-capability-tokens/delegator
  */
 
 import {
@@ -17,9 +17,9 @@ import {
   type ISO8601,
   MAX_DELEGATION_DEPTH,
   type Result,
-  type SintCapabilityToken,
-  type SintPhysicalConstraints,
-  type SintRegulatedDataPolicy,
+  type NosihCapabilityToken,
+  type NosihPhysicalConstraints,
+  type NosihRegulatedDataPolicy,
   err,
 } from "@pshkv/core";
 import { issueCapabilityToken } from "./issuer.js";
@@ -36,10 +36,10 @@ export interface DelegationParams {
   readonly restrictActions?: readonly string[];
 
   /** Optional: Tighten physical constraints (can only reduce, never increase). */
-  readonly tightenConstraints?: Partial<SintPhysicalConstraints>;
+  readonly tightenConstraints?: Partial<NosihPhysicalConstraints>;
 
   /** Optional: Tighten regulated-data policy (subset only, never expand). */
-  readonly tightenRegulatedDataPolicy?: Partial<SintRegulatedDataPolicy>;
+  readonly tightenRegulatedDataPolicy?: Partial<NosihRegulatedDataPolicy>;
 
   /** Optional: Override expiry (must be <= parent's expiry). */
   readonly expiresAt?: ISO8601;
@@ -51,9 +51,9 @@ export interface DelegationParams {
  * Pure function.
  */
 function attenuateConstraints(
-  parent: SintPhysicalConstraints,
-  tighten?: Partial<SintPhysicalConstraints>,
-): SintPhysicalConstraints {
+  parent: NosihPhysicalConstraints,
+  tighten?: Partial<NosihPhysicalConstraints>,
+): NosihPhysicalConstraints {
   if (!tighten) return { ...parent };
 
   return {
@@ -77,9 +77,9 @@ function minOptional(a?: number, b?: number): number | undefined {
 }
 
 function attenuateRegulatedDataPolicy(
-  parent: SintRegulatedDataPolicy | undefined,
-  tighten: Partial<SintRegulatedDataPolicy> | undefined,
-): Result<SintRegulatedDataPolicy | undefined, CapabilityTokenError> {
+  parent: NosihRegulatedDataPolicy | undefined,
+  tighten: Partial<NosihRegulatedDataPolicy> | undefined,
+): Result<NosihRegulatedDataPolicy | undefined, CapabilityTokenError> {
   if (!tighten) {
     return { ok: true, value: parent ? { ...parent } : undefined };
   }
@@ -188,10 +188,10 @@ function attenuateStringList(
  * ```
  */
 export function delegateCapabilityToken(
-  parentToken: SintCapabilityToken,
+  parentToken: NosihCapabilityToken,
   params: DelegationParams,
   delegatorPrivateKey: string,
-): Result<SintCapabilityToken, CapabilityTokenError> {
+): Result<NosihCapabilityToken, CapabilityTokenError> {
   // Check delegation depth limit
   const newDepth = parentToken.delegationChain.depth + 1;
   if (newDepth > MAX_DELEGATION_DEPTH) {

@@ -1,12 +1,12 @@
 /**
- * OpenClawAdapter — SINT governance layer for OpenClaw.
+ * OpenClawAdapter — NOSIH governance layer for OpenClaw.
  *
- * Wraps the OpenClaw Gateway and injects SINT Protocol governance
+ * Wraps the OpenClaw Gateway and injects NOSIH Protocol governance
  * (capability tokens, policy gateway, evidence ledger) into every
  * tool call, MCP server call, and node action.
  *
  * This is the central choke-point: nothing goes through OpenClaw
- * without passing SINT's policy check first.
+ * without passing NOSIH's policy check first.
  *
  * @example
  * ```typescript
@@ -34,7 +34,7 @@ import type {
   OpenClawNodeAction,
   GovernanceResult,
   OpenClawAdapterConfig,
-  SintTier,
+  NosihTier,
 } from "./types.js";
 import {
   classifyToolCall,
@@ -54,7 +54,7 @@ export class OpenClawAdapter {
     type: "tool" | "mcp" | "node";
     resource: string;
     action: string;
-    tier: SintTier;
+    tier: NosihTier;
     outcome: string;
   }> = [];
 
@@ -73,8 +73,8 @@ export class OpenClawAdapter {
   /**
    * Govern an OpenClaw tool call.
    *
-   * Classifies the tool into a SINT tier, checks cross-system policies,
-   * then sends an intercept request to the SINT Policy Gateway.
+   * Classifies the tool into a NOSIH tier, checks cross-system policies,
+   * then sends an intercept request to the NOSIH Policy Gateway.
    */
   async governToolCall(call: OpenClawToolCall): Promise<GovernanceResult> {
     const tier = this.config.tierClassifier
@@ -238,7 +238,7 @@ export class OpenClawAdapter {
     type: "tool" | "mcp" | "node",
     resource: string,
     action: string,
-    tier: SintTier,
+    tier: NosihTier,
     context: Record<string, unknown>,
   ): Promise<GovernanceResult> {
     const url = `${this.config.gatewayUrl}/v1/intercept`;
@@ -292,7 +292,7 @@ export class OpenClawAdapter {
 
       const result: GovernanceResult = {
         allowed: outcome === "approve",
-        tier: (data.assignedTier as SintTier) ?? tier,
+        tier: (data.assignedTier as NosihTier) ?? tier,
         outcome: outcome as "approve" | "deny" | "escalate",
         reason: data.reason as string | undefined,
         approvalId: data.approvalRequestId as string | undefined,
@@ -322,7 +322,7 @@ export class OpenClawAdapter {
     type: "tool" | "mcp" | "node",
     resource: string,
     action: string,
-    tier: SintTier,
+    tier: NosihTier,
     outcome: string,
   ): void {
     this.interceptLog.push({

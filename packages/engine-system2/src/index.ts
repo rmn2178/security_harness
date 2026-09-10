@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Engine System 2 (Symbolic Reasoning + Arbitration).
+ * NOSIH Protocol — Engine System 2 (Symbolic Reasoning + Arbitration).
  *
  * Public API for the behavior tree engine, task planner,
  * and System 1/System 2 arbitration layer.
  *
- * @module @sint/engine-system2
+ * @module @nosih/engine-system2
  */
 
 // Behavior Tree

@@ -1,0 +1,59 @@
+{
+  "name": "@pshkv/mcp-scanner",
+  "version": "0.1.0",
+  "description": "NOSIH MCP Security Scanner — analyze MCP server tool definitions for risk",
+  "type": "module",
+  "main": "./dist/scanner.js",
+  "bin": {
+    "nosih-scan": "dist/cli.js",
+    "mcp-scanner": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/scanner.d.ts",
+      "import": "./dist/scanner.js"
+    }
+  },
+  "files": [
+    "dist/cli.js",
+    "dist/scanner.js",
+    "dist/scanner.d.ts",
+    "dist/scanner.d.ts.map",
+    "dist/cli.d.ts",
+    "dist/cli.d.ts.map",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc --build && node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "keywords": [
+    "mcp",
+    "security",
+    "ai-safety",
+    "llm",
+    "policy-gateway",
+    "nosih",
+    "owasp",
+    "agent-security"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nosih-ai/nosih-protocol.git",
+    "directory": "apps/nosih-mcp-scanner"
+  },
+  "homepage": "https://github.com/nosih-ai/nosih-protocol#mcp-scanner",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@pshkv/bridge-mcp": "workspace:*",
+    "@pshkv/core": "workspace:*",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

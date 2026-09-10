@@ -1,18 +1,18 @@
 /**
- * SINT Bridge A2A — A2A Interceptor.
+ * NOSIH Bridge A2A — A2A Interceptor.
  *
  * The A2AInterceptor sits between an orchestrating agent and a target agent.
  * Every `tasks/send` (and `tasks/sendSubscribe`) call is intercepted and run
- * through the SINT PolicyGateway before the task is forwarded.
+ * through the NOSIH PolicyGateway before the task is forwarded.
  *
  * If the gateway allows → the task is forwarded as-is.
- * If the gateway denies → the task is rejected with a SINT error code.
+ * If the gateway denies → the task is rejected with a NOSIH error code.
  * If the gateway escalates → the task is held pending human approval.
  *
- * @module @sint/bridge-a2a/interceptor
+ * @module @nosih/bridge-a2a/interceptor
  */
 
-import type { PolicyDecision, SintRequest, UUIDv7 } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest, UUIDv7 } from "@pshkv/core";
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { generateUUIDv7, nowISO8601 } from "@pshkv/gate-capability-tokens";
 import {
@@ -31,7 +31,7 @@ import {
 } from "./a2a-resource-mapper.js";
 
 /**
- * A2A Interceptor — the SINT security layer for agent-to-agent communication.
+ * A2A Interceptor — the NOSIH security layer for agent-to-agent communication.
  *
  * @example
  * ```ts
@@ -103,7 +103,7 @@ export class A2AInterceptor {
     const action = mapMethodToAction(method);
     const physicalContext = extractA2APhysicalContext(params);
 
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: generateUUIDv7() as UUIDv7,
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -137,7 +137,7 @@ export class A2AInterceptor {
         return {
           action: "deny",
           task: { ...task, status: "failed" },
-          reason: decision.denial?.reason ?? "Denied by SINT policy gateway",
+          reason: decision.denial?.reason ?? "Denied by NOSIH policy gateway",
           policyViolated: decision.denial?.policyViolated ?? "POLICY_DENY",
         };
 
@@ -166,7 +166,7 @@ export class A2AInterceptor {
       message: params.message,
       metadata: {
         ...params.metadata,
-        sint: {
+        nosih: {
           requestId: decision.requestId,
           assignedTier: decision.assignedTier,
           assignedRisk: decision.assignedRisk,
@@ -178,12 +178,12 @@ export class A2AInterceptor {
 }
 
 /**
- * Build a JSON-RPC 2.0 error response for a SINT deny decision.
+ * Build a JSON-RPC 2.0 error response for a NOSIH deny decision.
  */
 export function buildDenyResponse(
   id: string | number,
   reason: string,
-  code = A2A_ERROR_CODES.SINT_POLICY_DENY,
+  code = A2A_ERROR_CODES.NOSIH_POLICY_DENY,
 ): object {
   return {
     jsonrpc: "2.0",
@@ -191,22 +191,22 @@ export function buildDenyResponse(
     error: {
       code,
       message: reason,
-      data: { sint: true },
+      data: { nosih: true },
     },
   };
 }
 
 /**
- * Build a JSON-RPC 2.0 error response for a SINT escalation.
+ * Build a JSON-RPC 2.0 error response for a NOSIH escalation.
  */
 export function buildEscalationResponse(id: string | number, reason: string): object {
   return {
     jsonrpc: "2.0",
     id,
     error: {
-      code: A2A_ERROR_CODES.SINT_ESCALATION_REQUIRED,
+      code: A2A_ERROR_CODES.NOSIH_ESCALATION_REQUIRED,
       message: reason,
-      data: { sint: true, awaitingApproval: true },
+      data: { nosih: true, awaitingApproval: true },
     },
   };
 }

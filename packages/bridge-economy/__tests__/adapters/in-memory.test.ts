@@ -17,7 +17,7 @@ describe("InMemoryBalanceAdapter", () => {
 
   it("withdraw reduces balance", async () => {
     const adapter = new InMemoryBalanceAdapter(250);
-    const result = await adapter.withdraw("user-1", 9, "MCP call", "sint_protocol");
+    const result = await adapter.withdraw("user-1", 9, "MCP call", "nosih_protocol");
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.value.balance).toBe(241);
@@ -26,7 +26,7 @@ describe("InMemoryBalanceAdapter", () => {
 
   it("withdraw fails on insufficient balance", async () => {
     const adapter = new InMemoryBalanceAdapter(5);
-    const result = await adapter.withdraw("user-1", 9, "MCP call", "sint_protocol");
+    const result = await adapter.withdraw("user-1", 9, "MCP call", "nosih_protocol");
     expect(result.ok).toBe(false);
   });
 

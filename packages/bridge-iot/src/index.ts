@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — @sint/bridge-iot
+ * NOSIH Protocol — @nosih/bridge-iot
  *
  * MQTT/CoAP edge IoT bridge for constrained devices.
  * Targets industrial sensors, actuators, and edge gateways.

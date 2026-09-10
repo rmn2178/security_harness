@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — A2A (Agent-to-Agent) routes.
+ * NOSIH Gateway Server — A2A (Agent-to-Agent) routes.
  *
  * Exposes a JSON-RPC 2.0 endpoint that intercepts Google A2A protocol
  * task messages before forwarding them to target agents.
@@ -10,7 +10,7 @@
  *   POST /v1/a2a/agents          — Register an Agent Card
  *   GET  /v1/a2a/agents/:url     — Retrieve a specific Agent Card
  *
- * @module @sint/gateway-server/routes/a2a
+ * @module @nosih/gateway-server/routes/a2a
  */
 
 import { Hono } from "hono";
@@ -52,7 +52,7 @@ export function a2aRoutes(ctx: A2ARouteContext): Hono {
    * POST /v1/a2a
    *
    * Accepts A2A JSON-RPC 2.0 requests. Intercepts supported methods through
-   * the SINT PolicyGateway before returning a result or forwarding.
+   * the NOSIH PolicyGateway before returning a result or forwarding.
    */
   app.post("/v1/a2a", async (c) => {
     let rpcRequest: A2AJsonRpcRequest;
@@ -77,7 +77,7 @@ export function a2aRoutes(ctx: A2ARouteContext): Hono {
     const { id, method, params } = rpcRequest;
 
     // Extract agent identity from headers (passed by the calling agent)
-    const agentId = c.req.header("X-SINT-Agent-Id");
+    const agentId = c.req.header("X-NOSIH-Agent-Id");
     const tokenId = agentId ? ctx.resolveToken?.(agentId) : undefined;
 
     // Identify the target agent from the request metadata
@@ -91,7 +91,7 @@ export function a2aRoutes(ctx: A2ARouteContext): Hono {
         id,
         error: {
           code: A2A_ERROR_CODES.INVALID_PARAMS,
-          message: "Missing params.targetAgentUrl — SINT requires the target agent URL for policy evaluation",
+          message: "Missing params.targetAgentUrl — NOSIH requires the target agent URL for policy evaluation",
         },
       }, 400);
     }
@@ -113,8 +113,8 @@ export function a2aRoutes(ctx: A2ARouteContext): Hono {
         jsonrpc: "2.0",
         id,
         error: {
-          code: A2A_ERROR_CODES.SINT_POLICY_DENY,
-          message: "Missing X-SINT-Agent-Id header or no token registered for this agent",
+          code: A2A_ERROR_CODES.NOSIH_POLICY_DENY,
+          message: "Missing X-NOSIH-Agent-Id header or no token registered for this agent",
         },
       }, 401);
     }
@@ -158,7 +158,7 @@ export function a2aRoutes(ctx: A2ARouteContext): Hono {
     return c.json({
       jsonrpc: "2.0",
       id,
-      result: { task: result.task, sint: { approved: true } },
+      result: { task: result.task, nosih: { approved: true } },
     });
   });
 

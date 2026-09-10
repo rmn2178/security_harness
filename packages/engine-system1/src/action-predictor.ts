@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — Action Predictor for System 1.
+ * NOSIH Protocol — Action Predictor for System 1.
  *
  * Converts perception output (world state + optional inference results)
  * into action recommendations. Sets safety relevance flags based on
  * anomaly flags and human presence in the scene.
  *
- * @module @sint/engine-system1/action-predictor
+ * @module @nosih/engine-system1/action-predictor
  */
 
-import type { SintActionRecommendation, SintWorldState } from "@pshkv/core";
+import type { NosihActionRecommendation, NosihWorldState } from "@pshkv/core";
 
 /**
  * Event payload emitted by the ActionPredictor.
@@ -76,7 +76,7 @@ export class ActionPredictor {
    * console.log(recommendation.action, recommendation.confidence);
    * ```
    */
-  predict(worldState: SintWorldState, _inferenceOutput?: Float32Array): SintActionRecommendation {
+  predict(worldState: NosihWorldState, _inferenceOutput?: Float32Array): NosihActionRecommendation {
     const hasAnomalies = worldState.anomalyFlags.length > 0;
     const hasCollisionRisk = worldState.anomalyFlags.some(
       (flag) => flag.type === "collision_risk",
@@ -114,7 +114,7 @@ export class ActionPredictor {
       params["speedFactor"] = 1.0;
     }
 
-    const recommendation: SintActionRecommendation = {
+    const recommendation: NosihActionRecommendation = {
       action,
       resource,
       params,

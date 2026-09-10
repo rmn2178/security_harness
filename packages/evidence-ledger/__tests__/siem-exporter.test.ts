@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — SIEM Exporter unit tests.
+ * NOSIH Protocol — SIEM Exporter unit tests.
  *
  * Tests RFC 5424 syslog, JSON Lines, and CEF output formatting.
  */
@@ -12,20 +12,20 @@ import {
   formatCef,
   exportBatch,
 } from "../src/siem-exporter.js";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 const AGENT_ID = "a".repeat(64);
 
 function buildEvent(
   writer: LedgerWriter,
   eventType: Parameters<LedgerWriter["append"]>[0]["eventType"] = "policy.evaluated",
-): SintLedgerEvent {
+): NosihLedgerEvent {
   return writer.append({ eventType, agentId: AGENT_ID, payload: {} });
 }
 
 describe("SIEM Exporter", () => {
   let writer: LedgerWriter;
-  let event: SintLedgerEvent;
+  let event: NosihLedgerEvent;
 
   beforeEach(() => {
     writer = new LedgerWriter();
@@ -40,9 +40,9 @@ describe("SIEM Exporter", () => {
     expect(line).toMatch(/^<\d+>1 /);
   });
 
-  it("syslog includes structured data [sint@...]", () => {
+  it("syslog includes structured data [nosih@...]", () => {
     const line = formatSyslog(event);
-    expect(line).toContain("[sint@32473 ");
+    expect(line).toContain("[nosih@32473 ");
   });
 
   it("policy.denied maps to severity 4 (warning) — PRI = facility*8 + 4", () => {
@@ -53,14 +53,14 @@ describe("SIEM Exporter", () => {
     });
     // Directly test a syslog line for a policy.denied-like event
     // We'll construct an event with eventType that maps to severity 4
-    const mockEvent: SintLedgerEvent = { ...denied, eventType: "approval.denied" as any };
+    const mockEvent: NosihLedgerEvent = { ...denied, eventType: "approval.denied" as any };
     // The severity 4 case is for "policy.denied" — test that path via a crafted call
-    const policyDeniedEvent: SintLedgerEvent = {
+    const policyDeniedEvent: NosihLedgerEvent = {
       ...event,
       eventType: "policy.evaluated" as any,
     };
     // Test the actual mapping: policy.denied → severity 4 → PRI = 1*8+4 = 12
-    const customEvent: SintLedgerEvent = {
+    const customEvent: NosihLedgerEvent = {
       ...event,
       eventType: "policy.denied" as any,
     };
@@ -70,7 +70,7 @@ describe("SIEM Exporter", () => {
   });
 
   it("agent.supply_chain.violation maps to severity 2 (critical) — PRI = 1*8+2 = 10", () => {
-    const supplyChainEvent: SintLedgerEvent = {
+    const supplyChainEvent: NosihLedgerEvent = {
       ...event,
       eventType: "agent.supply_chain.violation" as any,
     };
@@ -91,9 +91,9 @@ describe("SIEM Exporter", () => {
 
   // ── CEF ───────────────────────────────────────────────────────────────────
 
-  it("cef output starts with CEF:0|SINT|", () => {
+  it("cef output starts with CEF:0|NOSIH|", () => {
     const line = formatCef(event);
-    expect(line).toMatch(/^CEF:0\|SINT\|/);
+    expect(line).toMatch(/^CEF:0\|NOSIH\|/);
   });
 
   // ── exportBatch ───────────────────────────────────────────────────────────

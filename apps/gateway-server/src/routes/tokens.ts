@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Token routes.
+ * NOSIH Gateway Server — Token routes.
  */
 
 import { Hono } from "hono";

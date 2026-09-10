@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://docs.sint.gg/specs/simulation-receipt.schema.json",
+  "$id": "https://docs.nosih.gg/specs/simulation-receipt.schema.json",
   "title": "SimulationReceipt",
   "description": "Simulation proof artifact required before selected factory actions may execute.",
   "type": "object",

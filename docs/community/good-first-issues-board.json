@@ -15,7 +15,7 @@
       ],
       "number": 18,
       "title": "Add README badges (CI, license, npm)",
-      "url": "https://github.com/sint-ai/sint-protocol/issues/18"
+      "url": "https://github.com/nosih-ai/nosih-protocol/issues/18"
     },
     {
       "assignees": [],
@@ -29,7 +29,7 @@
       ],
       "number": 17,
       "title": "Add JSON Schema definitions for heartbeat messages",
-      "url": "https://github.com/sint-ai/sint-protocol/issues/17"
+      "url": "https://github.com/nosih-ai/nosih-protocol/issues/17"
     },
     {
       "assignees": [],
@@ -42,8 +42,8 @@
         }
       ],
       "number": 9,
-      "title": "Create example: minimal MCP server with SINT protection",
-      "url": "https://github.com/sint-ai/sint-protocol/issues/9"
+      "title": "Create example: minimal MCP server with NOSIH protection",
+      "url": "https://github.com/nosih-ai/nosih-protocol/issues/9"
     },
     {
       "assignees": [],
@@ -56,8 +56,8 @@
         }
       ],
       "number": 8,
-      "title": "Add JSDoc comments to @sint/core exported types",
-      "url": "https://github.com/sint-ai/sint-protocol/issues/8"
+      "title": "Add JSDoc comments to @nosih/core exported types",
+      "url": "https://github.com/nosih-ai/nosih-protocol/issues/8"
     },
     {
       "assignees": [],
@@ -71,7 +71,7 @@
       ],
       "number": 7,
       "title": "Add unit tests for constraint validation edge cases",
-      "url": "https://github.com/sint-ai/sint-protocol/issues/7"
+      "url": "https://github.com/nosih-ai/nosih-protocol/issues/7"
     }
   ],
   "notes": []

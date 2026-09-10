@@ -5,7 +5,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -44,7 +44,7 @@ describe("computeSigningPayload", () => {
     const issuer = generateKeypair();
     const subject = generateKeypair();
 
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: issuer.publicKey,
       subject: subject.publicKey,
       resource: "ros2:///cmd_vel",

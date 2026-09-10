@@ -149,7 +149,7 @@ describe("detectHardware", () => {
     }
   });
 
-  it("validates output conforms to SintHardwareProfile", async () => {
+  it("validates output conforms to NosihHardwareProfile", async () => {
     const result = await detectHardware();
     expect(result.ok).toBe(true);
     if (result.ok) {

@@ -1,7 +1,7 @@
 {
   "fixtureId": "post-quantum-crypto-agility-v1",
   "schemaVersion": "1.0.0",
-  "description": "Conformance profile for SINT token crypto agility: classic Ed25519 compatibility and fail-closed handling for mandatory hybrid/PQ profiles until PQ verifier support is wired.",
+  "description": "Conformance profile for NOSIH token crypto agility: classic Ed25519 compatibility and fail-closed handling for mandatory hybrid/PQ profiles until PQ verifier support is wired.",
   "profiles": [
     {
       "cryptoProfile": "classic-ed25519",

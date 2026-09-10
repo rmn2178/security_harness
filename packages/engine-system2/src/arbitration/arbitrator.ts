@@ -1,19 +1,19 @@
 /**
- * SINT Protocol — System 1 / System 2 Arbitrator.
+ * NOSIH Protocol — System 1 / System 2 Arbitrator.
  *
  * THE CRITICAL INVARIANT: System 2 ALWAYS wins on safety.
  *
  * When System 1 (neural) and System 2 (symbolic) disagree on a
  * safety-relevant action, System 2's decision is final. This
- * invariant is the foundation of SINT's physical AI safety model.
+ * invariant is the foundation of NOSIH's physical AI safety model.
  *
- * @module @sint/engine-system2/arbitration/arbitrator
+ * @module @nosih/engine-system2/arbitration/arbitrator
  */
 
 import type {
-  SintActionRecommendation,
-  SintArbitrationDecision,
-  SintWorldState,
+  NosihActionRecommendation,
+  NosihArbitrationDecision,
+  NosihWorldState,
 } from "@pshkv/core";
 
 /** Event emitted by the arbitrator. */
@@ -33,7 +33,7 @@ function nowISO(): string {
  * Arbitrates between System 1 and System 2 action recommendations.
  *
  * CRITICAL INVARIANT: System 2 ALWAYS wins when safety is involved.
- * This class enforces the fundamental safety contract of the SINT Protocol.
+ * This class enforces the fundamental safety contract of the NOSIH Protocol.
  *
  * Decision rules:
  * 1. If EITHER recommendation is safety-relevant AND they disagree:
@@ -71,17 +71,17 @@ export class Arbitrator {
    * ```
    */
   arbitrate(
-    s1: SintActionRecommendation,
-    s2: SintActionRecommendation,
-    _worldState: SintWorldState,
-  ): SintArbitrationDecision {
+    s1: NosihActionRecommendation,
+    s2: NosihActionRecommendation,
+    _worldState: NosihWorldState,
+  ): NosihArbitrationDecision {
     const eitherSafetyRelevant = s1.isSafetyRelevant || s2.isSafetyRelevant;
     const theyDisagree =
       s1.action !== s2.action || s1.resource !== s2.resource;
 
     // CRITICAL INVARIANT: System 2 ALWAYS wins on safety
     if (eitherSafetyRelevant && theyDisagree) {
-      const decision: SintArbitrationDecision = {
+      const decision: NosihArbitrationDecision = {
         s1Recommendation: s1,
         s2Recommendation: s2,
         winner: "system2",
@@ -108,7 +108,7 @@ export class Arbitrator {
 
     // Safety-relevant but they agree — System 2 wins (safety authority)
     if (eitherSafetyRelevant && !theyDisagree) {
-      const decision: SintArbitrationDecision = {
+      const decision: NosihArbitrationDecision = {
         s1Recommendation: s1,
         s2Recommendation: s2,
         winner: "system2",
@@ -135,7 +135,7 @@ export class Arbitrator {
     const winner = s1.confidence >= s2.confidence ? "system1" : "system2";
     const winnerRec = winner === "system1" ? s1 : s2;
 
-    const decision: SintArbitrationDecision = {
+    const decision: NosihArbitrationDecision = {
       s1Recommendation: s1,
       s2Recommendation: s2,
       winner,

@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/capsule-pick-and-place",
   "version": "1.0.0",
-  "description": "SINT Reference Capsule — Gripper control for pick-and-place tasks",
+  "description": "NOSIH Reference Capsule — Gripper control for pick-and-place tasks",
   "type": "module",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",

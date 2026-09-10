@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — Tier constants and mappings.
+ * NOSIH Protocol — Tier constants and mappings.
  *
- * @module @sint/core/constants/tiers
+ * @module @nosih/core/constants/tiers
  */
 
 import { ApprovalTier, RiskTier } from "../types/policy.js";
@@ -234,7 +234,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
     escalateOnHumanPresence: true,
   },
 
-  // Generic MQTT IoT bridge defaults (`mqtt://`) used by @sint/bridge-iot
+  // Generic MQTT IoT bridge defaults (`mqtt://`) used by @nosih/bridge-iot
   // Safety-critical publish/call paths are irreversible.
   {
     resourcePattern: "mqtt://*/*estop*",
@@ -719,16 +719,16 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
     baseRisk: RiskTier.T2_STATEFUL,
   },
 
-  // ── Operator Interface tools (@sint/interface-bridge) ─────────────────────
+  // ── Operator Interface tools (@nosih/interface-bridge) ─────────────────────
   //
-  // Resource format: sint://interface/<path>
+  // Resource format: nosih://interface/<path>
   // Read-only status and memory recall → T0_OBSERVE (auto-approved, logged)
   // TTS output, HUD updates, memory store → T1_PREPARE (low-impact writes)
   // Proactive notifications, mode changes, memory delete → T2_ACT (stateful)
 
   // Interface status — read-only
   {
-    resourcePattern: "sint://interface/status",
+    resourcePattern: "nosih://interface/status",
     actions: ["call"],
     baseTier: ApprovalTier.T0_OBSERVE,
     baseRisk: RiskTier.T0_READ,
@@ -736,7 +736,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // Memory recall — read-only search
   {
-    resourcePattern: "sint://interface/memory/recall",
+    resourcePattern: "nosih://interface/memory/recall",
     actions: ["call"],
     baseTier: ApprovalTier.T0_OBSERVE,
     baseRisk: RiskTier.T0_READ,
@@ -744,7 +744,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // TTS output to operator — low-impact write
   {
-    resourcePattern: "sint://interface/speak",
+    resourcePattern: "nosih://interface/speak",
     actions: ["call"],
     baseTier: ApprovalTier.T1_PREPARE,
     baseRisk: RiskTier.T1_WRITE_LOW,
@@ -752,7 +752,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // HUD panel updates — low-impact write
   {
-    resourcePattern: "sint://interface/hud/*",
+    resourcePattern: "nosih://interface/hud/*",
     actions: ["call"],
     baseTier: ApprovalTier.T1_PREPARE,
     baseRisk: RiskTier.T1_WRITE_LOW,
@@ -760,7 +760,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // Memory store — low-impact write
   {
-    resourcePattern: "sint://interface/memory/store",
+    resourcePattern: "nosih://interface/memory/store",
     actions: ["call"],
     baseTier: ApprovalTier.T1_PREPARE,
     baseRisk: RiskTier.T1_WRITE_LOW,
@@ -768,7 +768,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // Proactive notification to operator — stateful (push action)
   {
-    resourcePattern: "sint://interface/notify",
+    resourcePattern: "nosih://interface/notify",
     actions: ["call"],
     baseTier: ApprovalTier.T2_ACT,
     baseRisk: RiskTier.T2_STATEFUL,
@@ -776,7 +776,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // Interface mode change — stateful
   {
-    resourcePattern: "sint://interface/mode",
+    resourcePattern: "nosih://interface/mode",
     actions: ["call"],
     baseTier: ApprovalTier.T2_ACT,
     baseRisk: RiskTier.T2_STATEFUL,
@@ -784,7 +784,7 @@ export const DEFAULT_TIER_RULES: readonly TierAssignmentRule[] = [
 
   // Memory delete — stateful (destructive)
   {
-    resourcePattern: "sint://interface/memory/delete",
+    resourcePattern: "nosih://interface/memory/delete",
     actions: ["call"],
     baseTier: ApprovalTier.T2_ACT,
     baseRisk: RiskTier.T2_STATEFUL,

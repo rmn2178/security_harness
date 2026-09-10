@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-MCP — Session Manager unit tests.
+ * NOSIH Bridge-MCP — Session Manager unit tests.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";

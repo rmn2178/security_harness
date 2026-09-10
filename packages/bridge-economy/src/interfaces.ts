@@ -1,15 +1,15 @@
 /**
- * SINT Protocol — Economy Bridge port interfaces.
+ * NOSIH Protocol — Economy Bridge port interfaces.
  *
  * These define the contracts that external economy services must
- * implement. The Port/Adapter pattern keeps sint-protocol decoupled
+ * implement. The Port/Adapter pattern keeps nosih-protocol decoupled
  * from any specific economy implementation.
  *
  * Each port mirrors the corresponding service in the product API
  * (BalanceService, BudgetService, TrustService) without coupling
  * to its internals.
  *
- * @module @sint/bridge-economy/interfaces
+ * @module @nosih/bridge-economy/interfaces
  */
 
 import type { Result } from "@pshkv/core";
@@ -51,7 +51,7 @@ export interface IBalancePort {
    * @param userId - The user or agent identifier
    * @param tokens - Number of tokens to withdraw
    * @param description - Human-readable reason for the withdrawal
-   * @param source - Source system identifier (e.g. "sint_protocol")
+   * @param source - Source system identifier (e.g. "nosih_protocol")
    * @returns Updated balance info or error
    */
   withdraw(
@@ -145,7 +145,7 @@ export interface TrustEvalParams {
 /**
  * Trust levels from the product API's TrustService.
  *
- * These map to SINT ApprovalTiers via trust-tier-mapper.ts.
+ * These map to NOSIH ApprovalTiers via trust-tier-mapper.ts.
  */
 export type EconomyTrustLevel =
   | "unrestricted"

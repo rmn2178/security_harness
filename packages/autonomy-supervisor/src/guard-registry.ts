@@ -11,8 +11,8 @@ import {
   err,
   ok,
   type Result,
-  type SintLedgerEvent,
-  type SintRequest,
+  type NosihLedgerEvent,
+  type NosihRequest,
 } from "@pshkv/core";
 import type { GuardState } from "./autonomy-states.js";
 
@@ -48,10 +48,10 @@ export interface GuardContext {
   readonly agentId: string;
   readonly requestId: string;
   readonly guardProfileId: string;
-  readonly recentLedgerEvents: readonly SintLedgerEvent[];
+  readonly recentLedgerEvents: readonly NosihLedgerEvent[];
   readonly latestCsmlScore: number | null;
-  readonly physicalContext?: SintRequest["physicalContext"];
-  readonly executionContext?: SintRequest["executionContext"];
+  readonly physicalContext?: NosihRequest["physicalContext"];
+  readonly executionContext?: NosihRequest["executionContext"];
   readonly metacognitiveElapsedMs?: number;
   readonly assistedElapsedMs?: number;
   readonly maxMetacognitiveRecoveryMs?: number;

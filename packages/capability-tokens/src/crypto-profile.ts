@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — crypto profile verification.
+ * NOSIH Protocol — crypto profile verification.
  *
  * Keeps capability-token validation crypto-agile while preserving the default
  * fail-closed posture for profiles this package cannot verify locally.
@@ -8,15 +8,15 @@
 import {
   type CapabilityTokenError,
   type Result,
-  type SintCapabilityToken,
-  type SintCryptoProfile,
+  type NosihCapabilityToken,
+  type NosihCryptoProfile,
   err,
   ok,
 } from "@pshkv/core";
 import { verify } from "./crypto.js";
 
 export interface CryptoProfileVerificationInput {
-  readonly token: SintCapabilityToken;
+  readonly token: NosihCapabilityToken;
   readonly signingPayload: string;
 }
 
@@ -25,10 +25,10 @@ export type CryptoProfileVerifier = (
 ) => Result<true, CapabilityTokenError>;
 
 export type CryptoProfileVerifierRegistry = Partial<
-  Record<SintCryptoProfile, CryptoProfileVerifier>
+  Record<NosihCryptoProfile, CryptoProfileVerifier>
 >;
 
-export const CLASSIC_ED25519_PROFILE: SintCryptoProfile = "classic-ed25519";
+export const CLASSIC_ED25519_PROFILE: NosihCryptoProfile = "classic-ed25519";
 
 export const DEFAULT_CRYPTO_PROFILE_VERIFIERS: CryptoProfileVerifierRegistry = {
   [CLASSIC_ED25519_PROFILE]: ({ token, signingPayload }) => {
@@ -38,7 +38,7 @@ export const DEFAULT_CRYPTO_PROFILE_VERIFIERS: CryptoProfileVerifierRegistry = {
 };
 
 export function verifyTokenCryptoProfile(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   signingPayload: string,
   registry: CryptoProfileVerifierRegistry = DEFAULT_CRYPTO_PROFILE_VERIFIERS,
 ): Result<true, CapabilityTokenError> {

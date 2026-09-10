@@ -10,8 +10,8 @@ import {
 import {
   createSignedDispatchEnvelope,
   createSignedEffectPack,
-  SintEdgeRunner,
-} from "@pshkv/sint-edge-agent";
+  NosihEdgeRunner,
+} from "@pshkv/nosih-edge-agent";
 
 function futureIso(): string {
   return new Date(Date.now() + 60_000).toISOString().replace(/\.(\d{3})Z$/, ".$1000Z");
@@ -38,7 +38,7 @@ describe("Signed Effect Pack Conformance", () => {
     if (!token.ok) throw new Error(token.error);
 
     const pack = createSignedEffectPack({
-      schemaVersion: "sint-effect-pack/1",
+      schemaVersion: "nosih-effect-pack/1",
       packId: "conformance.motion",
       version: "1.0.0",
       issuedAt: nowISO8601(),
@@ -61,7 +61,7 @@ describe("Signed Effect Pack Conformance", () => {
     if (!pack.ok) throw new Error(pack.error);
 
     const dispatch = createSignedDispatchEnvelope({
-      schemaVersion: "sint-dispatch/1",
+      schemaVersion: "nosih-dispatch/1",
       dispatchId: generateUUIDv7(),
       requestId: generateUUIDv7(),
       actionRef: `conformance:${generateUUIDv7()}`,
@@ -92,7 +92,7 @@ describe("Signed Effect Pack Conformance", () => {
   function runner(executor = vi.fn(() => ok({ status: "completed" as const }))) {
     return {
       executor,
-      value: new SintEdgeRunner({
+      value: new NosihEdgeRunner({
         runnerId: "runner-a",
         admission: {
           trustedPackIssuers: [packAuthority.publicKey],

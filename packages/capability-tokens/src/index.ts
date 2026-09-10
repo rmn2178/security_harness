@@ -10,7 +10,7 @@ export type {
   CryptoProfileVerifierRegistry,
 } from "./crypto-profile.js";
 export { issueCapabilityToken, computeSigningPayload } from "./issuer.js";
-export type { SintCapabilityToken as CapabilityToken } from "@pshkv/core";
+export type { NosihCapabilityToken as CapabilityToken } from "@pshkv/core";
 export {
   validateCapabilityToken,
   validateTokenSchema,

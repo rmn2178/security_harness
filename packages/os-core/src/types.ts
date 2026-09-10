@@ -1,12 +1,12 @@
 /**
- * Type definitions for SINT OS.
+ * Type definitions for NOSIH OS.
  */
 
 import type { OpenClawAdapterConfig, CrossSystemPolicy } from "@pshkv/openclaw-adapter";
 
-/** Full SINT OS configuration. */
-export interface SintOSConfig {
-  /** SINT Protocol gateway URL. */
+/** Full NOSIH OS configuration. */
+export interface NosihOSConfig {
+  /** NOSIH Protocol gateway URL. */
   gatewayUrl: string;
 
   /** Agent identifier (Ed25519 public key hex). */
@@ -18,10 +18,10 @@ export interface SintOSConfig {
   /** Capability token. */
   token?: string;
 
-  /** Admin API key for the SINT gateway. */
+  /** Admin API key for the NOSIH gateway. */
   apiKey?: string;
 
-  /** Avatar configuration (optional — SINT Face). */
+  /** Avatar configuration (optional — NOSIH Face). */
   avatar?: AvatarConfig;
 
   /** Evidence HUD configuration (optional). */
@@ -34,7 +34,7 @@ export interface SintOSConfig {
   openclawAdapter?: Partial<OpenClawAdapterConfig>;
 }
 
-/** Avatar (SINT Face) configuration. */
+/** Avatar (NOSIH Face) configuration. */
 export interface AvatarConfig {
   /** Avatar server URL. Default: "http://localhost:3005". */
   serverUrl: string;
@@ -70,12 +70,12 @@ export interface EvidenceHUDConfig {
   sseUrl?: string;
 }
 
-/** SINT OS runtime status. */
-export interface SintOSStatus {
+/** NOSIH OS runtime status. */
+export interface NosihOSStatus {
   /** Whether the OS is running. */
   running: boolean;
 
-  /** SINT gateway health. */
+  /** NOSIH gateway health. */
   gateway: {
     connected: boolean;
     version?: string;

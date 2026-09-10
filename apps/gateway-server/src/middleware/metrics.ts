@@ -1,10 +1,10 @@
 /**
- * SINT Gateway Server — Prometheus-Compatible Metrics.
+ * NOSIH Gateway Server — Prometheus-Compatible Metrics.
  *
  * In-process counters, gauges, and histograms exposed
  * via GET /v1/metrics in Prometheus text format.
  *
- * @module @sint/gateway-server/middleware/metrics
+ * @module @nosih/gateway-server/middleware/metrics
  */
 
 import { Hono } from "hono";
@@ -133,14 +133,14 @@ export function metricsRoutes(): Hono {
 
   app.get("/v1/metrics", (c) => {
     const body = [
-      metrics.requestsTotal.format("sint_requests_total", "Total HTTP requests"),
-      metrics.approvalQueueSize.format("sint_approval_queue_size", "Current approval queue size"),
+      metrics.requestsTotal.format("nosih_requests_total", "Total HTTP requests"),
+      metrics.approvalQueueSize.format("nosih_approval_queue_size", "Current approval queue size"),
       metrics.approvalResolutionMs.format(
-        "sint_approval_resolution_ms",
+        "nosih_approval_resolution_ms",
         "Approval resolution latency in milliseconds",
       ),
       metrics.tokenOperationsTotal.format(
-        "sint_token_operations_total",
+        "nosih_token_operations_total",
         "Total token operations",
       ),
     ].join("\n\n");

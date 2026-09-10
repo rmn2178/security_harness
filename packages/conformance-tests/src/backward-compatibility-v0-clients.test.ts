@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   delegateCapabilityToken,
   type DelegationParams,
@@ -27,7 +27,7 @@ describe("Backward Compatibility (v0 clients)", () => {
   const agent = generateKeypair();
   const delegated = generateKeypair();
 
-  function legacyTokenRequest(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityTokenRequest {
+  function legacyTokenRequest(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityTokenRequest {
     return {
       issuer: root.publicKey,
       subject: agent.publicKey,
@@ -59,7 +59,7 @@ describe("Backward Compatibility (v0 clients)", () => {
       throw new Error(`Token issuance failed: ${issued.error}`);
     }
     const token = issued.value;
-    const tokenStore = new Map<string, SintCapabilityToken>([[token.tokenId, token]]);
+    const tokenStore = new Map<string, NosihCapabilityToken>([[token.tokenId, token]]);
     const gateway = new PolicyGateway({
       resolveToken: (tokenId) => tokenStore.get(tokenId),
     });

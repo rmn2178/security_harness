@@ -16,7 +16,7 @@ import {
   classifyFHIRDataClasses,
   withRegulatedRuntimeParams,
 } from "../src/regulated-runtime-metadata.js";
-import { mapFHIRToSint } from "../src/fhir-mapper.js";
+import { mapFHIRToNosih } from "../src/fhir-mapper.js";
 
 describe("regulated runtime metadata", () => {
   it("classifies patient, clinical, and consent resources", () => {
@@ -26,7 +26,7 @@ describe("regulated runtime metadata", () => {
   });
 
   it("builds PolicyGateway regulated-data metadata from a FHIR mapping", () => {
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Observation",
       resourceId: "obs-123",
@@ -57,7 +57,7 @@ describe("regulated runtime metadata", () => {
   });
 
   it("preserves bridge params while attaching regulated metadata", () => {
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Patient",
       resourceId: "patient-456",
@@ -82,7 +82,7 @@ describe("regulated runtime metadata", () => {
   });
 
   it("builds token-bound regulated data policy from the same FHIR mapping", () => {
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Observation",
       resourceId: "obs-123",
@@ -115,7 +115,7 @@ describe("regulated runtime metadata", () => {
   });
 
   it("emits metadata compatible with the gateway regulated-data policy", () => {
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Observation",
       resourceId: "obs-123",
@@ -184,7 +184,7 @@ describe("regulated runtime metadata", () => {
   it("uses generated token policy to bind issued token authority", () => {
     const issuer = generateKeypair();
     const subject = generateKeypair();
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Observation",
       resourceId: "obs-123",
@@ -260,7 +260,7 @@ describe("regulated runtime metadata", () => {
     const issuer = generateKeypair();
     const parentSubject = generateKeypair();
     const childSubject = generateKeypair();
-    const mapping = mapFHIRToSint({
+    const mapping = mapFHIRToNosih({
       serverUrl: "https://fhir.example.test",
       resourceType: "Observation",
       resourceId: "obs-123",

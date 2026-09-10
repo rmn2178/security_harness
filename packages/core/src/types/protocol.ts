@@ -1,15 +1,15 @@
 /**
- * SINT Protocol — Public interoperability nouns.
+ * NOSIH Protocol — Public interoperability nouns.
  *
  * These types define the stable public protocol vocabulary for discovery,
  * bridge interoperability, and governance artifacts.
  *
- * @module @sint/core/types/protocol
+ * @module @nosih/core/types/protocol
  */
 
 import type { GeoPolygon, ISO8601, UUIDv7 } from "./primitives.js";
-import type { ApprovalTier, SintSiteDeploymentProfile } from "./policy.js";
-import type { SintPhysicalConstraints } from "./capability-token.js";
+import type { ApprovalTier, NosihSiteDeploymentProfile } from "./policy.js";
+import type { NosihPhysicalConstraints } from "./capability-token.js";
 
 /**
  * CL-1.0 physical safety constraints within the structured envelope.
@@ -105,7 +105,7 @@ export type ConstraintEnvelopeMode = "static-token" | "dynamic-runtime" | "corri
  * Supports both legacy flat fields and CL-1.0 structured groups.
  * When both are present, CL-1.0 structured fields take precedence.
  */
-export interface ConstraintEnvelope extends Partial<SintPhysicalConstraints> {
+export interface ConstraintEnvelope extends Partial<NosihPhysicalConstraints> {
   // CL-1.0 structured fields
   readonly version?: "cl-1.0";
   readonly mode?: ConstraintEnvelopeMode;
@@ -141,7 +141,7 @@ export interface BridgeProfile {
  */
 export interface SiteProfile {
   readonly siteId: string;
-  readonly deploymentProfile: SintSiteDeploymentProfile;
+  readonly deploymentProfile: NosihSiteDeploymentProfile;
   readonly bridges: readonly string[];
   readonly defaultEscalationTheta?: number;
   readonly notes?: string;

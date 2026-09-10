@@ -1,5 +1,5 @@
 /**
- * @pshkv/bridge-matter — SINT Bridge for Matter Protocol
+ * @pshkv/bridge-matter — NOSIH Bridge for Matter Protocol
  *
  * Governs AI agent access to Matter-certified smart home devices.
  * Implements Phase 2 of Physical AI Governance Roadmap.
@@ -15,7 +15,7 @@ export {
 } from "./matter-interceptor.js";
 
 export {
-  mapMatterToSint,
+  mapMatterToNosih,
   parseMatterUri,
   getClusterName,
   isPhysicalActuatorCluster,

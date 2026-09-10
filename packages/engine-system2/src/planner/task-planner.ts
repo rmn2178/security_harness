@@ -1,17 +1,17 @@
 /**
- * SINT Protocol — Task Planner.
+ * NOSIH Protocol — Task Planner.
  *
  * Decomposes high-level goals into executable plan steps and validates
  * them against the current world state.
  *
- * @module @sint/engine-system2/planner/task-planner
+ * @module @nosih/engine-system2/planner/task-planner
  */
 
 import type {
   Result,
-  SintPlan,
-  SintPlanStep,
-  SintWorldState,
+  NosihPlan,
+  NosihPlanStep,
+  NosihWorldState,
 } from "@pshkv/core";
 import { ok, err, ApprovalTier } from "@pshkv/core";
 
@@ -97,9 +97,9 @@ export class TaskPlanner {
    */
   createPlan(
     goalDescription: string,
-    _worldState: SintWorldState,
+    _worldState: NosihWorldState,
     availableActions: readonly string[],
-  ): Result<SintPlan, Error> {
+  ): Result<NosihPlan, Error> {
     if (availableActions.length === 0) {
       return err(new Error("No available actions to build a plan"));
     }
@@ -107,7 +107,7 @@ export class TaskPlanner {
     const planId = generateId();
     const goalId = generateId();
 
-    const steps: SintPlanStep[] = availableActions.map((action) => {
+    const steps: NosihPlanStep[] = availableActions.map((action) => {
       const resource = `ros2:///${action}`;
       return {
         action,
@@ -119,7 +119,7 @@ export class TaskPlanner {
       };
     });
 
-    const plan: SintPlan = {
+    const plan: NosihPlan = {
       planId,
       goalId,
       steps,
@@ -157,9 +157,9 @@ export class TaskPlanner {
    * ```
    */
   validatePlan(
-    plan: SintPlan,
-    _worldState: SintWorldState,
-  ): Result<SintPlan, Error> {
+    plan: NosihPlan,
+    _worldState: NosihWorldState,
+  ): Result<NosihPlan, Error> {
     for (const step of plan.steps) {
       for (const pre of step.preconditions) {
         if (pre.length === 0) {
@@ -172,7 +172,7 @@ export class TaskPlanner {
       }
     }
 
-    const validated: SintPlan = {
+    const validated: NosihPlan = {
       ...plan,
       status: "validating",
     };

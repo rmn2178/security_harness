@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Shared HTTP Client for economy adapters.
+ * NOSIH Protocol — Shared HTTP Client for economy adapters.
  *
  * Provides a fetch wrapper with:
  * - Configurable base URL
@@ -8,7 +8,7 @@
  * - Timeout support
  * - JSON parsing
  *
- * @module @sint/bridge-economy/adapters/http-client
+ * @module @nosih/bridge-economy/adapters/http-client
  */
 
 import { ok, err, type Result } from "@pshkv/core";
@@ -17,7 +17,7 @@ import { ok, err, type Result } from "@pshkv/core";
  * HTTP client configuration.
  */
 export interface HttpClientConfig {
-  /** Base URL for the API (e.g. "https://api.sint.gg"). */
+  /** Base URL for the API (e.g. "https://api.nosih.gg"). */
   readonly baseUrl: string;
   /** Authorization token (Bearer). */
   readonly authToken?: string;
@@ -35,7 +35,7 @@ export interface HttpClientConfig {
  * @example
  * ```ts
  * const client = new HttpClient({
- *   baseUrl: "https://api.sint.gg",
+ *   baseUrl: "https://api.nosih.gg",
  *   authToken: "Bearer abc123",
  * });
  * const result = await client.get("/balance/user1");

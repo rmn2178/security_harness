@@ -6,7 +6,7 @@ import {
   issueCapabilityToken,
   validateDuressResolution,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -17,7 +17,7 @@ describe("Duress token helpers", () => {
   const issuer = generateKeypair();
   const subject = generateKeypair();
 
-  const request: SintCapabilityTokenRequest = {
+  const request: NosihCapabilityTokenRequest = {
     issuer: issuer.publicKey,
     subject: subject.publicKey,
     resource: "home://lock/front-door",

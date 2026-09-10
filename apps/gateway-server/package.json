@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/gateway-server",
   "version": "0.1.0",
-  "description": "SINT Gate — Standalone Policy Gateway HTTP Server",
+  "description": "NOSIH Gate — Standalone Policy Gateway HTTP Server",
   "type": "module",
   "main": "./dist/index.js",
   "exports": {

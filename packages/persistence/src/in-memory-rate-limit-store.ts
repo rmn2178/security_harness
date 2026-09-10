@@ -1,14 +1,14 @@
 /**
- * SINT Persistence — In-memory RateLimitStore.
+ * NOSIH Persistence — In-memory RateLimitStore.
  *
  * Sliding-window (fixed-bucket) call counter for per-token rate limiting.
- * Uses bucket keys of the form `sint:rate:<tokenId>:<bucketN>` which the
+ * Uses bucket keys of the form `nosih:rate:<tokenId>:<bucketN>` which the
  * PolicyGateway constructs before calling increment().
  *
  * Suitable for single-node deployments and tests.
  * For distributed deployments use RedisRateLimitStore (see redis-cache.ts).
  *
- * @module @sint/persistence/in-memory-rate-limit-store
+ * @module @nosih/persistence/in-memory-rate-limit-store
  */
 
 import type { RateLimitStore } from "@pshkv/core";

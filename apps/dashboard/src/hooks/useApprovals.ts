@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Real-time Approval SSE Hook.
+ * NOSIH Dashboard — Real-time Approval SSE Hook.
  *
  * Connects to /v1/approvals/events via Server-Sent Events
  * and keeps an in-memory list of pending approvals.

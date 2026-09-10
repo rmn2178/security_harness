@@ -1,10 +1,10 @@
 /**
- * SINT Gateway Server — Redis Connection Factory.
+ * NOSIH Gateway Server — Redis Connection Factory.
  *
  * Isolates the ioredis import to handle CJS/ESM interop.
- * Only called when SINT_CACHE=redis is configured.
+ * Only called when NOSIH_CACHE=redis is configured.
  *
- * @module @sint/gateway-server/redis-factory
+ * @module @nosih/gateway-server/redis-factory
  */
 
 import { createRequire } from "node:module";

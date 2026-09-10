@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Tier Assignment Engine unit tests.
+ * NOSIH Protocol — Tier Assignment Engine unit tests.
  *
  * Tests the pure function that maps requests to approval tiers.
  */
@@ -7,9 +7,9 @@
 import { describe, it, expect } from "vitest";
 import { assignTier } from "../src/tier-assigner.js";
 import { ApprovalTier, RiskTier } from "@pshkv/core";
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 
-function makeRequest(overrides: Partial<SintRequest>): SintRequest {
+function makeRequest(overrides: Partial<NosihRequest>): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

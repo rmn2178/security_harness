@@ -1,49 +1,49 @@
 /**
- * SINT Gateway Server — Discovery and schema routes.
+ * NOSIH Gateway Server — Discovery and schema routes.
  *
  * Exposes machine-readable protocol metadata and schema catalog.
  *
  * Endpoints:
- * - GET /.well-known/sint.json
+ * - GET /.well-known/nosih.json
  * - GET /v1/schemas
  * - GET /v1/schemas/:name
  * - GET /v1/openapi.json
  *
- * @module @sint/gateway-server/routes/discovery
+ * @module @nosih/gateway-server/routes/discovery
  */
 
 import { Hono } from "hono";
 import {
-  SINT_PROTOCOL_VERSION,
-  SINT_PROTOCOL_BOUNDARY,
-  SINT_BRIDGE_PROFILES,
-  SINT_SITE_PROFILES,
-  SINT_SCHEMA_CATALOG,
-  SINT_TIER_COMPLIANCE_CROSSWALK,
+  NOSIH_PROTOCOL_VERSION,
+  NOSIH_PROTOCOL_BOUNDARY,
+  NOSIH_BRIDGE_PROFILES,
+  NOSIH_SITE_PROFILES,
+  NOSIH_SCHEMA_CATALOG,
+  NOSIH_TIER_COMPLIANCE_CROSSWALK,
 } from "@pshkv/core";
 
 export function discoveryRoutes(): Hono {
   const app = new Hono();
 
-  // OATR domain verification — proves ownership of sint-protocol public key
+  // OATR domain verification — proves ownership of nosih-protocol public key
   // Required by FransDevelopment/open-agent-trust-registry CI pipeline
   app.get("/.well-known/agent-trust.json", (c) => {
     return c.json({
-      issuer_id: "sint-protocol",
-      public_key_fingerprint: "sint-registry-2026-04",
+      issuer_id: "nosih-protocol",
+      public_key_fingerprint: "nosih-registry-2026-04",
     });
   });
 
-  app.get("/.well-known/sint.json", (c) => {
+  app.get("/.well-known/nosih.json", (c) => {
     return c.json({
-      name: "SINT Protocol",
-      version: SINT_PROTOCOL_VERSION,
-      boundary: SINT_PROTOCOL_BOUNDARY,
+      name: "NOSIH Protocol",
+      version: NOSIH_PROTOCOL_VERSION,
+      boundary: NOSIH_PROTOCOL_BOUNDARY,
       identityMethods: ["ed25519", "did:key"],
       attestationModes: ["intel-sgx", "arm-trustzone", "amd-sev", "tpm2", "none"],
-      deploymentProfiles: SINT_SITE_PROFILES,
-      supportedBridges: SINT_BRIDGE_PROFILES,
-      schemaCatalog: Object.keys(SINT_SCHEMA_CATALOG).map((name) => ({
+      deploymentProfiles: NOSIH_SITE_PROFILES,
+      supportedBridges: NOSIH_BRIDGE_PROFILES,
+      schemaCatalog: Object.keys(NOSIH_SCHEMA_CATALOG).map((name) => ({
         name,
         path: `/v1/schemas/${name}`,
       })),
@@ -61,8 +61,8 @@ export function discoveryRoutes(): Hono {
 
   app.get("/v1/schemas", (c) => {
     return c.json({
-      total: Object.keys(SINT_SCHEMA_CATALOG).length,
-      schemas: Object.keys(SINT_SCHEMA_CATALOG).map((name) => ({
+      total: Object.keys(NOSIH_SCHEMA_CATALOG).length,
+      schemas: Object.keys(NOSIH_SCHEMA_CATALOG).map((name) => ({
         name,
         path: `/v1/schemas/${name}`,
       })),
@@ -71,11 +71,11 @@ export function discoveryRoutes(): Hono {
 
   app.get("/v1/schemas/:name", (c) => {
     const name = c.req.param("name");
-    const schema = SINT_SCHEMA_CATALOG[name];
+    const schema = NOSIH_SCHEMA_CATALOG[name];
     if (!schema) {
       return c.json({
         error: "Schema not found",
-        available: Object.keys(SINT_SCHEMA_CATALOG),
+        available: Object.keys(NOSIH_SCHEMA_CATALOG),
       }, 404);
     }
     return c.json(schema);
@@ -83,8 +83,8 @@ export function discoveryRoutes(): Hono {
 
   app.get("/v1/compliance/tier-crosswalk", (c) => {
     return c.json({
-      version: SINT_PROTOCOL_VERSION,
-      mappings: SINT_TIER_COMPLIANCE_CROSSWALK,
+      version: NOSIH_PROTOCOL_VERSION,
+      mappings: NOSIH_TIER_COMPLIANCE_CROSSWALK,
       disclaimer:
         "Crosswalk is implementation guidance, not legal advice. Validate obligations for your jurisdiction and sector.",
     });
@@ -94,12 +94,12 @@ export function discoveryRoutes(): Hono {
     return c.json({
       openapi: "3.1.0",
       info: {
-        title: "SINT Gateway API",
-        version: SINT_PROTOCOL_VERSION,
-        description: SINT_PROTOCOL_BOUNDARY,
+        title: "NOSIH Gateway API",
+        version: NOSIH_PROTOCOL_VERSION,
+        description: NOSIH_PROTOCOL_BOUNDARY,
       },
       paths: {
-        "/.well-known/sint.json": { get: { summary: "Protocol discovery document" } },
+        "/.well-known/nosih.json": { get: { summary: "Protocol discovery document" } },
         "/v1/health": { get: { summary: "Health status" } },
         "/v1/ready": { get: { summary: "Readiness checks for configured store/cache backends" } },
         "/v1/metrics": { get: { summary: "Prometheus metrics" } },
@@ -128,13 +128,13 @@ export function discoveryRoutes(): Hono {
         "/v1/schemas": { get: { summary: "List public JSON schemas" } },
         "/v1/schemas/{name}": { get: { summary: "Fetch schema by name" } },
         "/v1/compliance/tier-crosswalk": {
-          get: { summary: "SINT tier mapping to NIST AI RMF, ISO/IEC 42001, and EU AI Act controls" },
+          get: { summary: "NOSIH tier mapping to NIST AI RMF, ISO/IEC 42001, and EU AI Act controls" },
         },
         "/v1/docs": { get: { summary: "API docs landing page" } },
         "/v1/docs/redoc": { get: { summary: "Redoc API documentation UI" } },
       },
       components: {
-        schemas: SINT_SCHEMA_CATALOG,
+        schemas: NOSIH_SCHEMA_CATALOG,
       },
     });
   });
@@ -145,7 +145,7 @@ export function discoveryRoutes(): Hono {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>SINT Gateway API Docs</title>
+    <title>NOSIH Gateway API Docs</title>
     <style>
       body { font-family: Inter, Arial, sans-serif; margin: 0; background: #0b1324; color: #e7eefc; }
       .wrap { max-width: 840px; margin: 56px auto; padding: 0 20px; }
@@ -162,14 +162,14 @@ export function discoveryRoutes(): Hono {
   <body>
     <main class="wrap">
       <section class="card">
-        <h1>SINT Gateway API Documentation</h1>
+        <h1>NOSIH Gateway API Documentation</h1>
         <p>Interactive docs generated from the live OpenAPI surface.</p>
         <div class="links">
           <a class="link" href="/v1/docs/redoc">Open Redoc UI</a>
           <a class="link" href="/v1/openapi.json">View raw OpenAPI JSON</a>
-          <a class="link" href="/.well-known/sint.json">View protocol discovery document</a>
+          <a class="link" href="/.well-known/nosih.json">View protocol discovery document</a>
         </div>
-        <p style="margin-top:16px;">Tip: set <code>SINT_API_KEY</code> and test protected endpoints from your API client or <code>sintctl</code>.</p>
+        <p style="margin-top:16px;">Tip: set <code>NOSIH_API_KEY</code> and test protected endpoints from your API client or <code>nosihctl</code>.</p>
       </section>
     </main>
   </body>
@@ -180,7 +180,7 @@ export function discoveryRoutes(): Hono {
     return c.html(`<!doctype html>
 <html>
   <head>
-    <title>SINT Gateway API (Redoc)</title>
+    <title>NOSIH Gateway API (Redoc)</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>body { margin: 0; }</style>

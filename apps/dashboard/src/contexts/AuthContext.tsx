@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Authentication Context.
+ * NOSIH Dashboard — Authentication Context.
  *
  * Stores the authenticated operator's identity (name + API key).
  * Persists to sessionStorage so refreshes don't require re-login.
@@ -34,7 +34,7 @@ interface AuthContextValue {
   error: string | null;
 }
 
-const STORAGE_KEY = "sint_operator_session";
+const STORAGE_KEY = "nosih_operator_session";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 

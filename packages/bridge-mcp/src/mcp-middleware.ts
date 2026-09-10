@@ -1,17 +1,17 @@
 /**
- * SINT Bridge MCP — Drop-in Middleware.
+ * NOSIH Bridge MCP — Drop-in Middleware.
  *
- * Wraps any MCP server's tool handler to enforce SINT policy
+ * Wraps any MCP server's tool handler to enforce NOSIH policy
  * on every tool call. Auto-creates sessions per agent.
  *
- * @module @sint/bridge-mcp/mcp-middleware
+ * @module @nosih/bridge-mcp/mcp-middleware
  */
 
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { MCPInterceptor } from "./mcp-interceptor.js";
 import type { MCPToolCall, MCPInterceptResult } from "./types.js";
 
-export interface SintMiddlewareConfig {
+export interface NosihMiddlewareConfig {
   /** PolicyGateway instance for local policy evaluation. */
   gateway: PolicyGateway;
   /** Default server name for resource URI mapping. */
@@ -32,23 +32,23 @@ export interface ToolCallContext {
 export type ToolHandler<T = unknown> = (toolCall: MCPToolCall) => Promise<T>;
 
 /**
- * Create a SINT middleware that wraps MCP tool handlers.
+ * Create a NOSIH middleware that wraps MCP tool handlers.
  *
  * @example
  * ```ts
- * const sint = createSintMiddleware({ gateway, serverName: "my-mcp" });
+ * const nosih = createNosihMiddleware({ gateway, serverName: "my-mcp" });
  *
  * // Wrap your tool handler
- * const protectedHandler = sint.protect(originalHandler);
+ * const protectedHandler = nosih.protect(originalHandler);
  *
  * // Or intercept manually
- * const result = sint.intercept(context);
+ * const result = nosih.intercept(context);
  * if (result.action === "forward") {
  *   await originalHandler(context.toolCall);
  * }
  * ```
  */
-export function createSintMiddleware(config: SintMiddlewareConfig) {
+export function createNosihMiddleware(config: NosihMiddlewareConfig) {
   const interceptor = new MCPInterceptor({ gateway: config.gateway });
   const sessionMap = new Map<string, string>(); // agentId → sessionId
 
@@ -82,7 +82,7 @@ export function createSintMiddleware(config: SintMiddlewareConfig) {
     },
 
     /**
-     * Wrap a tool handler with SINT policy enforcement.
+     * Wrap a tool handler with NOSIH policy enforcement.
      * Returns a new handler that checks policy before execution.
      *
      * Denied calls throw an error with the deny reason.
@@ -97,12 +97,12 @@ export function createSintMiddleware(config: SintMiddlewareConfig) {
         const result = await this.intercept({ agentId, tokenId, toolCall });
 
         if (result.action === "deny") {
-          throw new Error(`SINT: Tool call denied — ${result.denyReason ?? "policy violation"}`);
+          throw new Error(`NOSIH: Tool call denied — ${result.denyReason ?? "policy violation"}`);
         }
 
         if (result.action === "escalate") {
           throw new Error(
-            `SINT: Tool call requires approval (tier: ${result.requiredTier ?? "unknown"})`,
+            `NOSIH: Tool call requires approval (tier: ${result.requiredTier ?? "unknown"})`,
           );
         }
 

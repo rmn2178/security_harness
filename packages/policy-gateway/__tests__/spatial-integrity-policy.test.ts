@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Spatial integrity policy tests.
+ * NOSIH Protocol — Spatial integrity policy tests.
  */
 
 import { describe, expect, it, vi } from "vitest";
 import {
   ApprovalTier,
-  type SintCapabilityToken,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -24,7 +24,7 @@ function isoOffset(ms: number): string {
     .replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-function makeToken(): SintCapabilityToken {
+function makeToken(): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -45,9 +45,9 @@ function makeToken(): SintCapabilityToken {
 }
 
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f000",
     timestamp: isoOffset(0),
@@ -70,7 +70,7 @@ function makeRequest(
   };
 }
 
-function makeGateway(token: SintCapabilityToken, emitLedgerEvent = vi.fn()) {
+function makeGateway(token: NosihCapabilityToken, emitLedgerEvent = vi.fn()) {
   return new PolicyGateway({
     resolveToken: () => token,
     emitLedgerEvent,

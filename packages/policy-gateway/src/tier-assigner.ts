@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Tier Assignment Engine.
+ * NOSIH Protocol — Tier Assignment Engine.
  *
  * Determines the approval tier for each request based on:
  * 1. The resource being accessed
@@ -7,13 +7,13 @@
  * 3. Physical context (human presence, environment)
  * 4. Agent trust level
  *
- * @module @sint/gate-policy-gateway/tier-assigner
+ * @module @nosih/gate-policy-gateway/tier-assigner
  */
 
 import {
   ApprovalTier,
   type RiskTier,
-  type SintRequest,
+  type NosihRequest,
   type TierAssignmentRule,
   DEFAULT_TIER_RULES,
 } from "@pshkv/core";
@@ -154,7 +154,7 @@ function matchesRuleResource(pattern: string, resource: string): boolean {
  * ```
  */
 export function assignTier(
-  request: SintRequest,
+  request: NosihRequest,
   options: {
     rules?: readonly TierAssignmentRule[];
     agentTrustLevel?: AgentTrustLevel;

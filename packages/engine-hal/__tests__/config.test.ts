@@ -79,7 +79,7 @@ describe("loadEngineConfig", () => {
     const configJson = JSON.stringify({ deploymentProfile: "full" });
     mockReadFile.mockResolvedValue(configJson);
 
-    const customPath = "/etc/sint/engine.json";
+    const customPath = "/etc/nosih/engine.json";
     const result = await loadEngineConfig(customPath);
 
     expect(result.ok).toBe(true);

@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — Engine System 1 internal types.
+ * NOSIH Protocol — Engine System 1 internal types.
  *
  * Configuration interfaces and defaults for the neural perception pipeline.
  * These types are used internally by the sensor bus, perception pipeline,
  * anomaly detector, and ONNX executor.
  *
- * @module @sint/engine-system1/types
+ * @module @nosih/engine-system1/types
  */
 
-import type { Result, SintSensorModality } from "@pshkv/core";
+import type { Result, NosihSensorModality } from "@pshkv/core";
 
 /**
  * Describes a sensor source registered with the SensorBus.
@@ -24,7 +24,7 @@ import type { Result, SintSensorModality } from "@pshkv/core";
  */
 export interface SensorSource {
   readonly sensorId: string;
-  readonly modality: SintSensorModality;
+  readonly modality: NosihSensorModality;
   readonly bufferSize: number;
 }
 

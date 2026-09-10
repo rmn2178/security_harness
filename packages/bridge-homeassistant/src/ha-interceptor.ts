@@ -1,8 +1,8 @@
 /**
- * SINT bridge-homeassistant — MCP Interceptor
+ * NOSIH bridge-homeassistant — MCP Interceptor
  *
  * Intercepts Home Assistant MCP Server tool calls and routes them through
- * SINT Policy Gateway for tier-based authorization. Implements Phase 1
+ * NOSIH Policy Gateway for tier-based authorization. Implements Phase 1
  * consumer smart home governance.
  *
  * Architecture:
@@ -16,17 +16,17 @@ import type { CapabilityToken } from "@pshkv/gate-capability-tokens";
 import { ApprovalTier } from "@pshkv/core";
 import {
   parseEntityId,
-  mapServiceCallToSint,
+  mapServiceCallToNosih,
   extractEntityIdFromMCP,
   extractServiceFromMCP,
   isSafetyCritical,
-  type SintResourceMapping,
+  type NosihResourceMapping,
 } from "./resource-mapper.js";
 
 export interface HAInterceptorConfig {
   /** Home Assistant instance hostname (default: 'homeassistant.local') */
   homeAssistantHost?: string;
-  /** SINT Policy Gateway instance */
+  /** NOSIH Policy Gateway instance */
   policyGateway: PolicyGateway;
   /** Agent DID (e.g., 'did:key:z6Mk...') */
   agentDid: string;
@@ -49,7 +49,7 @@ export interface MCPToolResult {
  * Home Assistant MCP Interceptor.
  *
  * Wraps the Home Assistant MCP Server and intercepts all tool calls.
- * Each call is mapped to a SINT resource + action, checked against Policy Gateway,
+ * Each call is mapped to a NOSIH resource + action, checked against Policy Gateway,
  * and either allowed, denied, or escalated for human approval.
  *
  * @example
@@ -104,14 +104,14 @@ export class HAInterceptor {
       };
     }
     
-    // Parse entity and map to SINT resource
+    // Parse entity and map to NOSIH resource
     const entity = parseEntityId(entityId);
-    const mapping = mapServiceCallToSint(
+    const mapping = mapServiceCallToNosih(
       { entity, service, serviceData: call.toolInput },
       this.config.homeAssistantHost
     );
     
-    this.log(`Mapped to SINT resource: ${mapping.resource}, action: ${mapping.action}, tier: ${mapping.tier}`);
+    this.log(`Mapped to NOSIH resource: ${mapping.resource}, action: ${mapping.action}, tier: ${mapping.tier}`);
     
     // Create Policy Gateway context
     const policyContext: PolicyContext = {
@@ -144,7 +144,7 @@ export class HAInterceptor {
       case "deny":
         return {
           success: false,
-          error: `Access denied by SINT Policy Gateway: ${decision.reason ?? "Insufficient permissions"}`,
+          error: `Access denied by NOSIH Policy Gateway: ${decision.reason ?? "Insufficient permissions"}`,
         };
       
       case "escalate":
@@ -169,12 +169,12 @@ export class HAInterceptor {
    * For now, returns a placeholder success response.
    *
    * @param call - Original MCP tool call
-   * @param mapping - SINT resource mapping
+   * @param mapping - NOSIH resource mapping
    * @returns Service call execution result
    */
   private async executeServiceCall(
     call: MCPToolCall,
-    mapping: SintResourceMapping
+    mapping: NosihResourceMapping
   ): Promise<MCPToolResult> {
     this.log(`Executing HA service call: ${mapping.action} on ${mapping.resource}`);
     
@@ -217,7 +217,7 @@ export function createHACapabilityToken(
   validUntil?: Date
 ): Partial<CapabilityToken> {
   const entity = parseEntityId(entityId);
-  const mapping = mapServiceCallToSint({ entity, service });
+  const mapping = mapServiceCallToNosih({ entity, service });
   
   const expiresAt = validUntil ?? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
   

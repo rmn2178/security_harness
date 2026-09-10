@@ -1,10 +1,10 @@
 /**
- * SINT Gateway Server — Intercept routes.
+ * NOSIH Gateway Server — Intercept routes.
  */
 
 import { Hono } from "hono";
-import type { SintRequest } from "@pshkv/core";
-import { sintRequestSchema, ApprovalTier } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
+import { nosihRequestSchema, ApprovalTier } from "@pshkv/core";
 import type { ServerContext } from "../server.js";
 import { globalRiskBus, computeRiskScore } from "./risk-stream.js";
 import { globalApprovalBus } from "../ws/ws-approval-stream.js";
@@ -21,7 +21,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
   // Single request interception
   app.post("/v1/intercept", async (c) => {
     const body = await c.req.json();
-    const parsed = sintRequestSchema.safeParse(body);
+    const parsed = nosihRequestSchema.safeParse(body);
 
     if (!parsed.success) {
       return c.json(
@@ -30,7 +30,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
       );
     }
 
-    const decision = await ctx.gateway.intercept(parsed.data as SintRequest);
+    const decision = await ctx.gateway.intercept(parsed.data as NosihRequest);
 
     ctx.ledger.append({
       eventType: "request.received",
@@ -83,7 +83,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
     if (decision.action === "escalate") {
       const quorum = decision.escalation?.approvalQuorum;
       const approvalRequest = ctx.approvalQueue.enqueue(
-        parsed.data as SintRequest,
+        parsed.data as NosihRequest,
         decision,
         quorum,
       );
@@ -115,7 +115,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
     }
 
     const results = await Promise.all(body.map(async (item: unknown) => {
-      const parsed = sintRequestSchema.safeParse(item);
+      const parsed = nosihRequestSchema.safeParse(item);
       if (!parsed.success) {
         return {
           status: 400,
@@ -124,7 +124,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
         };
       }
 
-      const decision = await ctx.gateway.intercept(parsed.data as SintRequest);
+      const decision = await ctx.gateway.intercept(parsed.data as NosihRequest);
 
       ctx.ledger.append({
         eventType: "request.received",
@@ -157,7 +157,7 @@ export function interceptRoutes(ctx: ServerContext): Hono {
       if (decision.action === "escalate") {
         const quorum = decision.escalation?.approvalQuorum;
         const approvalRequest = ctx.approvalQueue.enqueue(
-          parsed.data as SintRequest,
+          parsed.data as NosihRequest,
           decision,
           quorum,
         );

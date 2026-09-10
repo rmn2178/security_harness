@@ -1,5 +1,5 @@
 /**
- * @pshkv/bridge-homeassistant — SINT Bridge for Home Assistant
+ * @pshkv/bridge-homeassistant — NOSIH Bridge for Home Assistant
  *
  * Governs AI agent access to consumer smart home devices via Home Assistant MCP.
  * Implements Phase 1 consumer smart home governance from Physical AI Governance
@@ -18,13 +18,13 @@ export {
 
 export {
   parseEntityId,
-  mapServiceCallToSint,
+  mapServiceCallToNosih,
   extractEntityIdFromMCP,
   extractServiceFromMCP,
   isSafetyCritical,
   type HAEntity,
   type HAServiceCall,
-  type SintResourceMapping,
+  type NosihResourceMapping,
 } from "./resource-mapper.js";
 
 export {

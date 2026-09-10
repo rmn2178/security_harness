@@ -8,15 +8,15 @@ services:
     ports:
       - "3100:3100"
     environment:
-      SINT_PORT: "3100"
-      SINT_STORE: postgres
-      SINT_CACHE: redis
-      DATABASE_URL: postgresql://sint:${POSTGRES_PASSWORD:-sint}@postgres:5432/sint
+      NOSIH_PORT: "3100"
+      NOSIH_STORE: postgres
+      NOSIH_CACHE: redis
+      DATABASE_URL: postgresql://nosih:${POSTGRES_PASSWORD:-nosih}@postgres:5432/nosih
       REDIS_URL: redis://redis:6379
-      SINT_LOG_LEVEL: info
-      SINT_API_KEY: ${SINT_API_KEY:-edge-dev-key}
-      SINT_REQUIRE_SIGNATURES: ${SINT_REQUIRE_SIGNATURES:-true}
-      SINT_WS_ALLOW_QUERY_API_KEY: ${SINT_WS_ALLOW_QUERY_API_KEY:-false}
+      NOSIH_LOG_LEVEL: info
+      NOSIH_API_KEY: ${NOSIH_API_KEY:-edge-dev-key}
+      NOSIH_REQUIRE_SIGNATURES: ${NOSIH_REQUIRE_SIGNATURES:-true}
+      NOSIH_WS_ALLOW_QUERY_API_KEY: ${NOSIH_WS_ALLOW_QUERY_API_KEY:-false}
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,14 +33,14 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: sint
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sint}
-      POSTGRES_DB: sint
+      POSTGRES_USER: nosih
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nosih}
+      POSTGRES_DB: nosih
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ../../packages/persistence/migrations:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sint -d sint"]
+      test: ["CMD-SHELL", "pg_isready -U nosih -d nosih"]
       interval: 5s
       timeout: 5s
       retries: 5

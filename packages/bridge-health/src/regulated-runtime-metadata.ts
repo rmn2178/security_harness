@@ -1,12 +1,12 @@
 /**
- * SINT bridge-health — regulated runtime metadata helpers.
+ * NOSIH bridge-health — regulated runtime metadata helpers.
  *
  * Builds the `params.regulatedData` payload consumed by the policy gateway's
  * regulated-data runtime policy. Enforcement stays in PolicyGateway.intercept().
  */
 
 import type { RegulatedDataRequestMetadata } from "@pshkv/gate-policy-gateway";
-import type { SintRegulatedDataPolicy } from "@pshkv/core";
+import type { NosihRegulatedDataPolicy } from "@pshkv/core";
 import type { FHIRResourceMapping, FHIRResourceType } from "./fhir-mapper.js";
 
 export interface RegulatedRuntimeRouteContext {
@@ -47,7 +47,7 @@ const CLINICAL_PHI_RESOURCES = new Set<FHIRResourceType>([
 ]);
 
 /**
- * Build regulated runtime metadata from an existing FHIR-to-SINT mapping.
+ * Build regulated runtime metadata from an existing FHIR-to-NOSIH mapping.
  */
 export function buildFHIRRegulatedRuntimeMetadata(
   mapping: FHIRResourceMapping,
@@ -67,13 +67,13 @@ export function buildFHIRRegulatedRuntimeMetadata(
 /**
  * Build a token-bound regulated data policy from a FHIR mapping.
  *
- * Use this as `SintCapabilityTokenRequest.regulatedDataPolicy` so token
+ * Use this as `NosihCapabilityTokenRequest.regulatedDataPolicy` so token
  * authority and request metadata are derived from the same bridge mapping.
  */
 export function buildFHIRRegulatedDataPolicy(
   mapping: FHIRResourceMapping,
   options: FHIRRegulatedDataPolicyOptions,
-): SintRegulatedDataPolicy {
+): NosihRegulatedDataPolicy {
   return {
     allowedDataClasses: classifyFHIRDataClasses(mapping.context.resourceType),
     allowedPurposes: options.allowedPurposes,

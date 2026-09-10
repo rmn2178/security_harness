@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — HTTP Pricing Adapter.
+ * NOSIH Protocol — HTTP Pricing Adapter.
  *
  * Implements IPricingPort by calling the product API's MCP marketplace:
  * - GET /mcps/:id/pricing → getPrice
  *
- * @module @sint/bridge-economy/adapters/http-pricing-adapter
+ * @module @nosih/bridge-economy/adapters/http-pricing-adapter
  */
 
 import { ok, type Result } from "@pshkv/core";
@@ -18,7 +18,7 @@ import { BASE_TOOL_CALL_COST, GLOBAL_MARKUP_MULTIPLIER } from "../pricing-calcul
  * @example
  * ```ts
  * const adapter = new HttpPricingAdapter({
- *   baseUrl: "https://api.sint.gg",
+ *   baseUrl: "https://api.nosih.gg",
  *   authToken: keycloakToken,
  * });
  * const result = await adapter.getPrice({ actionType: "call", resource: "my-mcp" });

@@ -1,5 +1,5 @@
 /**
- * SINT PolicyGateway — edge mode control-plane tests.
+ * NOSIH PolicyGateway — edge mode control-plane tests.
  */
 
 import { describe, expect, it, vi } from "vitest";
@@ -9,7 +9,7 @@ import {
   issueCapabilityToken,
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow = 2): string {
   const d = new Date(Date.now() + hoursFromNow * 3_600_000);
@@ -17,8 +17,8 @@ function futureISO(hoursFromNow = 2): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -33,7 +33,7 @@ describe("PolicyGateway Edge Control Plane", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
 
-  function issueToken(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
+  function issueToken(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
     const token = issueCapabilityToken(
       {
         issuer: root.publicKey,

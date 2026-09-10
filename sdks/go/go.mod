@@ -1,4 +1,4 @@
-module github.com/sint-ai/sint-protocol/sdks/go
+module github.com/nosih-ai/nosih-protocol/sdks/go
 
 go 1.22
 

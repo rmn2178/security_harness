@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 import { ApprovalTier } from "@pshkv/core";
 import type { MavCommandLong, MavSetPositionTargetLocalNed, MavlinkIntercept } from "@pshkv/bridge-mavlink";
-import { mapMavlinkToSint } from "@pshkv/bridge-mavlink";
+import { mapMavlinkToNosih } from "@pshkv/bridge-mavlink";
 import { loadPx4OffboardPolicyReceiptsFixture } from "./fixture-loader.js";
 
 function toIntercept(
@@ -34,7 +34,7 @@ describe("PX4 offboard policy receipts fixture v1", () => {
       bridge: "mavlink",
       projectContext: "px4",
       boundary: "arming, offboard mode, and continuous setpoints",
-      goal: "Test whether MAVLink arming, offboard-mode, fence-change, and velocity-setpoint actions can carry auditable policy receipts without making SINT a required PX4 runtime dependency.",
+      goal: "Test whether MAVLink arming, offboard-mode, fence-change, and velocity-setpoint actions can carry auditable policy receipts without making NOSIH a required PX4 runtime dependency.",
       nonGoal: "This fixture does not propose changes to PX4 flight-control internals.",
     });
     expect(fixture.requirements).toEqual({
@@ -47,7 +47,7 @@ describe("PX4 offboard policy receipts fixture v1", () => {
     });
 
     expect(fixture.deployment.px4LogFormat).toBe("ulge");
-    expect(fixture.deployment.px4LogEvidenceRef).toMatch(/^sint:\/\/evidence\/px4\//);
+    expect(fixture.deployment.px4LogEvidenceRef).toMatch(/^nosih:\/\/evidence\/px4\//);
   });
 
   it("defines receipt fields that bind vehicle, mission corridor, mode, and decision", () => {
@@ -70,7 +70,7 @@ describe("PX4 offboard policy receipts fixture v1", () => {
 
   it("routes MAVLink intercepts through the canonical bridge mapper", () => {
     for (const item of fixture.mappingCases) {
-      const mapped = mapMavlinkToSint(toIntercept(item));
+      const mapped = mapMavlinkToNosih(toIntercept(item));
 
       expect(mapped.resource, item.id).toBe(item.expectedResource);
       expect(mapped.action, item.id).toBe(item.expectedAction);

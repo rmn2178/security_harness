@@ -1,7 +1,7 @@
 /**
- * SINT bridge-health — FHIR Consent Token
+ * NOSIH bridge-health — FHIR Consent Token
  *
- * Implements FHIR R5 Consent resource as a SINT capability token extension.
+ * Implements FHIR R5 Consent resource as a NOSIH capability token extension.
  * Provides cryptographic consent enforcement for health data access.
  *
  * @module @pshkv/bridge-health/fhir-consent-token
@@ -36,7 +36,7 @@ export type ConsentCategory =
   | "TREAT";   // Treatment
 
 /**
- * FHIR Consent extension for SINT capability tokens.
+ * FHIR Consent extension for NOSIH capability tokens.
  *
  * Based on FHIR R5 Consent resource:
  * https://hl7.org/fhir/R5/consent.html
@@ -83,7 +83,7 @@ export interface FHIRConsentExtension {
 }
 
 /**
- * FHIR Consent Token = SINT Capability Token + FHIR Consent Extension.
+ * FHIR Consent Token = NOSIH Capability Token + FHIR Consent Extension.
  */
 export interface FHIRConsentToken extends CapabilityToken {
   fhirConsent: FHIRConsentExtension;

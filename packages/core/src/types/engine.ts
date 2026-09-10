@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Engine Layer (L3) types.
+ * NOSIH Protocol — Engine Layer (L3) types.
  *
  * The Engine is the neuromorphic-symbolic runtime that runs on robots.
  * It integrates System 1 (neural perception) and System 2 (symbolic reasoning)
@@ -7,7 +7,7 @@
  *
  * Every engine action routes through the Policy Gateway — no exceptions.
  *
- * @module @sint/core/types/engine
+ * @module @nosih/core/types/engine
  */
 
 import type {
@@ -29,7 +29,7 @@ import type { ApprovalTier } from "./policy.js";
 /**
  * Supported sensor modalities for System 1 perception.
  */
-export type SintSensorModality =
+export type NosihSensorModality =
   | "camera_rgb"
   | "camera_depth"
   | "lidar"
@@ -47,7 +47,7 @@ export type SintSensorModality =
  *
  * @example
  * ```ts
- * const reading: SintSensorReading = {
+ * const reading: NosihSensorReading = {
  *   sensorId: "cam_front_rgb",
  *   modality: "camera_rgb",
  *   timestamp: "2026-03-17T10:00:00.000000Z",
@@ -56,11 +56,11 @@ export type SintSensorModality =
  * };
  * ```
  */
-export interface SintSensorReading {
+export interface NosihSensorReading {
   /** Unique identifier for this sensor source. */
   readonly sensorId: string;
   /** Sensor modality type. */
-  readonly modality: SintSensorModality;
+  readonly modality: NosihSensorModality;
   /** ISO 8601 timestamp when reading was captured. */
   readonly timestamp: ISO8601;
   /** Raw sensor data (type depends on modality). */
@@ -72,7 +72,7 @@ export interface SintSensorReading {
 /**
  * A perceived object from the sensor fusion pipeline.
  */
-export interface SintPerceivedObject {
+export interface NosihPerceivedObject {
   /** Classification label from the model. */
   readonly classLabel: string;
   /** Confidence score in [0, 1]. */
@@ -91,7 +91,7 @@ export interface SintPerceivedObject {
 /**
  * Robot pose: position + orientation.
  */
-export interface SintPose {
+export interface NosihPose {
   /** Position in meters relative to reference frame. */
   readonly position: Point3D;
   /** Orientation as Euler angles in radians. */
@@ -105,7 +105,7 @@ export interface SintPose {
 /**
  * An anomaly flag raised by the anomaly detector.
  */
-export interface SintAnomalyFlag {
+export interface NosihAnomalyFlag {
   /** Anomaly category. */
   readonly type: "distribution_shift" | "low_confidence" | "novelty" | "sensor_fault" | "collision_risk";
   /** Severity from 0 (info) to 1 (critical). */
@@ -120,17 +120,17 @@ export interface SintAnomalyFlag {
  * Fused world state from the perception pipeline.
  * This is System 1's output consumed by System 2.
  */
-export interface SintWorldState {
+export interface NosihWorldState {
   /** Timestamp of this world state snapshot. */
   readonly timestamp: ISO8601;
   /** Perceived objects in the scene. */
-  readonly objects: readonly SintPerceivedObject[];
+  readonly objects: readonly NosihPerceivedObject[];
   /** Current robot pose estimate. */
-  readonly robotPose: SintPose;
+  readonly robotPose: NosihPose;
   /** Occupancy grid as boolean matrix (true = occupied). */
   readonly occupancyGrid?: readonly boolean[][];
   /** Active anomaly flags from the anomaly detector. */
-  readonly anomalyFlags: readonly SintAnomalyFlag[];
+  readonly anomalyFlags: readonly NosihAnomalyFlag[];
   /** Whether any human is detected in the scene. */
   readonly humanPresent: boolean;
 }
@@ -142,7 +142,7 @@ export interface SintWorldState {
 /**
  * An action recommendation from System 1 (neural) or System 2 (symbolic).
  */
-export interface SintActionRecommendation {
+export interface NosihActionRecommendation {
   /** Target resource URI (e.g. "ros2:///cmd_vel"). */
   readonly action: string;
   /** Resource being acted upon. */
@@ -158,7 +158,7 @@ export interface SintActionRecommendation {
 /**
  * A single step in a task plan.
  */
-export interface SintPlanStep {
+export interface NosihPlanStep {
   /** The action to execute. */
   readonly action: string;
   /** Target resource URI. */
@@ -174,7 +174,7 @@ export interface SintPlanStep {
 }
 
 /** Plan execution status. */
-export type SintPlanStatus =
+export type NosihPlanStatus =
   | "pending"
   | "validating"
   | "approved"
@@ -188,7 +188,7 @@ export type SintPlanStatus =
  *
  * @example
  * ```ts
- * const plan: SintPlan = {
+ * const plan: NosihPlan = {
  *   planId: "01905f7c-...",
  *   goalId: "01905f7c-...",
  *   steps: [{ action: "navigate", resource: "ros2:///cmd_vel", ... }],
@@ -198,17 +198,17 @@ export type SintPlanStatus =
  * };
  * ```
  */
-export interface SintPlan {
+export interface NosihPlan {
   /** Unique plan identifier. */
   readonly planId: UUIDv7;
   /** Goal this plan fulfills. */
   readonly goalId: UUIDv7;
   /** Ordered sequence of plan steps. */
-  readonly steps: readonly SintPlanStep[];
+  readonly steps: readonly NosihPlanStep[];
   /** Estimated total duration in milliseconds. */
   readonly estimatedDurationMs: DurationMs;
   /** Current plan status. */
-  readonly status: SintPlanStatus;
+  readonly status: NosihPlanStatus;
   /** When the plan was created. */
   readonly createdAt: ISO8601;
 }
@@ -221,11 +221,11 @@ export interface SintPlan {
  * An arbitration decision between System 1 and System 2.
  * Critical invariant: System 2 ALWAYS wins on safety.
  */
-export interface SintArbitrationDecision {
+export interface NosihArbitrationDecision {
   /** System 1's recommendation. */
-  readonly s1Recommendation: SintActionRecommendation;
+  readonly s1Recommendation: NosihActionRecommendation;
   /** System 2's recommendation. */
-  readonly s2Recommendation: SintActionRecommendation;
+  readonly s2Recommendation: NosihActionRecommendation;
   /** Which system won the arbitration. */
   readonly winner: "system1" | "system2";
   /** Reason for the arbitration outcome. */
@@ -241,14 +241,14 @@ export interface SintArbitrationDecision {
 // ---------------------------------------------------------------------------
 
 /** Deployment profiles for different hardware targets. */
-export type SintHardwareDeploymentProfile = "full" | "edge" | "split" | "lite";
+export type NosihHardwareDeploymentProfile = "full" | "edge" | "split" | "lite";
 
 /**
  * Hardware profile detected by the HAL.
  *
  * @example
  * ```ts
- * const profile: SintHardwareProfile = {
+ * const profile: NosihHardwareProfile = {
  *   arch: "arm64",
  *   platform: "linux",
  *   cpuCores: 8,
@@ -258,7 +258,7 @@ export type SintHardwareDeploymentProfile = "full" | "edge" | "split" | "lite";
  * };
  * ```
  */
-export interface SintHardwareProfile {
+export interface NosihHardwareProfile {
   /** CPU architecture (e.g. "x64", "arm64"). */
   readonly arch: string;
   /** Operating system platform (e.g. "linux", "darwin", "win32"). */
@@ -274,7 +274,7 @@ export interface SintHardwareProfile {
     readonly memoryMB?: number;
   } | null;
   /** Selected deployment profile based on hardware capabilities. */
-  readonly deploymentProfile: SintHardwareDeploymentProfile;
+  readonly deploymentProfile: NosihHardwareDeploymentProfile;
 }
 
 // ---------------------------------------------------------------------------
@@ -284,7 +284,7 @@ export interface SintHardwareProfile {
 /**
  * Resource limits for capsule execution.
  */
-export interface SintCapsuleResourceLimits {
+export interface NosihCapsuleResourceLimits {
   /** Maximum memory in megabytes. */
   readonly maxMemoryMB: number;
   /** Maximum CPU time per invocation in milliseconds. */
@@ -297,7 +297,7 @@ export interface SintCapsuleResourceLimits {
  * Safety declarations in a capsule manifest.
  * Capsules must declare their safety-relevant behaviors.
  */
-export interface SintCapsuleSafetyDeclarations {
+export interface NosihCapsuleSafetyDeclarations {
   /** Maximum force the capsule may command (Newtons). */
   readonly maxForceNewtons?: Newtons;
   /** Maximum velocity the capsule may command (m/s). */
@@ -314,11 +314,11 @@ export interface SintCapsuleSafetyDeclarations {
  *
  * @example
  * ```ts
- * const manifest: SintCapsuleManifest = {
+ * const manifest: NosihCapsuleManifest = {
  *   capsuleId: "01905f7c-...",
  *   version: "1.0.0",
  *   name: "visual-inspection",
- *   author: "sint-labs",
+ *   author: "nosih-labs",
  *   description: "Visual anomaly detection for manufacturing QA",
  *   sensors: ["camera_rgb"],
  *   actuators: [],
@@ -330,7 +330,7 @@ export interface SintCapsuleSafetyDeclarations {
  * };
  * ```
  */
-export interface SintCapsuleManifest {
+export interface NosihCapsuleManifest {
   /** Unique capsule identifier. */
   readonly capsuleId: UUIDv7;
   /** Semantic version. */
@@ -342,13 +342,13 @@ export interface SintCapsuleManifest {
   /** Description of capsule purpose. */
   readonly description?: string;
   /** Required sensor modalities. */
-  readonly sensors: readonly SintSensorModality[];
+  readonly sensors: readonly NosihSensorModality[];
   /** Required actuator resources (e.g. "ros2:///gripper/open"). */
   readonly actuators: readonly string[];
   /** Safety constraint declarations. */
-  readonly safetyDeclarations: SintCapsuleSafetyDeclarations;
+  readonly safetyDeclarations: NosihCapsuleSafetyDeclarations;
   /** Resource usage limits. */
-  readonly resourceLimits: SintCapsuleResourceLimits;
+  readonly resourceLimits: NosihCapsuleResourceLimits;
   /** Runtime environment ("wasm" or "typescript"). */
   readonly runtime: "wasm" | "typescript";
   /** Entry point file path within the capsule bundle. */

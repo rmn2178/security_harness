@@ -7,10 +7,10 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 import {
-  SINT_TIER_COMPLIANCE_CROSSWALK,
-  type SintCapabilityToken,
-  type SintCapabilityTokenRequest,
-  type SintRequest,
+  NOSIH_TIER_COMPLIANCE_CROSSWALK,
+  type NosihCapabilityToken,
+  type NosihCapabilityTokenRequest,
+  type NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -56,12 +56,12 @@ describe("Canonical Fixture Conformance", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let events: Array<{ eventType: string; payload: Record<string, unknown> }>;
 
-  function issueAndStore(overrides: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "*",
@@ -98,7 +98,7 @@ describe("Canonical Fixture Conformance", () => {
 
   it("well-known discovery fixture preserves v0.2 boundary contract", () => {
     const fixture = loadWellKnownDiscoveryFixture();
-    expect(fixture.name).toBe("SINT Protocol");
+    expect(fixture.name).toBe("NOSIH Protocol");
     expect(fixture.version).toBe("0.2.0");
     expect(fixture.boundary).toContain("governance and runtime enforcement");
     expect(fixture.identityMethods).toContain("ed25519");
@@ -109,10 +109,10 @@ describe("Canonical Fixture Conformance", () => {
 
   it("tier compliance crosswalk fixture stays aligned with exported core mapping", () => {
     const fixture = loadTierComplianceCrosswalkFixture();
-    expect(SINT_TIER_COMPLIANCE_CROSSWALK.length).toBe(fixture.tiers.length);
+    expect(NOSIH_TIER_COMPLIANCE_CROSSWALK.length).toBe(fixture.tiers.length);
 
     for (const tierFixture of fixture.tiers) {
-      const mapped = SINT_TIER_COMPLIANCE_CROSSWALK.find((entry) => entry.tier === tierFixture.tier);
+      const mapped = NOSIH_TIER_COMPLIANCE_CROSSWALK.find((entry) => entry.tier === tierFixture.tier);
       expect(mapped).toBeDefined();
       expect(mapped?.consequenceClass).toBe(tierFixture.consequenceClass);
 
@@ -240,7 +240,7 @@ describe("Canonical Fixture Conformance", () => {
         resource: scenario.request.resource,
         action: scenario.request.action,
         params: scenario.request.params ?? {},
-        executionContext: executionContext as SintRequest["executionContext"],
+        executionContext: executionContext as NosihRequest["executionContext"],
       });
 
       expect(decision.action).toBe(scenario.expected.decisionAction);

@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Authentication Tests.
+ * NOSIH Dashboard — Authentication Tests.
  *
  * Tests the operator login flow, auth context, and
  * API key propagation.
@@ -172,10 +172,10 @@ describe("AuthContext", () => {
     });
 
     await waitFor(() => {
-      expect(sessionStore["sint_operator_session"]).toBeDefined();
+      expect(sessionStore["nosih_operator_session"]).toBeDefined();
     });
 
-    const stored = JSON.parse(sessionStore["sint_operator_session"]!);
+    const stored = JSON.parse(sessionStore["nosih_operator_session"]!);
     expect(stored.operatorName).toBe("alice");
     expect(stored.apiKey).toBe("test-key");
   });
@@ -199,7 +199,7 @@ describe("LoginScreen", () => {
       </AuthProvider>,
     );
 
-    expect(screen.getByText("SINT Dashboard")).toBeDefined();
+    expect(screen.getByText("NOSIH Dashboard")).toBeDefined();
     expect(screen.getByText("Operator Authentication")).toBeDefined();
     expect(screen.getByLabelText("Operator Name")).toBeDefined();
     expect(screen.getByLabelText("API Key")).toBeDefined();

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ProactiveEscalationEngine tests.
+ * NOSIH Protocol — ProactiveEscalationEngine tests.
  *
  * 30+ tests covering:
  * - evaluate() with insufficient events → returns null
@@ -20,7 +20,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ProactiveEscalationEngine } from "../src/proactive-escalation.js";
 import type { EscalationAlert, EventSource } from "../src/proactive-escalation.js";
 import { ApprovalTier } from "@pshkv/core";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -30,10 +30,10 @@ const AGENT_B = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 function makeEvent(
   seq: bigint,
-  eventType: SintLedgerEvent["eventType"],
+  eventType: NosihLedgerEvent["eventType"],
   agentId = AGENT_A,
   payload: Record<string, unknown> = {},
-): SintLedgerEvent {
+): NosihLedgerEvent {
   return {
     eventId: `0190${seq.toString().padStart(20, "0")}-0000-7000-8000-000000000000` as any,
     sequenceNumber: seq,
@@ -53,7 +53,7 @@ function makeEvent(
  * Build a set of events that pushes CSML above the 0.3 threshold.
  * Strategy: 10 request.received + 10 approval.denied → AR=1.0 → score ≈ 0.4+0.2+0.2-0.1+0.1 = 0.8
  */
-function makeHighCsmlEvents(agentId = AGENT_A, count = 10): SintLedgerEvent[] {
+function makeHighCsmlEvents(agentId = AGENT_A, count = 10): NosihLedgerEvent[] {
   return [
     ...Array.from({ length: count }, (_, i) =>
       makeEvent(BigInt(i + 1), "request.received", agentId),
@@ -68,7 +68,7 @@ function makeHighCsmlEvents(agentId = AGENT_A, count = 10): SintLedgerEvent[] {
  * Build a set of events where all requests are allowed (AR=0).
  * We need ≥10 request events for a non-insufficient_data recommendation.
  */
-function makeNominalEvents(agentId = AGENT_A, count = 10): SintLedgerEvent[] {
+function makeNominalEvents(agentId = AGENT_A, count = 10): NosihLedgerEvent[] {
   return Array.from({ length: count }, (_, i) =>
     makeEvent(BigInt(i + 1), "request.received", agentId),
   );
@@ -76,7 +76,7 @@ function makeNominalEvents(agentId = AGENT_A, count = 10): SintLedgerEvent[] {
 
 /** Simple in-memory EventSource backed by a Map. */
 function makeEventSource(
-  eventsByAgent: Map<string, readonly SintLedgerEvent[]>,
+  eventsByAgent: Map<string, readonly NosihLedgerEvent[]>,
 ): EventSource {
   return {
     getEventsForAgent: (id) => eventsByAgent.get(id) ?? [],
@@ -94,7 +94,7 @@ describe("ProactiveEscalationEngine — evaluate()", () => {
   });
 
   it("returns null when fewer than 10 request events (insufficient_data)", async () => {
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       makeEvent(1n, "request.received"),
       makeEvent(2n, "approval.denied"),
     ];

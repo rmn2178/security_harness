@@ -1,10 +1,10 @@
 /**
- * SINT Bridge-MCP — Types for MCP tool call interception.
+ * NOSIH Bridge-MCP — Types for MCP tool call interception.
  *
  * These types represent the MCP protocol's tool call lifecycle
- * as it flows through the SINT security gate.
+ * as it flows through the NOSIH security gate.
  *
- * @module @sint/bridge-mcp/types
+ * @module @nosih/bridge-mcp/types
  */
 
 import type {
@@ -34,7 +34,7 @@ export interface MCPToolAnnotations {
 }
 
 /**
- * An MCP tool call entering the SINT bridge for interception.
+ * An MCP tool call entering the NOSIH bridge for interception.
  */
 export interface MCPToolCall {
   /** Unique call ID (typically from the MCP protocol). */
@@ -52,7 +52,7 @@ export interface MCPToolCall {
 }
 
 /**
- * Result of SINT intercepting an MCP tool call.
+ * Result of NOSIH intercepting an MCP tool call.
  */
 export interface MCPInterceptResult {
   /** The original call ID. */
@@ -89,7 +89,7 @@ export interface MCPToolResult {
 export interface MCPRiskHint {
   /** Suggested approval tier for this operation. */
   readonly suggestedTier: ApprovalTier;
-  /** SINT resource action (e.g. "call", "subscribe"). */
+  /** NOSIH resource action (e.g. "call", "subscribe"). */
   readonly action: string;
   /** Whether this operation has physical consequences. */
   readonly hasPhysicalEffect: boolean;

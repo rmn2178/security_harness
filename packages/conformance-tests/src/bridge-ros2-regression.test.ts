@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Bridge-ROS2 Regression Test Suite.
+ * NOSIH Protocol — Bridge-ROS2 Regression Test Suite.
  *
  * Tests that ROS 2 topic publishes, subscriptions, service calls,
- * and action goals correctly flow through the SINT security gate
+ * and action goals correctly flow through the NOSIH security gate
  * with physical safety constraints.
  *
- * These tests MUST pass on every PR that touches @sint/bridge-ros2
- * or @sint/gate-policy-gateway.
+ * These tests MUST pass on every PR that touches @nosih/bridge-ros2
+ * or @nosih/gate-policy-gateway.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -25,7 +25,7 @@ import type {
   ROS2ServiceCall,
   ROS2ActionGoal,
 } from "@pshkv/bridge-ros2";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
@@ -41,7 +41,7 @@ describe("Bridge-ROS2 Regression Tests", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
 
@@ -65,9 +65,9 @@ describe("Bridge-ROS2 Regression Tests", () => {
   });
 
   function issueAndStore(
-    overrides?: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides?: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",
@@ -87,7 +87,7 @@ describe("Bridge-ROS2 Regression Tests", () => {
     return result.value;
   }
 
-  function createInterceptor(token: SintCapabilityToken, robotMassKg?: number) {
+  function createInterceptor(token: NosihCapabilityToken, robotMassKg?: number) {
     return new ROS2Interceptor({
       gateway,
       agentId: agent.publicKey,

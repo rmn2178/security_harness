@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Industrial interoperability conformance.
+ * NOSIH Protocol — Industrial interoperability conformance.
  *
  * Verifies equivalent safety-tier behavior for the same warehouse command
  * routed through different industrial ingress paths.
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { ApprovalTier, type SintCapabilityToken, type SintCapabilityTokenRequest } from "@pshkv/core";
+import { ApprovalTier, type NosihCapabilityToken, type NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   generateKeypair,
   generateUUIDv7,
@@ -44,14 +44,14 @@ describe("Industrial Interoperability Conformance", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let emitted: Array<{ eventType: string; payload: Record<string, unknown> }>;
 
   function issueAndStore(
-    overrides: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "*",

@@ -1,5 +1,5 @@
 /**
- * SINT ApprovalQueue — M-of-N quorum approval tests.
+ * NOSIH ApprovalQueue — M-of-N quorum approval tests.
  *
  * Verifies the multi-party approval flow: K approvals from N authorized
  * operators must be collected before a T3 request resolves.
@@ -7,10 +7,10 @@
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ApprovalQueue, type ApprovalQuorum } from "../src/approval-flow.js";
-import type { PolicyDecision, SintRequest } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest } from "@pshkv/core";
 import { ApprovalTier, RiskTier } from "@pshkv/core";
 
-function makeRequest(id = "req-001"): SintRequest {
+function makeRequest(id = "req-001"): NosihRequest {
   return {
     requestId: id as any,
     timestamp: new Date().toISOString(),

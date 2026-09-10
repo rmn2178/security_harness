@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — HTTP Trust Adapter.
+ * NOSIH Protocol — HTTP Trust Adapter.
  *
  * Implements ITrustPort by calling the product API's trust endpoints:
  * - POST /trust/evaluate → evaluateTrust
  *
- * @module @sint/bridge-economy/adapters/http-trust-adapter
+ * @module @nosih/bridge-economy/adapters/http-trust-adapter
  */
 
 import { err, type Result } from "@pshkv/core";
@@ -17,7 +17,7 @@ import { HttpClient, type HttpClientConfig } from "./http-client.js";
  * @example
  * ```ts
  * const adapter = new HttpTrustAdapter({
- *   baseUrl: "https://api.sint.gg",
+ *   baseUrl: "https://api.nosih.gg",
  *   authToken: keycloakToken,
  * });
  * const result = await adapter.evaluateTrust({ userId: "u1", agentId: "a1", ... });

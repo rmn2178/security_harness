@@ -110,7 +110,7 @@ describe("Industrial humanoid shipyard safety pack fixture v1", () => {
       "LOAD_LIMIT_EXCEEDED",
     );
     expect(byId.get("estop-during-weld")?.expectedDecision).toBe("rollback");
-    expect(byId.get("estop-during-weld")?.rollbackTargetRef).toMatch(/^sint:\/\/action\//);
+    expect(byId.get("estop-during-weld")?.rollbackTargetRef).toMatch(/^nosih:\/\/action\//);
   });
 
   it("requires receipts for every shipyard outcome and high-consequence action", () => {
@@ -181,7 +181,7 @@ describe("Industrial humanoid shipyard safety pack fixture v1", () => {
       expect(scenarioIds.has(row.sourceScenarioId), row.failureMode).toBe(true);
       expect(riskPriorityNumber(row), row.failureMode).toBeGreaterThan(0);
       expect(row.requiredEvidence, row.failureMode).toContain("eventHash");
-      expect(row.sintControl.length, row.failureMode).toBeGreaterThan(0);
+      expect(row.nosihControl.length, row.failureMode).toBeGreaterThan(0);
     }
   });
 

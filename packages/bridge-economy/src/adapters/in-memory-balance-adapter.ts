@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — In-Memory Balance Adapter.
+ * NOSIH Protocol — In-Memory Balance Adapter.
  *
  * Testing implementation of IBalancePort that stores balances
  * in a Map. No external dependencies.
  *
- * @module @sint/bridge-economy/adapters/in-memory-balance-adapter
+ * @module @nosih/bridge-economy/adapters/in-memory-balance-adapter
  */
 
 import { ok, err, type Result } from "@pshkv/core";
@@ -17,7 +17,7 @@ import type { IBalancePort, BalanceInfo } from "../interfaces.js";
  * ```ts
  * const adapter = new InMemoryBalanceAdapter(250); // 250 initial tokens
  * await adapter.getBalance("user1"); // { balance: 250 }
- * await adapter.withdraw("user1", 9, "MCP call", "sint_protocol");
+ * await adapter.withdraw("user1", 9, "MCP call", "nosih_protocol");
  * await adapter.getBalance("user1"); // { balance: 241 }
  * ```
  */

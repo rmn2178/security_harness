@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — W3C DID Identity Utilities.
+ * NOSIH Protocol — W3C DID Identity Utilities.
  *
  * Implements the `did:key` method for Ed25519 public keys as specified by:
  *   https://w3c-ccg.github.io/did-method-key/
@@ -12,10 +12,10 @@
  *   3. Prepend 'z' (multibase base58btc indicator)
  *   4. Prepend 'did:key:'
  *
- * This allows SINT Ed25519 agent keys to be used as W3C DIDs, enabling
+ * This allows NOSIH Ed25519 agent keys to be used as W3C DIDs, enabling
  * interoperability with the W3C DID/Verifiable Credential ecosystem.
  *
- * @module @sint/gate-capability-tokens/did
+ * @module @nosih/gate-capability-tokens/did
  */
 
 import { hexToBytes } from "@noble/hashes/utils";
@@ -74,7 +74,7 @@ function fromBase58(str: string): Uint8Array {
 }
 
 /**
- * Convert a SINT Ed25519 public key (hex) to a W3C `did:key:` identifier.
+ * Convert a NOSIH Ed25519 public key (hex) to a W3C `did:key:` identifier.
  *
  * @example
  * ```ts
@@ -98,7 +98,7 @@ export function keyToDid(publicKey: Ed25519PublicKey): string {
 }
 
 /**
- * Parse a `did:key:` DID back to a SINT Ed25519 public key (hex).
+ * Parse a `did:key:` DID back to a NOSIH Ed25519 public key (hex).
  *
  * Returns `undefined` if the DID is not a valid `did:key:` with an
  * Ed25519 public key.
@@ -136,7 +136,7 @@ export function didToKey(did: string): Ed25519PublicKey | undefined {
 }
 
 /**
- * Check whether a string is a valid SINT `did:key:` identifier
+ * Check whether a string is a valid NOSIH `did:key:` identifier
  * with an Ed25519 public key.
  */
 export function isValidDid(value: string): boolean {

@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — Constraint Checker edge case tests.
+ * NOSIH Protocol — Constraint Checker edge case tests.
  *
- * Covers the edges noted in sint-ai/sint-protocol#7:
+ * Covers the edges noted in nosih-ai/nosih-protocol#7:
  *   - negative velocity values
  *   - exactly-at-boundary constraint values (velocity == maxVelocity)
  *   - empty constraint sets
@@ -17,7 +17,7 @@ import {
   checkConstraints,
   extractPhysicalContext,
 } from "../src/constraint-checker.js";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 const agentId =
   "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2";
@@ -26,24 +26,24 @@ const requestId = "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f001";
 const timestamp = "2026-04-17T00:00:00.000000Z";
 
 function makeToken(
-  constraints: Partial<SintCapabilityToken["constraints"]> = {},
-): SintCapabilityToken {
+  constraints: Partial<NosihCapabilityToken["constraints"]> = {},
+): NosihCapabilityToken {
   return {
     tokenId,
     issuer: agentId,
     subject: agentId,
     resource: "ros2:///cmd_vel",
     actions: ["publish"],
-    constraints: constraints as SintCapabilityToken["constraints"],
+    constraints: constraints as NosihCapabilityToken["constraints"],
     delegationChain: { parentTokenId: null, depth: 0, attenuated: false },
     issuedAt: timestamp,
     expiresAt: "2027-01-01T00:00:00.000000Z",
     revocable: true,
     signature: "00".repeat(64),
-  } as SintCapabilityToken;
+  } as NosihCapabilityToken;
 }
 
-function makeRequest(params: Record<string, unknown> = {}): SintRequest {
+function makeRequest(params: Record<string, unknown> = {}): NosihRequest {
   return {
     requestId,
     timestamp,
@@ -52,7 +52,7 @@ function makeRequest(params: Record<string, unknown> = {}): SintRequest {
     resource: "ros2:///cmd_vel",
     action: "publish",
     params,
-  } as SintRequest;
+  } as NosihRequest;
 }
 
 describe("checkConstraints — edge cases", () => {
@@ -189,7 +189,7 @@ describe("checkConstraints — edge cases", () => {
       const req = {
         ...makeRequest(),
         physicalContext: { humanDetected: false },
-      } as SintRequest;
+      } as NosihRequest;
       const result = checkConstraints(token, req);
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -202,7 +202,7 @@ describe("checkConstraints — edge cases", () => {
       const req = {
         ...makeRequest(),
         physicalContext: { humanDetected: true },
-      } as SintRequest;
+      } as NosihRequest;
       const result = checkConstraints(token, req);
       expect(result.ok).toBe(true);
     });
@@ -220,7 +220,7 @@ describe("checkConstraints — edge cases", () => {
       const req = {
         ...makeRequest({ velocity: 1.5 }),
         physicalContext: { currentVelocityMps: 9.9 },
-      } as SintRequest;
+      } as NosihRequest;
       const ctx = extractPhysicalContext(req);
       expect(ctx.commandedVelocityMps).toBe(1.5);
     });
@@ -229,7 +229,7 @@ describe("checkConstraints — edge cases", () => {
       const req = {
         ...makeRequest({}),
         physicalContext: { currentVelocityMps: 0.7 },
-      } as SintRequest;
+      } as NosihRequest;
       const ctx = extractPhysicalContext(req);
       expect(ctx.commandedVelocityMps).toBe(0.7);
     });

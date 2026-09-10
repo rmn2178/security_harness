@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI04 SupplyChainVerifier tests.
+ * NOSIH Protocol — ASI04 SupplyChainVerifier tests.
  *
  * 10 test cases covering:
  * 1. Matching fingerprint → verified
@@ -22,7 +22,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 const VALID_HASH_A = "a".repeat(64);
 const VALID_HASH_B = "b".repeat(64);
@@ -36,7 +36,7 @@ function futureISO(h = 1): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): SintCapabilityToken {
+function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -57,9 +57,9 @@ function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]
 
 let _seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   const seq = String(++_seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${seq}` as any,

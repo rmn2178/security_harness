@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-open-rmf",
   "version": "0.1.0",
-  "description": "SINT Bridge — Open-RMF profile adapter for multi-fleet dispatch and facility workflows",
+  "description": "NOSIH Bridge — Open-RMF profile adapter for multi-fleet dispatch and facility workflows",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

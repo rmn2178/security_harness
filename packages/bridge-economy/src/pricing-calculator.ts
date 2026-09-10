@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Pricing Calculator.
+ * NOSIH Protocol — Pricing Calculator.
  *
  * Pure function that computes the token cost for an action.
  * Mirrors the billing formula from the product API's ChatService:
@@ -8,10 +8,10 @@
  *
  * Default MCP tool call: ceil(6 × 1.0 × 1.5) = 9 tokens.
  *
- * @module @sint/bridge-economy/pricing-calculator
+ * @module @nosih/bridge-economy/pricing-calculator
  */
 
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 import type { PricingInfo } from "./interfaces.js";
 
 // ─── Constants matching the product API ────────────────────────
@@ -40,10 +40,10 @@ export const INITIAL_USER_BALANCE = 250;
 /**
  * Determine the base cost for a request based on its action type.
  *
- * @param request - The SINT request
+ * @param request - The NOSIH request
  * @returns Base cost in tokens
  */
-export function getBaseCost(request: SintRequest): number {
+export function getBaseCost(request: NosihRequest): number {
   const action = request.action.toLowerCase();
   const resource = request.resource.toLowerCase();
 
@@ -71,7 +71,7 @@ export function getBaseCost(request: SintRequest): number {
  *
  * Formula: ceil(baseCost × costMultiplier × globalMarkup)
  *
- * @param request - The SINT request to price
+ * @param request - The NOSIH request to price
  * @param costMultiplier - MCP/resource-specific cost multiplier (default 1.0)
  * @returns Pricing information with breakdown
  *
@@ -82,7 +82,7 @@ export function getBaseCost(request: SintRequest): number {
  * ```
  */
 export function computeActionCost(
-  request: SintRequest,
+  request: NosihRequest,
   costMultiplier = 1.0,
 ): PricingInfo {
   const baseCost = getBaseCost(request);

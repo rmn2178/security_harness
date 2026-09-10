@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Capability Token Revocation.
+ * NOSIH Protocol — Capability Token Revocation.
  *
  * Provides real-time token revocation via an in-memory revocation set
  * and integration point for ConsentPass-based distributed revocation.
@@ -7,7 +7,7 @@
  * Key invariant: A revoked token MUST fail validation within 1 second.
  * There is NO grace period for revoked tokens.
  *
- * @module @sint/gate-capability-tokens/revocation
+ * @module @nosih/gate-capability-tokens/revocation
  */
 
 import {

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
-  sintGovernedTool,
+  nosihGovernedTool,
   wrapToolsWithGovernance,
 } from "../src/tool-wrapper.js";
-import { SintDeniedError } from "../src/errors.js";
+import { NosihDeniedError } from "../src/errors.js";
 
 const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
@@ -32,7 +32,7 @@ function createMockTool(name: string): MockTool {
   };
 }
 
-describe("sintGovernedTool", () => {
+describe("nosihGovernedTool", () => {
   beforeEach(() => {
     mockFetch.mockReset();
   });
@@ -43,7 +43,7 @@ describe("sintGovernedTool", () => {
 
   it("executes tool when approved", async () => {
     const tool = createMockTool("search");
-    const governed = sintGovernedTool(tool, {
+    const governed = nosihGovernedTool(tool, {
       gatewayUrl: "http://localhost:4100",
       agentId: "agent-1",
     });
@@ -57,7 +57,7 @@ describe("sintGovernedTool", () => {
 
   it("blocks tool when denied", async () => {
     const tool = createMockTool("delete");
-    const governed = sintGovernedTool(tool, {
+    const governed = nosihGovernedTool(tool, {
       gatewayUrl: "http://localhost:4100",
       agentId: "agent-1",
     });
@@ -65,14 +65,14 @@ describe("sintGovernedTool", () => {
     mockGatewayResponse("deny", { reason: "No delete permission" });
 
     await expect(governed.invoke({ path: "/data" })).rejects.toThrow(
-      SintDeniedError
+      NosihDeniedError
     );
     expect(tool.invoke).not.toHaveBeenCalled();
   });
 
   it("returns denial string when throwOnDeny is false", async () => {
     const tool = createMockTool("write");
-    const governed = sintGovernedTool(tool, {
+    const governed = nosihGovernedTool(tool, {
       gatewayUrl: "http://localhost:4100",
       agentId: "agent-1",
       throwOnDeny: false,
@@ -81,14 +81,14 @@ describe("sintGovernedTool", () => {
     mockGatewayResponse("deny", { reason: "Read-only scope" });
 
     const result = await governed.invoke({ data: "test" });
-    expect(result).toContain("[SINT DENIED]");
+    expect(result).toContain("[NOSIH DENIED]");
     expect(result).toContain("Read-only scope");
     expect(tool.invoke).not.toHaveBeenCalled();
   });
 
   it("preserves non-invoke properties", () => {
     const tool = createMockTool("test");
-    const governed = sintGovernedTool(tool, {
+    const governed = nosihGovernedTool(tool, {
       gatewayUrl: "http://localhost:4100",
       agentId: "agent-1",
     });

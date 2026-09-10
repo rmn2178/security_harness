@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/persistence-postgres",
   "version": "0.1.0",
-  "description": "SINT Persistence — production PostgreSQL backend for EvidenceLedger and RevocationStore",
+  "description": "NOSIH Persistence — production PostgreSQL backend for EvidenceLedger and RevocationStore",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

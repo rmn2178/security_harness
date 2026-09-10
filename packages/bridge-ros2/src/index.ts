@@ -113,7 +113,7 @@ export type {
 export {
   discoverSros2Enclaves,
   checkSros2Permission,
-  sros2ToSintConstraints,
+  sros2ToNosihConstraints,
   matchTopicPattern,
 } from "./sros2-enclave.js";
 export type { Sros2Enclave, Sros2Discovery } from "./sros2-enclave.js";

@@ -1,21 +1,21 @@
 /**
- * SINT Protocol — Proof Receipt Generator.
+ * NOSIH Protocol — Proof Receipt Generator.
  *
  * Creates cryptographic attestations for ledger events.
  * Proof receipts are used for regulatory compliance
  * (EU AI Act, IEC 62443) — they prove that a specific
  * event occurred and the hash chain is intact up to that point.
  *
- * @module @sint/gate-evidence-ledger/proof-receipt
+ * @module @nosih/gate-evidence-ledger/proof-receipt
  */
 
 import type {
   Ed25519PublicKey,
   SHA256,
-  SintBilateralProofReceipt,
-  SintBilateralProofReceiptPair,
-  SintLedgerEvent,
-  SintProofReceipt,
+  NosihBilateralProofReceipt,
+  NosihBilateralProofReceiptPair,
+  NosihLedgerEvent,
+  NosihProofReceipt,
   UUIDv7,
 } from "@pshkv/core";
 import { canonicalJsonStringify } from "@pshkv/core";
@@ -46,11 +46,11 @@ import { bytesToHex } from "@noble/hashes/utils";
  * ```
  */
 export function generateProofReceipt(
-  targetEvent: SintLedgerEvent,
-  chainEvents: readonly SintLedgerEvent[],
+  targetEvent: NosihLedgerEvent,
+  chainEvents: readonly NosihLedgerEvent[],
   signerPublicKey: Ed25519PublicKey,
   signFn: (data: string) => string,
-): SintProofReceipt {
+): NosihProofReceipt {
   // Build the hash chain from genesis to target
   const hashChain: SHA256[] = chainEvents.map((e) => e.hash);
 
@@ -92,7 +92,7 @@ export function generateProofReceipt(
  * ```
  */
 export function verifyProofReceipt(
-  receipt: SintProofReceipt,
+  receipt: NosihProofReceipt,
   verifySignatureFn: (publicKey: string, signature: string, data: string) => boolean,
 ): boolean {
   // Verify the event hash appears in the chain
@@ -117,8 +117,8 @@ export function verifyProofReceipt(
 }
 
 function inferCompletionOutcome(
-  event: SintLedgerEvent,
-): SintBilateralProofReceipt["outcome"] {
+  event: NosihLedgerEvent,
+): NosihBilateralProofReceipt["outcome"] {
   switch (event.eventType) {
     case "action.completed":
       return "completed";
@@ -145,9 +145,9 @@ export function computeReceiptLinkageHash(
 }
 
 function signBilateralReceipt(
-  receipt: Omit<SintBilateralProofReceipt, "signature">,
+  receipt: Omit<NosihBilateralProofReceipt, "signature">,
   signFn: (data: string) => string,
-): SintBilateralProofReceipt {
+): NosihBilateralProofReceipt {
   const receiptData = canonicalJsonStringify(receipt);
   return {
     ...receipt,
@@ -157,15 +157,15 @@ function signBilateralReceipt(
 
 export function generateBilateralProofReceiptPair(params: {
   readonly actionRef: string;
-  readonly gateEvent: SintLedgerEvent;
-  readonly gateChainEvents: readonly SintLedgerEvent[];
-  readonly gateOutcome?: Extract<SintBilateralProofReceipt["outcome"], "allow" | "deny" | "escalate">;
-  readonly completionEvent: SintLedgerEvent;
-  readonly completionChainEvents: readonly SintLedgerEvent[];
-  readonly completionOutcome?: Extract<SintBilateralProofReceipt["outcome"], "completed" | "failed" | "rolledback">;
+  readonly gateEvent: NosihLedgerEvent;
+  readonly gateChainEvents: readonly NosihLedgerEvent[];
+  readonly gateOutcome?: Extract<NosihBilateralProofReceipt["outcome"], "allow" | "deny" | "escalate">;
+  readonly completionEvent: NosihLedgerEvent;
+  readonly completionChainEvents: readonly NosihLedgerEvent[];
+  readonly completionOutcome?: Extract<NosihBilateralProofReceipt["outcome"], "completed" | "failed" | "rolledback">;
   readonly signerPublicKey: Ed25519PublicKey;
   readonly signFn: (data: string) => string;
-}): SintBilateralProofReceiptPair {
+}): NosihBilateralProofReceiptPair {
   const gateBase = generateProofReceipt(
     params.gateEvent,
     params.gateChainEvents,
@@ -215,7 +215,7 @@ export function generateBilateralProofReceiptPair(params: {
 }
 
 export function verifyBilateralProofReceipt(
-  receipt: SintBilateralProofReceipt,
+  receipt: NosihBilateralProofReceipt,
   verifySignatureFn: (publicKey: string, signature: string, data: string) => boolean,
 ): boolean {
   if (receipt.hashChain.length === 0) return false;
@@ -244,7 +244,7 @@ export function verifyBilateralProofReceipt(
 }
 
 export function verifyBilateralReceiptPair(
-  pair: SintBilateralProofReceiptPair,
+  pair: NosihBilateralProofReceiptPair,
   verifySignatureFn: (publicKey: string, signature: string, data: string) => boolean,
 ): boolean {
   if (!verifyBilateralProofReceipt(pair.gate, verifySignatureFn)) return false;

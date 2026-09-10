@@ -11,7 +11,7 @@
     "packages/conformance-tests/fixtures/iot/mqtt-gateway-session.v1.json",
     "packages/conformance-tests/fixtures/persistence/postgres-adapter-cert.v1.json",
     "packages/conformance-tests/fixtures/protocol/tier-compliance-crosswalk.v1.json",
-    "packages/conformance-tests/fixtures/protocol/well-known-sint.v0.2.example.json",
+    "packages/conformance-tests/fixtures/protocol/well-known-nosih.v0.2.example.json",
     "packages/conformance-tests/fixtures/security/mcp-attack-surface.v1.json",
     "packages/conformance-tests/fixtures/security/supply-chain-verification.v1.json",
     "packages/conformance-tests/fixtures/security/verifiable-compute-critical-actions.v1.json"

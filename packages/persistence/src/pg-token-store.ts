@@ -1,15 +1,15 @@
 /**
- * SINT Persistence — PostgreSQL Token Store.
+ * NOSIH Persistence — PostgreSQL Token Store.
  *
- * @module @sint/persistence/pg-token-store
+ * @module @nosih/persistence/pg-token-store
  */
 
 import type pg from "pg";
-import type { SintCapabilityToken, UUIDv7 } from "@pshkv/core";
+import type { NosihCapabilityToken, UUIDv7 } from "@pshkv/core";
 import type { TokenStore } from "./interfaces.js";
 
-/** Map a database row to a SintCapabilityToken. */
-function rowToToken(row: any): SintCapabilityToken {
+/** Map a database row to a NosihCapabilityToken. */
+function rowToToken(row: any): NosihCapabilityToken {
   return {
     tokenId: row.token_id,
     issuer: row.issuer,
@@ -38,9 +38,9 @@ function rowToToken(row: any): SintCapabilityToken {
 export class PgTokenStore implements TokenStore {
   constructor(private readonly pool: pg.Pool) {}
 
-  async store(token: SintCapabilityToken): Promise<void> {
+  async store(token: NosihCapabilityToken): Promise<void> {
     await this.pool.query(
-      `INSERT INTO sint_tokens
+      `INSERT INTO nosih_tokens
         (token_id, issuer, subject, resource, actions, constraints,
          model_constraints, attestation_requirements, verifiable_compute_requirements,
          execution_envelope, behavioral_constraints, passport_id, delegation_depth,
@@ -94,17 +94,17 @@ export class PgTokenStore implements TokenStore {
     );
   }
 
-  async get(tokenId: UUIDv7): Promise<SintCapabilityToken | undefined> {
+  async get(tokenId: UUIDv7): Promise<NosihCapabilityToken | undefined> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_tokens WHERE token_id = $1",
+      "SELECT * FROM nosih_tokens WHERE token_id = $1",
       [tokenId],
     );
     return result.rows.length > 0 ? rowToToken(result.rows[0]) : undefined;
   }
 
-  async getBySubject(subject: string): Promise<readonly SintCapabilityToken[]> {
+  async getBySubject(subject: string): Promise<readonly NosihCapabilityToken[]> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_tokens WHERE subject = $1",
+      "SELECT * FROM nosih_tokens WHERE subject = $1",
       [subject],
     );
     return result.rows.map(rowToToken);
@@ -112,7 +112,7 @@ export class PgTokenStore implements TokenStore {
 
   async remove(tokenId: UUIDv7): Promise<boolean> {
     const result = await this.pool.query(
-      "DELETE FROM sint_tokens WHERE token_id = $1",
+      "DELETE FROM nosih_tokens WHERE token_id = $1",
       [tokenId],
     );
     return (result.rowCount ?? 0) > 0;
@@ -120,7 +120,7 @@ export class PgTokenStore implements TokenStore {
 
   async count(): Promise<number> {
     const result = await this.pool.query(
-      "SELECT COUNT(*) AS cnt FROM sint_tokens",
+      "SELECT COUNT(*) AS cnt FROM nosih_tokens",
     );
     return parseInt(result.rows[0].cnt, 10);
   }

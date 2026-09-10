@@ -7,9 +7,9 @@ import {
   DEFAULT_APPROVAL_TIMEOUT_MS,
   RiskTier,
   type PolicyDecision,
-  type SintCapabilityToken,
-  type SintLedgerEvent,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihLedgerEvent,
+  type NosihRequest,
 } from "@pshkv/core";
 import { LedgerWriter, computeCsml } from "@pshkv/gate-evidence-ledger";
 import { AutonomyState } from "./autonomy-states.js";
@@ -18,7 +18,7 @@ import {
   type ExternalAuthorizationSignal,
   type GuardRegistry,
 } from "./guard-registry.js";
-import { autonomyEvaluationToLedgerEvents, asSintEventType } from "./ledger-events.js";
+import { autonomyEvaluationToLedgerEvents, asNosihEventType } from "./ledger-events.js";
 import { evaluateAutonomy, type AutonomyEvaluation, type SupervisorPort } from "./supervisor.js";
 import {
   defaultAutonomyPolicy,
@@ -63,21 +63,21 @@ export interface PolicyGatewayAutonomySupervisorOptions {
   readonly stateStore?: AutonomyStateStore;
   readonly getRecentLedgerEvents?: (
     agentId: string,
-    request: SintRequest,
-  ) => readonly SintLedgerEvent[];
+    request: NosihRequest,
+  ) => readonly NosihLedgerEvent[];
   readonly getCsmlScore?: (
     agentId: string,
-    events: readonly SintLedgerEvent[],
-    request: SintRequest,
+    events: readonly NosihLedgerEvent[],
+    request: NosihRequest,
   ) => number | null;
   readonly getExternalAuthorization?: (
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     policy: AutonomyPolicy,
   ) => ExternalAuthorizationSignal | undefined;
   readonly getRuntimeSignals?: (
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     policy: AutonomyPolicy,
   ) => AutonomyRuntimeSignals | undefined;
   readonly nowMs?: () => number;
@@ -113,8 +113,8 @@ export class PolicyGatewayAutonomySupervisor {
   }
 
   async preIntercept(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): Promise<PolicyDecision | undefined> {
     if (request.executionContext?.hardwareSafety?.estopState === "triggered") {
       return undefined;
@@ -190,7 +190,7 @@ export class PolicyGatewayAutonomySupervisor {
       outputAttempted: true,
     })) {
       this.ledgerWriter.append({
-        eventType: asSintEventType(event.eventType),
+        eventType: asNosihEventType(event.eventType),
         agentId: event.agentId,
         tokenId: event.tokenId,
         payload: event.payload,
@@ -199,7 +199,7 @@ export class PolicyGatewayAutonomySupervisor {
   }
 
   private deny(
-    request: SintRequest,
+    request: NosihRequest,
     policyViolated: string,
     reason: string,
   ): PolicyDecision {
@@ -214,7 +214,7 @@ export class PolicyGatewayAutonomySupervisor {
   }
 
   private escalate(
-    request: SintRequest,
+    request: NosihRequest,
     evaluation: AutonomyEvaluation,
   ): PolicyDecision {
     return {

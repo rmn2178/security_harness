@@ -122,7 +122,7 @@ def require_security_env() -> str:
 
 
 def main() -> None:
-    gateway_url = os.environ.get("SINT_GATEWAY_URL", "http://localhost:3100").rstrip("/")
+    gateway_url = os.environ.get("NOSIH_GATEWAY_URL", "http://localhost:3100").rstrip("/")
     enclave = require_security_env()
 
     agent, token = issue_cmd_vel_token(gateway_url)

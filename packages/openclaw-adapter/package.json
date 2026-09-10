@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/openclaw-adapter",
   "version": "0.1.0",
-  "description": "SINT Protocol adapter for OpenClaw — injects capability token governance into every OpenClaw tool call, MCP server, and node action.",
+  "description": "NOSIH Protocol adapter for OpenClaw — injects capability token governance into every OpenClaw tool call, MCP server, and node action.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "sint",
+    "nosih",
     "openclaw",
     "ai-safety",
     "governance",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sint-ai/sint-protocol.git",
+    "url": "https://github.com/nosih-ai/nosih-protocol.git",
     "directory": "packages/openclaw-adapter"
   },
   "publishConfig": {

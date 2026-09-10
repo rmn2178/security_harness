@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it, beforeEach } from "vitest";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 import {
   generateKeypair,
@@ -30,11 +30,11 @@ describe("Industrial Benchmark Scenarios", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
-  function issueAndStore(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",

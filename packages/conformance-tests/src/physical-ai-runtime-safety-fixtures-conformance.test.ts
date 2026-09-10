@@ -10,9 +10,9 @@ import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -47,14 +47,14 @@ describe("Physical AI runtime safety fixtures v0.1", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let events: Array<{ eventType: string; payload: Record<string, unknown> }>;
 
   function issueFixtureToken(
     tokenTemplate = fixture.defaultToken,
-  ): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  ): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: tokenTemplate.resource,
@@ -170,7 +170,7 @@ describe("Physical AI runtime safety fixtures v0.1", () => {
 
       const token = issueFixtureToken(c.tokenOverride ?? fixture.defaultToken);
       const renderedRequest = replaceNowPlaceholder(requestTemplate);
-      const request: SintRequest = {
+      const request: NosihRequest = {
         requestId: generateUUIDv7(),
         timestamp: nowISO8601(),
         agentId: agent.publicKey,

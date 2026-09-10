@@ -1,5 +1,5 @@
 /**
- * SINT bridge-iot — Hardware Safety Bridge tests.
+ * NOSIH bridge-iot — Hardware Safety Bridge tests.
  *
  * 8 test cases covering:
  * 1. hardwareSafetyContextFromPayload: all fields present → all mapped

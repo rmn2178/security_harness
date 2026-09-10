@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/integration-langchain",
   "version": "0.1.0",
-  "description": "SINT Protocol governance middleware for LangChain — capability tokens, policy enforcement, and evidence logging on every tool call.",
+  "description": "NOSIH Protocol governance middleware for LangChain — capability tokens, policy enforcement, and evidence logging on every tool call.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "sint",
+    "nosih",
     "langchain",
     "ai-safety",
     "governance",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sint-ai/sint-protocol.git",
+    "url": "https://github.com/nosih-ai/nosih-protocol.git",
     "directory": "packages/integration-langchain"
   },
   "publishConfig": {

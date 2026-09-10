@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Zod validation schemas for kinetic envelopes.
+ * NOSIH Protocol — Zod validation schemas for kinetic envelopes.
  *
  * These schemas validate the opt-in physics-aware supervision surface. They do
  * not make any autonomy-demand / environmental-capacity formula normative.
  *
- * @module @sint/core/schemas/kinetic-envelope
+ * @module @nosih/core/schemas/kinetic-envelope
  */
 
 import { z } from "zod";

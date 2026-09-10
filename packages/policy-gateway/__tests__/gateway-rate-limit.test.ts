@@ -1,5 +1,5 @@
 /**
- * SINT PolicyGateway — Rate-limit enforcement tests.
+ * NOSIH PolicyGateway — Rate-limit enforcement tests.
  *
  * Verifies that tokens carrying a `rateLimit` constraint are blocked
  * by the PolicyGateway after maxCalls within the window.
@@ -13,14 +13,14 @@ import {
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
 import { InMemoryRateLimitStore } from "@pshkv/persistence";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
   return d.toISOString().replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-function makeRequest(overrides: Partial<SintRequest> & { tokenId: string; agentId: string }): SintRequest {
+function makeRequest(overrides: Partial<NosihRequest> & { tokenId: string; agentId: string }): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -35,12 +35,12 @@ describe("PolicyGateway — rate-limit enforcement", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let rateLimitStore: InMemoryRateLimitStore;
   let gateway: PolicyGateway;
 
-  function issueRateLimitedToken(maxCalls: number, windowMs: number): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueRateLimitedToken(maxCalls: number, windowMs: number): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",
@@ -114,7 +114,7 @@ describe("PolicyGateway — rate-limit enforcement", () => {
   });
 
   it("token without rateLimit is never blocked by rate-limit check", async () => {
-    const req: SintCapabilityTokenRequest = {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",
@@ -157,7 +157,7 @@ describe("PolicyGateway — rate-limit enforcement", () => {
 
   it("different tokens have independent rate-limit counters", async () => {
     const tokenA = issueRateLimitedToken(2, 60_000);
-    const req2: SintCapabilityTokenRequest = {
+    const req2: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",
@@ -190,12 +190,12 @@ describe("PolicyGateway — rate-limit enforcement", () => {
   });
 
   it("InMemoryRateLimitStore.getCount returns 0 for unknown key", async () => {
-    const count = await rateLimitStore.getCount("sint:rate:nonexistent:0");
+    const count = await rateLimitStore.getCount("nosih:rate:nonexistent:0");
     expect(count).toBe(0);
   });
 
   it("InMemoryRateLimitStore increments correctly", async () => {
-    const key = "sint:rate:test-token:bucket1";
+    const key = "nosih:rate:test-token:bucket1";
     expect(await rateLimitStore.increment(key, 60_000)).toBe(1);
     expect(await rateLimitStore.increment(key, 60_000)).toBe(2);
     expect(await rateLimitStore.increment(key, 60_000)).toBe(3);

@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Ledger semantic query & chain-of-custody proof route tests.
+ * NOSIH Gateway Server — Ledger semantic query & chain-of-custody proof route tests.
  *
  * Tests:
  *   GET /v1/ledger/query  — semantic filter endpoint

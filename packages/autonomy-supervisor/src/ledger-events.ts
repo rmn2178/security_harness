@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import type { SintEventType, UUIDv7 } from "@pshkv/core";
+import type { NosihEventType, UUIDv7 } from "@pshkv/core";
 import { AutonomyState } from "./autonomy-states.js";
 import type { AutonomyEvaluation } from "./supervisor.js";
 
@@ -162,6 +162,6 @@ export function autonomyEvaluationToLedgerEvents(
   return out;
 }
 
-export function asSintEventType(eventType: AutonomyEventType): SintEventType {
-  return eventType as SintEventType;
+export function asNosihEventType(eventType: AutonomyEventType): NosihEventType {
+  return eventType as NosihEventType;
 }

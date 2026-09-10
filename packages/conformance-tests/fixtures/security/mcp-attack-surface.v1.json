@@ -1,7 +1,7 @@
 {
   "fixtureId": "mcp-attack-surface-v1",
   "schemaVersion": "2026-04-04",
-  "description": "10 canonical MCP attack scenarios and expected SINT mitigations. Encodes the OWASP ASI01-ASI10 threat model for Model Context Protocol integrations.",
+  "description": "10 canonical MCP attack scenarios and expected NOSIH mitigations. Encodes the OWASP ASI01-ASI10 threat model for Model Context Protocol integrations.",
   "cases": [
     {
       "name": "tool-name-spoofing",

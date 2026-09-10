@@ -1,17 +1,17 @@
 /**
- * SINT Persistence — Redis Revocation Bus.
+ * NOSIH Persistence — Redis Revocation Bus.
  *
  * Cross-node revocation propagation via Redis pub/sub.
  * Enables <1s revocation propagation across distributed nodes.
  *
- * @module @sint/persistence/redis-revocation-bus
+ * @module @nosih/persistence/redis-revocation-bus
  */
 
 import type { Redis } from "ioredis";
 import type { UUIDv7 } from "@pshkv/core";
 import type { RevocationBus, RevocationEvent } from "./interfaces.js";
 
-const CHANNEL = "sint:revocations";
+const CHANNEL = "nosih:revocations";
 
 export class RedisRevocationBus implements RevocationBus {
   private readonly handlers: Array<(event: RevocationEvent) => void> = [];

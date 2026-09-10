@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { Arbitrator } from "../../src/arbitration/arbitrator.js";
-import type { SintActionRecommendation, SintWorldState } from "@pshkv/core";
+import type { NosihActionRecommendation, NosihWorldState } from "@pshkv/core";
 
-function makeRec(overrides: Partial<SintActionRecommendation> = {}): SintActionRecommendation {
+function makeRec(overrides: Partial<NosihActionRecommendation> = {}): NosihActionRecommendation {
   return {
     action: "publish",
     resource: "ros2:///camera/image",
@@ -13,7 +13,7 @@ function makeRec(overrides: Partial<SintActionRecommendation> = {}): SintActionR
   };
 }
 
-function makeWorldState(): SintWorldState {
+function makeWorldState(): NosihWorldState {
   return {
     timestamp: "2026-03-17T10:00:00.000000Z",
     objects: [],

@@ -76,7 +76,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
       );
 
       const existing = await client.query(
-        "SELECT manifest FROM sint_mission_manifests WHERE manifest_id = $1",
+        "SELECT manifest FROM nosih_mission_manifests WHERE manifest_id = $1",
         [manifest.manifestId],
       );
       if (existing.rows.length > 0) {
@@ -86,8 +86,8 @@ export class PgMissionManifestStore implements MissionManifestStore {
 
       const current = await client.query(
         `SELECT manifests.manifest
-         FROM sint_mission_authority_heads AS heads
-         JOIN sint_mission_manifests AS manifests
+         FROM nosih_mission_authority_heads AS heads
+         JOIN nosih_mission_manifests AS manifests
            ON manifests.manifest_id = heads.manifest_id
          WHERE heads.platform_identity = $1`,
         [manifest.platformIdentity],
@@ -105,7 +105,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
       }
 
       await client.query(
-        `INSERT INTO sint_mission_manifests
+        `INSERT INTO nosih_mission_manifests
           (manifest_id, platform_id, mission_class, valid_from, valid_until, manifest)
          VALUES ($1, $2, $3, $4, $5, $6)`,
         [
@@ -118,7 +118,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
         ],
       );
       await client.query(
-        `INSERT INTO sint_mission_authority_heads
+        `INSERT INTO nosih_mission_authority_heads
           (platform_identity, manifest_id, manifest_version)
          VALUES ($1, $2, $3)
          ON CONFLICT (platform_identity) DO UPDATE
@@ -139,7 +139,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
 
   async get(manifestId: UUIDv7): Promise<MissionManifest | undefined> {
     const result = await this.pool.query(
-      "SELECT manifest FROM sint_mission_manifests WHERE manifest_id = $1",
+      "SELECT manifest FROM nosih_mission_manifests WHERE manifest_id = $1",
       [manifestId],
     );
     return result.rows.length > 0 ? rowToManifest(result.rows[0]) : undefined;
@@ -150,8 +150,8 @@ export class PgMissionManifestStore implements MissionManifestStore {
   ): Promise<MissionManifest | undefined> {
     const result = await this.pool.query(
       `SELECT manifests.manifest
-       FROM sint_mission_authority_heads AS heads
-       JOIN sint_mission_manifests AS manifests
+       FROM nosih_mission_authority_heads AS heads
+       JOIN nosih_mission_manifests AS manifests
          ON manifests.manifest_id = heads.manifest_id
        WHERE heads.platform_identity = $1`,
       [platformIdentity],
@@ -181,7 +181,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
       ? ` WHERE ${conditions.join(" AND ")}`
       : "";
     const result = await this.pool.query(
-      `SELECT manifest FROM sint_mission_manifests${where}
+      `SELECT manifest FROM nosih_mission_manifests${where}
        ORDER BY registered_at ASC, manifest_id ASC`,
       params,
     );
@@ -190,10 +190,10 @@ export class PgMissionManifestStore implements MissionManifestStore {
 
   async revoke(revocation: MissionManifestRevocation): Promise<boolean> {
     const result = await this.pool.query(
-      `INSERT INTO sint_mission_manifest_revocations
+      `INSERT INTO nosih_mission_manifest_revocations
         (manifest_id, reason, revoked_by, revoked_at)
        SELECT manifest_id, $2, $3, $4
-       FROM sint_mission_manifests
+       FROM nosih_mission_manifests
        WHERE manifest_id = $1
        ON CONFLICT (manifest_id) DO NOTHING
        RETURNING manifest_id`,
@@ -212,7 +212,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
   ): Promise<MissionManifestRevocation | undefined> {
     const result = await this.pool.query(
       `SELECT manifest_id, reason, revoked_by, revoked_at
-       FROM sint_mission_manifest_revocations
+       FROM nosih_mission_manifest_revocations
        WHERE manifest_id = $1`,
       [manifestId],
     );
@@ -239,7 +239,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
 
       const existing = await client.query(
         `SELECT action_ref, manifest_id, effect_id, claimed_at
-         FROM sint_mission_action_claims
+         FROM nosih_mission_action_claims
          WHERE action_ref = $1`,
         [claim.actionRef],
       );
@@ -251,7 +251,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
       if (claim.effectId && effectMaxUses !== undefined) {
         const usage = await client.query(
           `SELECT COUNT(*)::integer AS count
-           FROM sint_mission_action_claims
+           FROM nosih_mission_action_claims
            WHERE manifest_id = $1 AND effect_id = $2`,
           [claim.manifestId, claim.effectId],
         );
@@ -262,7 +262,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
       }
 
       const inserted = await client.query(
-        `INSERT INTO sint_mission_action_claims
+        `INSERT INTO nosih_mission_action_claims
           (action_ref, manifest_id, effect_id, claimed_at)
          VALUES ($1, $2, $3, $4)
          RETURNING action_ref, manifest_id, effect_id, claimed_at`,
@@ -287,10 +287,10 @@ export class PgMissionManifestStore implements MissionManifestStore {
     report: MissionActionOutcomeReport,
   ): Promise<MissionActionOutcomeResult> {
     const inserted = await this.pool.query(
-      `INSERT INTO sint_mission_action_outcomes
+      `INSERT INTO nosih_mission_action_outcomes
         (action_ref, manifest_id, outcome, completed_at, report)
        SELECT action_ref, $2, $3, $4, $5
-       FROM sint_mission_action_claims
+       FROM nosih_mission_action_claims
        WHERE action_ref = $1 AND manifest_id = $2
        ON CONFLICT (action_ref) DO NOTHING
        RETURNING report`,
@@ -307,7 +307,7 @@ export class PgMissionManifestStore implements MissionManifestStore {
     }
 
     const existing = await this.pool.query(
-      "SELECT report FROM sint_mission_action_outcomes WHERE action_ref = $1",
+      "SELECT report FROM nosih_mission_action_outcomes WHERE action_ref = $1",
       [report.actionRef],
     );
     return existing.rows.length > 0

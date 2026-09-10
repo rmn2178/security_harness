@@ -1,5 +1,5 @@
 /**
- * SINT conformance fixture loader.
+ * NOSIH conformance fixture loader.
  *
  * Loads canonical JSON fixtures that external partners can reuse for
  * interoperability certification.
@@ -847,7 +847,7 @@ export function loadA2ASkillCapabilityEnforcementFixture(): A2ASkillCapabilityEn
 
 export function loadWellKnownDiscoveryFixture(): WellKnownDiscoveryFixture {
   return loadFixture<WellKnownDiscoveryFixture>(
-    "protocol/well-known-sint.v0.2.example.json",
+    "protocol/well-known-nosih.v0.2.example.json",
   );
 }
 
@@ -923,7 +923,7 @@ export function loadPhysicalWorkMarketFixture(): PhysicalWorkMarketFixture {
   );
 }
 
-export interface APSSINTHandshakeCase {
+export interface APSNOSIHHandshakeCase {
   readonly name: string;
   readonly scenario: "A" | "B" | "C";
   readonly description: string;
@@ -971,17 +971,17 @@ export interface APSSINTHandshakeCase {
   };
 }
 
-export interface APSSINTHandshakeFixture {
+export interface APSNOSIHHandshakeFixture {
   readonly fixtureId: string;
   readonly schemaVersion: string;
   readonly description: string;
   readonly interopProtocol: string;
-  readonly cases: readonly APSSINTHandshakeCase[];
+  readonly cases: readonly APSNOSIHHandshakeCase[];
 }
 
-export function loadAPSSINTHandshakeFixture(): APSSINTHandshakeFixture {
-  return loadFixture<APSSINTHandshakeFixture>(
-    "interop/aps-sint-handshake.v1.json",
+export function loadAPSNOSIHHandshakeFixture(): APSNOSIHHandshakeFixture {
+  return loadFixture<APSNOSIHHandshakeFixture>(
+    "interop/aps-nosih-handshake.v1.json",
   );
 }
 
@@ -1589,7 +1589,7 @@ export interface Px4UlogCorrelationArtifactFixture {
       readonly matchedEvents: readonly Array<{
         readonly type: string;
         readonly targetMode?: string;
-        readonly sintEventTimestamp: string;
+        readonly nosihEventTimestamp: string;
         readonly ulogTimestamp: string;
         readonly deltaMs: number;
       }>;
@@ -1842,11 +1842,11 @@ export interface EuAiActConformityPackFixture {
   readonly annexIVChecklist: readonly Array<{
     readonly id: string;
     readonly title: string;
-    readonly sintArtifactRefs: readonly string[];
+    readonly nosihArtifactRefs: readonly string[];
   }>;
   readonly iso13482Crosswalk: readonly Array<{
     readonly topic: string;
-    readonly sintControl: string;
+    readonly nosihControl: string;
     readonly evidenceSource: string;
   }>;
   readonly successCriteria: {
@@ -1934,8 +1934,8 @@ export interface IndustrialCellSafetyPackFixture {
     readonly failureMode: string;
     readonly sourceScenarioId: string;
     readonly hazard: string;
-    readonly sintDetection: string;
-    readonly sintControl: string;
+    readonly nosihDetection: string;
+    readonly nosihControl: string;
     readonly severity: number;
     readonly occurrence: number;
     readonly detection: number;
@@ -1943,7 +1943,7 @@ export interface IndustrialCellSafetyPackFixture {
   }>;
   readonly sotifIso26262Mapping: readonly Array<{
     readonly topic: string;
-    readonly sintSupport: string;
+    readonly nosihSupport: string;
     readonly claimBoundary: string;
   }>;
   readonly timingReport: {
@@ -2050,8 +2050,8 @@ export interface IndustrialHumanoidShipyardSafetyPackFixture {
     readonly failureMode: string;
     readonly sourceScenarioId: string;
     readonly hazard: string;
-    readonly sintDetection: string;
-    readonly sintControl: string;
+    readonly nosihDetection: string;
+    readonly nosihControl: string;
     readonly severity: number;
     readonly occurrence: number;
     readonly detection: number;
@@ -2059,7 +2059,7 @@ export interface IndustrialHumanoidShipyardSafetyPackFixture {
   }>;
   readonly safetyCaseMapping: readonly Array<{
     readonly topic: string;
-    readonly sintSupport: string;
+    readonly nosihSupport: string;
     readonly claimBoundary: string;
   }>;
   readonly sprintPlan: {

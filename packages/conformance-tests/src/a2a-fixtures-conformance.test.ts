@@ -11,8 +11,8 @@
 import { describe, expect, it } from "vitest";
 import type {
   ApprovalTier,
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -38,8 +38,8 @@ const primaryAgent = generateKeypair();
 const secondaryAgent = generateKeypair();
 
 function issueToken(
-  request: Omit<SintCapabilityTokenRequest, "issuer" | "subject" | "delegationChain" | "expiresAt" | "revocable">,
-): SintCapabilityToken {
+  request: Omit<NosihCapabilityTokenRequest, "issuer" | "subject" | "delegationChain" | "expiresAt" | "revocable">,
+): NosihCapabilityToken {
   const issued = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -60,8 +60,8 @@ function issueToken(
 function createHarness() {
   const revocationStore = new RevocationStore();
   const events: Array<{ eventType: string; payload: Record<string, unknown> }> = [];
-  const tokenStore = new Map<string, SintCapabilityToken>();
-  const namedTokens = new Map<string, SintCapabilityToken>();
+  const tokenStore = new Map<string, NosihCapabilityToken>();
+  const namedTokens = new Map<string, NosihCapabilityToken>();
 
   for (const [name, tokenTemplate] of Object.entries(fixture.tokens)) {
     const token = issueToken({
@@ -109,8 +109,8 @@ describe("A2A Fixture Conformance", () => {
       expect(result.action).toBe(scenario.expected.interceptAction);
 
       if (scenario.expected.assignedTier) {
-        const sintMeta = result.task.metadata?.["sint"] as { assignedTier?: ApprovalTier } | undefined;
-        expect(sintMeta?.assignedTier).toBe(scenario.expected.assignedTier);
+        const nosihMeta = result.task.metadata?.["nosih"] as { assignedTier?: ApprovalTier } | undefined;
+        expect(nosihMeta?.assignedTier).toBe(scenario.expected.assignedTier);
       }
 
       if (scenario.expected.policyViolated) {

@@ -1,5 +1,5 @@
 /**
- * SROS2 enclave discovery and SINT policy bridge — unit tests.
+ * SROS2 enclave discovery and NOSIH policy bridge — unit tests.
  */
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
@@ -9,7 +9,7 @@ import { tmpdir } from "node:os";
 import {
   discoverSros2Enclaves,
   checkSros2Permission,
-  sros2ToSintConstraints,
+  sros2ToNosihConstraints,
   matchTopicPattern,
 } from "../src/sros2-enclave.js";
 import type { Sros2Enclave } from "../src/sros2-enclave.js";
@@ -171,7 +171,7 @@ describe("wildcard pattern matching", () => {
   });
 });
 
-describe("sros2ToSintConstraints", () => {
+describe("sros2ToNosihConstraints", () => {
   it("extracts allowed and denied topics from enclave", () => {
     const enclave: Sros2Enclave = {
       enclavePath: "/talker",
@@ -183,7 +183,7 @@ describe("sros2ToSintConstraints", () => {
       governanceEnforced: false,
     };
 
-    const constraints = sros2ToSintConstraints(enclave);
+    const constraints = sros2ToNosihConstraints(enclave);
     expect(constraints.allowedTopics).toContain("/chatter");
     expect(constraints.allowedTopics).toContain("/status");
     expect(constraints.deniedTopics).toContain("/restricted");
@@ -201,7 +201,7 @@ describe("sros2ToSintConstraints", () => {
       governanceEnforced: false,
     };
 
-    const constraints = sros2ToSintConstraints(enclave);
+    const constraints = sros2ToNosihConstraints(enclave);
     expect(constraints.allowedTopics.filter((t) => t === "/shared")).toHaveLength(1);
   });
 });

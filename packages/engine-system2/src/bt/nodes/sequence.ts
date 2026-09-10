@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Sequence behavior tree node.
+ * NOSIH Protocol — Sequence behavior tree node.
  *
  * Ticks children in order. Returns failure immediately on any child failure.
  * Returns success only when ALL children succeed.
  *
- * @module @sint/engine-system2/bt/nodes/sequence
+ * @module @nosih/engine-system2/bt/nodes/sequence
  */
 
 import type { Blackboard } from "../blackboard.js";

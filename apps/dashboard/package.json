@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "SINT Protocol — Real-time Approval Dashboard",
+  "description": "NOSIH Protocol — Real-time Approval Dashboard",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

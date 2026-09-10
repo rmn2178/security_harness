@@ -5,7 +5,7 @@ import {
   delegateCapabilityToken,
   validateCapabilityToken,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -21,7 +21,7 @@ describe("Capability Token Delegator", () => {
   const agent5 = generateKeypair();
 
   function issueRootToken() {
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent1.publicKey,
       resource: "ros2:///cmd_vel",
@@ -40,9 +40,9 @@ describe("Capability Token Delegator", () => {
   }
 
   function issueRegulatedRootToken(
-    regulatedDataPolicyOverrides: Partial<NonNullable<SintCapabilityTokenRequest["regulatedDataPolicy"]>> = {},
+    regulatedDataPolicyOverrides: Partial<NonNullable<NosihCapabilityTokenRequest["regulatedDataPolicy"]>> = {},
   ) {
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent1.publicKey,
       resource: "health://intake/*",

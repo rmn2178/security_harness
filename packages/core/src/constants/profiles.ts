@@ -1,21 +1,21 @@
 /**
- * SINT Protocol — Public deployment and bridge profiles.
+ * NOSIH Protocol — Public deployment and bridge profiles.
  *
- * @module @sint/core/constants/profiles
+ * @module @nosih/core/constants/profiles
  */
 
 import { ApprovalTier } from "../types/policy.js";
 import type { BridgeProfile, SiteProfile } from "../types/protocol.js";
 
-/** Current version of the public SINT protocol surface. */
-export const SINT_PROTOCOL_VERSION = "0.2.0" as const;
+/** Current version of the public NOSIH protocol surface. */
+export const NOSIH_PROTOCOL_VERSION = "0.2.0" as const;
 
 /** Protocol boundary statement used in discovery and docs. */
-export const SINT_PROTOCOL_BOUNDARY =
-  "SINT is the governance and runtime enforcement layer for digital-to-physical execution.";
+export const NOSIH_PROTOCOL_BOUNDARY =
+  "NOSIH is the governance and runtime enforcement layer for digital-to-physical execution.";
 
 /** Canonical bridge profiles exposed by discovery and schema endpoints. */
-export const SINT_BRIDGE_PROFILES: readonly BridgeProfile[] = [
+export const NOSIH_BRIDGE_PROFILES: readonly BridgeProfile[] = [
   {
     bridgeId: "mcp",
     protocol: "mcp",
@@ -139,7 +139,7 @@ export const SINT_BRIDGE_PROFILES: readonly BridgeProfile[] = [
 ] as const;
 
 /** First-class site profiles for 2026 industrial wedge deployments. */
-export const SINT_SITE_PROFILES: readonly SiteProfile[] = [
+export const NOSIH_SITE_PROFILES: readonly SiteProfile[] = [
   {
     siteId: "warehouse-amr",
     deploymentProfile: "warehouse-amr",

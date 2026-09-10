@@ -1,12 +1,12 @@
 /**
- * SINT Bridge-ROS2 — Resource Mapper.
+ * NOSIH Bridge-ROS2 — Resource Mapper.
  *
- * Maps ROS 2 topic/service/action names to SINT resource URIs.
+ * Maps ROS 2 topic/service/action names to NOSIH resource URIs.
  * Extracts physical context from message payloads.
  *
  * URI scheme: ros2:///{topicName} (triple-slash for absolute topic names)
  *
- * @module @sint/bridge-ros2/ros2-resource-mapper
+ * @module @nosih/bridge-ros2/ros2-resource-mapper
  */
 
 import type { ROS2TopicMessage } from "./types.js";
@@ -34,7 +34,7 @@ export interface TopicToResourceOptions {
   isaacNormalize?: boolean;
   /**
    * Normalize namespaced differential-drive topics such as
-   * `/robot/cmd_wheels` and `/robot/enc_wheels` into canonical SINT
+   * `/robot/cmd_wheels` and `/robot/enc_wheels` into canonical NOSIH
    * resources. This matches the public control surface used by the
    * Sunnybotics T800 ROS2 + micro-ROS example.
    */
@@ -95,7 +95,7 @@ function normalizeDifferentialDriveTopicName(
 }
 
 /**
- * Map a ROS 2 topic name to a SINT resource URI.
+ * Map a ROS 2 topic name to a NOSIH resource URI.
  *
  * @example
  * ```ts
@@ -118,7 +118,7 @@ export function topicToResourceUri(
 }
 
 /**
- * Map a Gazebo-scoped ROS2 topic to a canonical SINT resource URI.
+ * Map a Gazebo-scoped ROS2 topic to a canonical NOSIH resource URI.
  *
  * @example
  * ```ts
@@ -131,7 +131,7 @@ export function gazeboTopicToResourceUri(topicName: string): string {
 }
 
 /**
- * Map an Isaac Sim namespaced ROS2 topic to a canonical SINT resource URI.
+ * Map an Isaac Sim namespaced ROS2 topic to a canonical NOSIH resource URI.
  *
  * @example
  * ```ts
@@ -144,7 +144,7 @@ export function isaacTopicToResourceUri(topicName: string): string {
 }
 
 /**
- * Map a namespaced differential-drive wheel topic to a canonical SINT
+ * Map a namespaced differential-drive wheel topic to a canonical NOSIH
  * resource URI.
  *
  * @example
@@ -158,7 +158,7 @@ export function differentialDriveTopicToResourceUri(topicName: string): string {
 }
 
 /**
- * Map a ROS 2 service name to a SINT resource URI.
+ * Map a ROS 2 service name to a NOSIH resource URI.
  */
 export function serviceToResourceUri(serviceName: string): string {
   const normalized = serviceName.startsWith("/") ? serviceName.slice(1) : serviceName;
@@ -166,7 +166,7 @@ export function serviceToResourceUri(serviceName: string): string {
 }
 
 /**
- * Map a ROS 2 action name to a SINT resource URI.
+ * Map a ROS 2 action name to a NOSIH resource URI.
  */
 export function actionToResourceUri(actionName: string): string {
   const normalized = actionName.startsWith("/") ? actionName.slice(1) : actionName;
@@ -174,14 +174,14 @@ export function actionToResourceUri(actionName: string): string {
 }
 
 /**
- * Determine the SINT action for a topic operation.
+ * Determine the NOSIH action for a topic operation.
  */
 export function topicAction(operation: "publish" | "subscribe"): string {
   return operation;
 }
 
 /**
- * Determine the SINT action for a service call.
+ * Determine the NOSIH action for a service call.
  */
 export function serviceAction(): string {
   return "call";

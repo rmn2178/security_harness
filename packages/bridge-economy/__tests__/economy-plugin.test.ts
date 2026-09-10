@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import type { SintRequest, PolicyDecision } from "@pshkv/core";
+import type { NosihRequest, PolicyDecision } from "@pshkv/core";
 import { ApprovalTier, RiskTier } from "@pshkv/core";
 import { EconomyPlugin } from "../src/economy-plugin.js";
 import type { EconomyPluginConfig } from "../src/economy-plugin.js";
@@ -8,7 +8,7 @@ import { InMemoryBudgetAdapter } from "../src/adapters/in-memory-budget-adapter.
 import { InMemoryTrustAdapter } from "../src/adapters/in-memory-trust-adapter.js";
 import { InMemoryPricingAdapter } from "../src/adapters/in-memory-pricing-adapter.js";
 
-function makeRequest(overrides: Partial<SintRequest> = {}): SintRequest {
+function makeRequest(overrides: Partial<NosihRequest> = {}): NosihRequest {
   return {
     requestId: "req-001",
     timestamp: "2026-03-17T10:00:00.000000Z",

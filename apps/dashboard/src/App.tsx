@@ -1,10 +1,10 @@
-// DEPRECATED: This app is superseded by SINT Console / Conductor.
+// DEPRECATED: This app is superseded by NOSIH Console / Conductor.
 // See apps/dashboard/README.md for migration notes.
 
 /**
- * SINT Dashboard — Main Application.
+ * NOSIH Dashboard — Main Application.
  *
- * Real-time approval management dashboard for the SINT Protocol.
+ * Real-time approval management dashboard for the NOSIH Protocol.
  * Connects to the Gateway Server via REST + SSE.
  *
  * Requires operator authentication before accessing the dashboard.

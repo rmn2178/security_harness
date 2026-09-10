@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — SSE Endpoint Tests.
+ * NOSIH Gateway Server — SSE Endpoint Tests.
  *
  * Tests the /v1/approvals/events Server-Sent Events endpoint.
  * Uses Hono's built-in test client to verify SSE stream behavior.
@@ -12,7 +12,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -42,9 +42,9 @@ describe("SSE Approvals Endpoint", () => {
   });
 
   async function issueAndStoreToken(
-    overrides?: Partial<SintCapabilityTokenRequest>,
+    overrides?: Partial<NosihCapabilityTokenRequest>,
   ) {
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",

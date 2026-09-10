@@ -2,7 +2,7 @@
   "capsuleId": "01905f7c-0001-7000-8000-000000000001",
   "version": "1.0.0",
   "name": "visual-inspection",
-  "author": "sint-labs",
+  "author": "nosih-labs",
   "description": "Visual anomaly detection for manufacturing QA — observes camera feed and classifies defects",
   "sensors": ["camera_rgb"],
   "actuators": [],

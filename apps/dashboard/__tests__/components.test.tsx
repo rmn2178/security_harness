@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Component Tests.
+ * NOSIH Dashboard — Component Tests.
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -21,7 +21,7 @@ function WithAuth({ children }: { children: ReactNode }) {
 const mockHealth: HealthResponse = {
   status: "ok",
   version: "0.1.0",
-  protocol: "SINT Gate",
+  protocol: "NOSIH Gate",
   tokens: 5,
   ledgerEvents: 120,
   revokedTokens: 2,
@@ -64,7 +64,7 @@ const mockLedger: LedgerResponse = {
 describe("Header", () => {
   it("renders logo and status", () => {
     render(<Header health={mockHealth} sseConnected={true} pendingCount={0} />, { wrapper: WithAuth });
-    expect(screen.getByText("SINT")).toBeDefined();
+    expect(screen.getByText("NOSIH")).toBeDefined();
     expect(screen.getByText("Approval Dashboard")).toBeDefined();
     expect(screen.getByText("Live")).toBeDefined();
   });

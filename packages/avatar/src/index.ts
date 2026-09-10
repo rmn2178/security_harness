@@ -1,5 +1,5 @@
 /**
- * @sint/avatar — SINT Protocol Avatar Layer (L5)
+ * @nosih/avatar — NOSIH Protocol Avatar Layer (L5)
  *
  * Behavioral identity profiles and CSML-driven tier escalation.
  *

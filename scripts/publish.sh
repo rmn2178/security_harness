@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🛡️  SINT Protocol — npm publish"
+echo "🛡️  NOSIH Protocol — npm publish"
 echo ""
 
 # Packages in dependency order — core first, bridges after

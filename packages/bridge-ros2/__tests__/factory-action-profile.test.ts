@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { ApprovalTier, type SintCapabilityToken, type SintCapabilityTokenRequest } from "@pshkv/core";
+import { ApprovalTier, type NosihCapabilityToken, type NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   generateKeypair,
   issueCapabilityToken,
@@ -55,7 +55,7 @@ const robotAction: RobotActionProfile = {
     human_approval: true,
     safety_zone_clear: true,
   },
-  adapter_hint: "sint-adapter-abb-rapid",
+  adapter_hint: "nosih-adapter-abb-rapid",
 };
 
 describe("Factory Action Profile ROS2 mapping", () => {
@@ -82,7 +82,7 @@ describe("Factory Action Profile ROS2 mapping", () => {
       requires_simulation_receipt: true,
       requires_human_approval: true,
       requires_safety_zone_clear: true,
-      adapter_hint: "sint-adapter-abb-rapid",
+      adapter_hint: "nosih-adapter-abb-rapid",
       cell_id: "packaging_cell_001",
       simulation_receipt_id: "simr_packaging_001",
       approval_id: "approval_packaging_001",
@@ -105,7 +105,7 @@ describe("Factory Action Profile ROS2 mapping", () => {
     });
   });
 
-  it("derives a Universal Robots ROS2 demo path without bypassing SINT", () => {
+  it("derives a Universal Robots ROS2 demo path without bypassing NOSIH", () => {
     const demoPath = robotActionProfileToUniversalRobotsRos2DemoPath(robotAction, {
       timestamp: "2026-05-26T20:00:00.000Z",
       cellId: "packaging_cell_001",
@@ -166,63 +166,63 @@ describe("Factory Action Profile ROS2 mapping", () => {
     const abb = robotActionProfileToAbbRapidExportStub(robotAction, {
       ...commonOptions,
       robotAssetId: "robot_abb_irb_1200_01",
-      programName: "sint_packaging_rapid",
+      programName: "nosih_packaging_rapid",
     });
     const fanuc = robotActionProfileToFanucLsExportStub(robotAction, {
       ...commonOptions,
       robotAssetId: "robot_fanuc_lr_mate_01",
-      programName: "sint_packaging_ls",
+      programName: "nosih_packaging_ls",
     });
     const kuka = robotActionProfileToKukaKrlExportStub(robotAction, {
       ...commonOptions,
       robotAssetId: "robot_kuka_kr6_01",
-      programName: "sint_packaging_krl",
+      programName: "nosih_packaging_krl",
     });
     const ur = robotActionProfileToUrScriptExportStub(robotAction, {
       ...commonOptions,
       robotAssetId: "robot_ur10e_01",
-      programName: "sint_packaging_ur",
+      programName: "nosih_packaging_ur",
     });
 
     expect(abb.profile_id).toBe("abb-rapid-export-stub");
     expect(abb.target_language).toBe("RAPID");
     expect(abb.execution_resource).toBe(
-      "robotstudio://packaging_cell_001/robot_abb_irb_1200_01/sint_packaging_rapid",
+      "robotstudio://packaging_cell_001/robot_abb_irb_1200_01/nosih_packaging_rapid",
     );
     expect(abb.generated_program_hash).toMatch(/^sha256:[a-f0-9]{64}$/);
-    expect(abb.program_text).toContain("MODULE sint_packaging_rapid");
-    expect(abb.program_text).toContain("sint_simulation_receipt_id");
-    expect(abb.program_text).toContain("sint_approval_id");
+    expect(abb.program_text).toContain("MODULE nosih_packaging_rapid");
+    expect(abb.program_text).toContain("nosih_simulation_receipt_id");
+    expect(abb.program_text).toContain("nosih_approval_id");
 
     expect(fanuc.profile_id).toBe("fanuc-ls-export-stub");
     expect(fanuc.target_language).toBe("LS");
     expect(fanuc.execution_resource).toBe(
-      "roboguide://packaging_cell_001/robot_fanuc_lr_mate_01/SINT_PACKAGING_LS",
+      "roboguide://packaging_cell_001/robot_fanuc_lr_mate_01/NOSIH_PACKAGING_LS",
     );
     expect(fanuc.generated_program_hash).toMatch(/^sha256:[a-f0-9]{64}$/);
-    expect(fanuc.program_text).toContain("/PROG SINT_PACKAGING_LS");
+    expect(fanuc.program_text).toContain("/PROG NOSIH_PACKAGING_LS");
     expect(fanuc.program_text).toContain("simulation_receipt_id=simr_packaging_001");
     expect(fanuc.program_text).toContain("approval_id=approval_packaging_001");
 
     expect(kuka.profile_id).toBe("kuka-krl-export-stub");
     expect(kuka.target_language).toBe("KRL");
     expect(kuka.execution_resource).toBe(
-      "kuka-sim://packaging_cell_001/robot_kuka_kr6_01/sint_packaging_krl",
+      "kuka-sim://packaging_cell_001/robot_kuka_kr6_01/nosih_packaging_krl",
     );
     expect(kuka.generated_program_hash).toMatch(/^sha256:[a-f0-9]{64}$/);
-    expect(kuka.program_text).toContain("DEF sint_packaging_krl()");
+    expect(kuka.program_text).toContain("DEF nosih_packaging_krl()");
     expect(kuka.program_text).toContain("simulation_receipt_id=simr_packaging_001");
     expect(kuka.program_text).toContain("approval_id=approval_packaging_001");
 
     expect(ur.profile_id).toBe("ur-script-export-stub");
     expect(ur.target_language).toBe("URScript");
     expect(ur.execution_resource).toBe(
-      "polyscope://packaging_cell_001/robot_ur10e_01/sint_packaging_ur",
+      "polyscope://packaging_cell_001/robot_ur10e_01/nosih_packaging_ur",
     );
     expect(ur.generated_program_hash).toMatch(/^sha256:[a-f0-9]{64}$/);
-    expect(ur.program_text).toContain("def sint_packaging_ur():");
-    expect(ur.program_text).toContain("sint_simulation_receipt_id=simr_packaging_001");
-    expect(ur.program_text).toContain("sint_approval_id=approval_packaging_001");
+    expect(ur.program_text).toContain("def nosih_packaging_ur():");
+    expect(ur.program_text).toContain("nosih_simulation_receipt_id=simr_packaging_001");
+    expect(ur.program_text).toContain("nosih_approval_id=approval_packaging_001");
 
     for (const stub of [abb, fanuc, kuka, ur]) {
       expect(stub.gated_policy_resource).toBe("ros2:///joint_commands");
@@ -371,14 +371,14 @@ describe("Factory Action Profile ROS2 mapping", () => {
   it("routes factory robot actions through the normal ROS2 interceptor path", async () => {
     const root = generateKeypair();
     const agent = generateKeypair();
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     const revocationStore = new RevocationStore();
     const gateway = new PolicyGateway({
       resolveToken: (id) => tokenStore.get(id),
       revocationStore,
     });
 
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///joint_commands",
@@ -414,14 +414,14 @@ describe("Factory Action Profile ROS2 mapping", () => {
   it("denies factory robot action when profile force exceeds token envelope", async () => {
     const root = generateKeypair();
     const agent = generateKeypair();
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     const revocationStore = new RevocationStore();
     const gateway = new PolicyGateway({
       resolveToken: (id) => tokenStore.get(id),
       revocationStore,
     });
 
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///joint_commands",

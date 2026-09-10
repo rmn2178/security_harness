@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-mavlink",
   "version": "0.1.0",
-  "description": "SINT Protocol MAVLink bridge \u2014 UAV/drone command interception and safety enforcement",
+  "description": "NOSIH Protocol MAVLink bridge \u2014 UAV/drone command interception and safety enforcement",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sint-ai/sint-protocol",
+    "url": "https://github.com/nosih-ai/nosih-protocol",
     "directory": "packages/bridge-mavlink"
   }
 }

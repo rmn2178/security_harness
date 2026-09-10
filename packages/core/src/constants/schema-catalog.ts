@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Public schema catalog.
+ * NOSIH Protocol — Public schema catalog.
  *
  * Machine-readable JSON Schema documents for public artifacts.
  *
- * @module @sint/core/constants/schema-catalog
+ * @module @nosih/core/constants/schema-catalog
  */
 
 /**
- * Shape of a JSON Schema document carried by `SINT_SCHEMA_CATALOG`.
+ * Shape of a JSON Schema document carried by `NOSIH_SCHEMA_CATALOG`.
  * A plain string-keyed record is used rather than a strict JSON Schema
  * type so that draft-2020-12 features (such as `$dynamicRef`) remain
  * representable as the spec evolves.
@@ -16,8 +16,8 @@ export type JsonSchemaDoc = Record<string, unknown>;
 
 const CAPABILITY_TOKEN_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/capability-token.schema.json",
-  title: "SINT CapabilityToken",
+  $id: "https://schemas.nosih.ai/capability-token.schema.json",
+  title: "NOSIH CapabilityToken",
   type: "object",
   required: [
     "tokenId",
@@ -57,8 +57,8 @@ const CAPABILITY_TOKEN_SCHEMA: JsonSchemaDoc = {
 
 const REQUEST_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/request.schema.json",
-  title: "SINT Request",
+  $id: "https://schemas.nosih.ai/request.schema.json",
+  title: "NOSIH Request",
   type: "object",
   required: ["requestId", "timestamp", "agentId", "tokenId", "resource", "action", "params"],
   properties: {
@@ -197,8 +197,8 @@ const REQUEST_SCHEMA: JsonSchemaDoc = {
 
 const POLICY_DECISION_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/policy-decision.schema.json",
-  title: "SINT PolicyDecision",
+  $id: "https://schemas.nosih.ai/policy-decision.schema.json",
+  title: "NOSIH PolicyDecision",
   type: "object",
   required: ["requestId", "timestamp", "action", "assignedTier", "assignedRisk"],
   properties: {
@@ -237,8 +237,8 @@ const POLICY_DECISION_SCHEMA: JsonSchemaDoc = {
 
 const HUMAN_AUTHORITY_PROOF_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/human-authority-proof.schema.json",
-  title: "SINT HumanAuthorityProof",
+  $id: "https://schemas.nosih.ai/human-authority-proof.schema.json",
+  title: "NOSIH HumanAuthorityProof",
   type: "object",
   required: ["principalRef", "assuranceLevel"],
   properties: {
@@ -260,8 +260,8 @@ const HUMAN_AUTHORITY_PROOF_SCHEMA: JsonSchemaDoc = {
 
 const HUMAN_AUTHORITY_REQUIREMENTS_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/human-authority-requirements.schema.json",
-  title: "SINT HumanAuthorityRequirements",
+  $id: "https://schemas.nosih.ai/human-authority-requirements.schema.json",
+  title: "NOSIH HumanAuthorityRequirements",
   type: "object",
   required: ["requiredAssuranceLevel"],
   properties: {
@@ -280,8 +280,8 @@ const HUMAN_AUTHORITY_REQUIREMENTS_SCHEMA: JsonSchemaDoc = {
 
 const EVIDENCE_EVENT_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/evidence-event.schema.json",
-  title: "SINT EvidenceEvent",
+  $id: "https://schemas.nosih.ai/evidence-event.schema.json",
+  title: "NOSIH EvidenceEvent",
   type: "object",
   required: [
     "eventId",
@@ -309,8 +309,8 @@ const EVIDENCE_EVENT_SCHEMA: JsonSchemaDoc = {
 
 const APPROVAL_RESOLUTION_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/approval-resolution.schema.json",
-  title: "SINT ApprovalResolution",
+  $id: "https://schemas.nosih.ai/approval-resolution.schema.json",
+  title: "NOSIH ApprovalResolution",
   type: "object",
   required: ["status", "by"],
   properties: {
@@ -323,8 +323,8 @@ const APPROVAL_RESOLUTION_SCHEMA: JsonSchemaDoc = {
 
 const BRIDGE_PROFILE_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/bridge-profile.schema.json",
-  title: "SINT BridgeProfile",
+  $id: "https://schemas.nosih.ai/bridge-profile.schema.json",
+  title: "NOSIH BridgeProfile",
   type: "object",
   required: ["bridgeId", "protocol", "version", "resourcePattern", "defaultTierByAction"],
   properties: {
@@ -340,11 +340,11 @@ const BRIDGE_PROFILE_SCHEMA: JsonSchemaDoc = {
 
 const CONSTRAINT_ENVELOPE_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/constraint-envelope.schema.json",
-  title: "SINT ConstraintEnvelope",
+  $id: "https://schemas.nosih.ai/constraint-envelope.schema.json",
+  title: "NOSIH ConstraintEnvelope",
   type: "object",
   description:
-    "Canonical SINT constraint language envelope for physical, behavioral, model, attestation, and corridor controls.",
+    "Canonical NOSIH constraint language envelope for physical, behavioral, model, attestation, and corridor controls.",
   properties: {
     version: {
       type: "string",
@@ -487,8 +487,8 @@ const CONSTRAINT_ENVELOPE_SCHEMA: JsonSchemaDoc = {
 
 const SITE_PROFILE_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/site-profile.schema.json",
-  title: "SINT SiteProfile",
+  $id: "https://schemas.nosih.ai/site-profile.schema.json",
+  title: "NOSIH SiteProfile",
   type: "object",
   required: ["siteId", "deploymentProfile", "bridges"],
   properties: {
@@ -503,8 +503,8 @@ const SITE_PROFILE_SCHEMA: JsonSchemaDoc = {
 
 const APPROVAL_QUORUM_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/approval-quorum.schema.json",
-  title: "SINT ApprovalQuorum",
+  $id: "https://schemas.nosih.ai/approval-quorum.schema.json",
+  title: "NOSIH ApprovalQuorum",
   type: "object",
   required: ["required", "authorized"],
   properties: {
@@ -516,8 +516,8 @@ const APPROVAL_QUORUM_SCHEMA: JsonSchemaDoc = {
 
 const REVOCATION_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/revocation.schema.json",
-  title: "SINT Revocation",
+  $id: "https://schemas.nosih.ai/revocation.schema.json",
+  title: "NOSIH Revocation",
   type: "object",
   required: ["tokenId", "reason", "revokedBy", "timestamp"],
   properties: {
@@ -531,8 +531,8 @@ const REVOCATION_SCHEMA: JsonSchemaDoc = {
 
 const TIER_COMPLIANCE_CROSSWALK_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/tier-compliance-crosswalk.schema.json",
-  title: "SINT Tier Compliance Crosswalk",
+  $id: "https://schemas.nosih.ai/tier-compliance-crosswalk.schema.json",
+  title: "NOSIH Tier Compliance Crosswalk",
   type: "object",
   required: ["tier", "consequenceClass", "mappings"],
   properties: {
@@ -545,7 +545,7 @@ const TIER_COMPLIANCE_CROSSWALK_SCHEMA: JsonSchemaDoc = {
       type: "array",
       items: {
         type: "object",
-        required: ["framework", "reference", "requirement", "sintEnforcement"],
+        required: ["framework", "reference", "requirement", "nosihEnforcement"],
         properties: {
           framework: {
             type: "string",
@@ -553,7 +553,7 @@ const TIER_COMPLIANCE_CROSSWALK_SCHEMA: JsonSchemaDoc = {
           },
           reference: { type: "string" },
           requirement: { type: "string" },
-          sintEnforcement: { type: "string" },
+          nosihEnforcement: { type: "string" },
         },
         additionalProperties: false,
       },
@@ -565,8 +565,8 @@ const TIER_COMPLIANCE_CROSSWALK_SCHEMA: JsonSchemaDoc = {
 
 const MISSION_MANIFEST_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/mission-manifest.schema.json",
-  title: "SINT MissionManifest",
+  $id: "https://schemas.nosih.ai/mission-manifest.schema.json",
+  title: "NOSIH MissionManifest",
   type: "object",
   required: [
     "manifestId",
@@ -627,8 +627,8 @@ const MISSION_MANIFEST_SCHEMA: JsonSchemaDoc = {
 
 const AUTHORITY_DECISION_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/authority-decision.schema.json",
-  title: "SINT AuthorityDecision",
+  $id: "https://schemas.nosih.ai/authority-decision.schema.json",
+  title: "NOSIH AuthorityDecision",
   type: "object",
   required: ["actionRef", "manifestId", "action", "evaluatedAt"],
   properties: {
@@ -672,8 +672,8 @@ const AUTHORITY_DECISION_SCHEMA: JsonSchemaDoc = {
 
 const MISSION_EVIDENCE_BUNDLE_SCHEMA: JsonSchemaDoc = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://schemas.sint.ai/mission-evidence-bundle.schema.json",
-  title: "SINT MissionEvidenceBundle",
+  $id: "https://schemas.nosih.ai/mission-evidence-bundle.schema.json",
+  title: "NOSIH MissionEvidenceBundle",
   type: "object",
   required: [
     "bundleId",
@@ -718,7 +718,7 @@ const MISSION_EVIDENCE_BUNDLE_SCHEMA: JsonSchemaDoc = {
 };
 
 /**
- * Registry of public JSON Schema documents for every SINT wire type.
+ * Registry of public JSON Schema documents for every NOSIH wire type.
  *
  * Keyed by short slug (e.g. `"capability-token"`, `"policy-decision"`).
  * Consumers use this catalog to (a) publish the canonical machine-readable
@@ -729,14 +729,14 @@ const MISSION_EVIDENCE_BUNDLE_SCHEMA: JsonSchemaDoc = {
  * @example
  * ```ts
  * import Ajv from "ajv";
- * import { SINT_SCHEMA_CATALOG } from "@pshkv/core";
+ * import { NOSIH_SCHEMA_CATALOG } from "@pshkv/core";
  *
  * const ajv = new Ajv({ strict: false });
- * const validateToken = ajv.compile(SINT_SCHEMA_CATALOG["capability-token"]);
+ * const validateToken = ajv.compile(NOSIH_SCHEMA_CATALOG["capability-token"]);
  * if (!validateToken(incoming)) throw new Error("invalid token");
  * ```
  */
-export const SINT_SCHEMA_CATALOG: Readonly<Record<string, JsonSchemaDoc>> = {
+export const NOSIH_SCHEMA_CATALOG: Readonly<Record<string, JsonSchemaDoc>> = {
   "capability-token": CAPABILITY_TOKEN_SCHEMA,
   request: REQUEST_SCHEMA,
   "policy-decision": POLICY_DECISION_SCHEMA,

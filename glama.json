@@ -3,10 +3,10 @@
   "maintainers": [
     "pshkv"
   ],
-  "name": "SINT Protocol",
+  "name": "NOSIH Protocol",
   "description": "Installable security-first MCP proxy with policy enforcement — scan tools for risks (T0–T3 tiers), enforce approval gates, and produce hash-chained audit trails. OWASP ASI05 compliant.",
-  "repository": "https://github.com/sint-ai/sint-protocol",
-  "homepage": "https://sint.gg",
+  "repository": "https://github.com/nosih-ai/nosih-protocol",
+  "homepage": "https://nosih.gg",
   "license": "Apache-2.0",
   "keywords": [
     "security",
@@ -24,48 +24,48 @@
   ],
   "tools": [
     {
-      "name": "sint__status",
-      "description": "Inspect the current SINT runtime state before taking action. Returns a JSON summary with server connectivity, aggregated tool counts, pending approvals, and ledger size.",
+      "name": "nosih__status",
+      "description": "Inspect the current NOSIH runtime state before taking action. Returns a JSON summary with server connectivity, aggregated tool counts, pending approvals, and ledger size.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false }
     },
     {
-      "name": "sint__servers",
+      "name": "nosih__servers",
       "description": "List configured downstream MCP servers and their live connection state. Returns a JSON array with server names, health, and discovered tool counts.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false }
     },
     {
-      "name": "sint__whoami",
-      "description": "Show the active SINT identity for the current session. Returns the acting public key, token ID, and role.",
+      "name": "nosih__whoami",
+      "description": "Show the active NOSIH identity for the current session. Returns the acting public key, token ID, and role.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false }
     },
     {
-      "name": "sint__pending",
-      "description": "List approval requests currently blocked for review. Read-only. Use this before sint__approve or sint__deny; returns a JSON array of request IDs, resources, actions, reasons, and expiry times.",
+      "name": "nosih__pending",
+      "description": "List approval requests currently blocked for review. Read-only. Use this before nosih__approve or nosih__deny; returns a JSON array of request IDs, resources, actions, reasons, and expiry times.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false, "examples": [{}] }
     },
     {
-      "name": "sint__approve",
-      "description": "Approve one pending escalated action after review. Requires a requestId from sint__pending, records the approver identity, and returns confirmation or an error if the request is missing.",
+      "name": "nosih__approve",
+      "description": "Approve one pending escalated action after review. Requires a requestId from nosih__pending, records the approver identity, and returns confirmation or an error if the request is missing.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
         "required": ["requestId"],
         "properties": {
-          "requestId": { "title": "Approval request ID", "type": "string", "minLength": 1, "description": "Approval request ID returned by sint__pending", "examples": ["apr_01hxyz..."] },
+          "requestId": { "title": "Approval request ID", "type": "string", "minLength": 1, "description": "Approval request ID returned by nosih__pending", "examples": ["apr_01hxyz..."] },
           "by": { "title": "Approver", "type": "string", "description": "Human or operator identifier recorded as the approver; defaults to the current agent identity", "examples": ["alice@example.com", "ops-console"] }
         },
         "examples": [{ "requestId": "apr_01hxyz...", "by": "ops-console" }]
       }
     },
     {
-      "name": "sint__deny",
-      "description": "Reject one pending escalated action so it cannot proceed. Requires a requestId from sint__pending and optionally records a denial reason.",
+      "name": "nosih__deny",
+      "description": "Reject one pending escalated action so it cannot proceed. Requires a requestId from nosih__pending and optionally records a denial reason.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
         "required": ["requestId"],
         "properties": {
-          "requestId": { "title": "Approval request ID", "type": "string", "minLength": 1, "description": "Approval request ID returned by sint__pending", "examples": ["apr_01hxyz..."] },
+          "requestId": { "title": "Approval request ID", "type": "string", "minLength": 1, "description": "Approval request ID returned by nosih__pending", "examples": ["apr_01hxyz..."] },
           "reason": { "title": "Denial reason", "type": "string", "description": "Human-readable reason recorded in the audit trail and returned to the caller", "examples": ["Outside approved maintenance window"] },
           "by": { "title": "Denying actor", "type": "string", "description": "Human or operator identifier recorded as the denying actor; defaults to the current agent identity", "examples": ["alice@example.com", "ops-console"] }
         },
@@ -73,8 +73,8 @@
       }
     },
     {
-      "name": "sint__audit",
-      "description": "Read recent events from the SINT evidence ledger for debugging, compliance review, or operator context. Read-only. Returns a JSON array of recent ledger events.",
+      "name": "nosih__audit",
+      "description": "Read recent events from the NOSIH evidence ledger for debugging, compliance review, or operator context. Read-only. Returns a JSON array of recent ledger events.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -86,8 +86,8 @@
       }
     },
     {
-      "name": "sint__add_server",
-      "description": "Register and connect a new downstream MCP server while SINT is running. Requires a unique server name and startup command, and returns the discovered tool count on success or an error if connection fails.",
+      "name": "nosih__add_server",
+      "description": "Register and connect a new downstream MCP server while NOSIH is running. Requires a unique server name and startup command, and returns the discovered tool count on success or an error if connection fails.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -101,20 +101,20 @@
       }
     },
     {
-      "name": "sint__remove_server",
-      "description": "Disconnect and remove one downstream MCP server from the running proxy. Requires the server name as listed by sint__servers and returns confirmation or an error if the name is unknown.",
+      "name": "nosih__remove_server",
+      "description": "Disconnect and remove one downstream MCP server from the running proxy. Requires the server name as listed by nosih__servers and returns confirmation or an error if the name is unknown.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
         "required": ["name"],
         "properties": {
-          "name": { "title": "Server name", "type": "string", "minLength": 1, "description": "Server name as listed by sint__servers", "examples": ["filesystem", "github"] }
+          "name": { "title": "Server name", "type": "string", "minLength": 1, "description": "Server name as listed by nosih__servers", "examples": ["filesystem", "github"] }
         },
         "examples": [{ "name": "filesystem" }]
       }
     },
     {
-      "name": "sint__issue_token",
+      "name": "nosih__issue_token",
       "description": "Issue a new attenuated capability token for another subject. Requires subject, resource, and actions, stores the token immediately, and returns token metadata including tokenId and expiry.",
       "inputSchema": {
         "type": "object",
@@ -122,15 +122,15 @@
         "required": ["subject", "resource", "actions"],
         "properties": {
           "subject": { "title": "Token subject", "type": "string", "minLength": 1, "description": "Public key or subject identifier that will own the new token", "examples": ["ed25519:abc123...", "agent:planner-01"] },
-          "resource": { "title": "Resource pattern", "type": "string", "minLength": 1, "description": "Resource URI pattern the token may access", "examples": ["mcp://filesystem/*", "mcp://github/repos/sint-ai/*"] },
+          "resource": { "title": "Resource pattern", "type": "string", "minLength": 1, "description": "Resource URI pattern the token may access", "examples": ["mcp://filesystem/*", "mcp://github/repos/nosih-ai/*"] },
           "actions": { "title": "Allowed actions", "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Allowed actions for the token on that resource", "examples": [["call"], ["call", "exec.run"]] },
           "expiresInHours": { "title": "Lifetime in hours", "type": "number", "minimum": 1, "default": 24, "description": "Token lifetime in hours; defaults to 24", "examples": [1, 24, 168] }
         },
-        "examples": [{ "subject": "agent:planner-01", "resource": "mcp://github/repos/sint-ai/sint-protocol/*", "actions": ["call"], "expiresInHours": 24 }]
+        "examples": [{ "subject": "agent:planner-01", "resource": "mcp://github/repos/nosih-ai/nosih-protocol/*", "actions": ["call"], "expiresInHours": 24 }]
       }
     },
     {
-      "name": "sint__revoke_token",
+      "name": "nosih__revoke_token",
       "description": "Revoke an active capability token so it can no longer authorize actions. Requires tokenId, records the reason in the audit trail, and returns a confirmation message.",
       "inputSchema": {
         "type": "object",
@@ -144,12 +144,12 @@
       }
     },
     {
-      "name": "sint__interface_status",
+      "name": "nosih__interface_status",
       "description": "Inspect the current operator interface state. Returns a JSON snapshot with mode, HUD panel state, and session context.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false }
     },
     {
-      "name": "sint__recall_memory",
+      "name": "nosih__recall_memory",
       "description": "Search the operator memory bank for relevant stored context. Read-only. Requires a query string and returns matching memory entries as JSON.",
       "inputSchema": {
         "type": "object",
@@ -163,7 +163,7 @@
       }
     },
     {
-      "name": "sint__store_memory",
+      "name": "nosih__store_memory",
       "description": "Store structured context in the operator memory bank for later retrieval. Requires key and value, with optional tags and persistence.",
       "inputSchema": {
         "type": "object",
@@ -179,7 +179,7 @@
       }
     },
     {
-      "name": "sint__speak",
+      "name": "nosih__speak",
       "description": "Send text-to-speech output to the operator interface. Requires short text and optionally a priority level.",
       "inputSchema": {
         "type": "object",
@@ -193,7 +193,7 @@
       }
     },
     {
-      "name": "sint__show_hud",
+      "name": "nosih__show_hud",
       "description": "Show or refresh one HUD panel in the operator interface. Requires a target panel and optionally accepts JSON data for that panel. Returns a confirmation payload with the panel name and timestamp.",
       "inputSchema": {
         "type": "object",
@@ -207,7 +207,7 @@
       }
     },
     {
-      "name": "sint__notify",
+      "name": "nosih__notify",
       "description": "Send a proactive notification to the operator interface, optionally with one action button that invokes another MCP tool. Returns a confirmation payload with the notification timestamp.",
       "inputSchema": {
         "type": "object",
@@ -222,16 +222,16 @@
             "required": ["label", "tool", "args"],
             "properties": {
               "label": { "title": "Button label", "type": "string", "description": "Button label shown in the notification UI", "examples": ["Review approvals"] },
-              "tool": { "title": "Tool to invoke", "type": "string", "description": "MCP tool name to invoke when the button is clicked", "examples": ["sint__pending"] },
+              "tool": { "title": "Tool to invoke", "type": "string", "description": "MCP tool name to invoke when the button is clicked", "examples": ["nosih__pending"] },
               "args": { "title": "Tool arguments", "type": ["object", "array", "string", "number", "boolean", "null"], "description": "Arguments passed to the MCP tool when the action button is clicked" }
             }
           }
         },
-        "examples": [{ "message": "Approval queue has blocked actions", "action": { "label": "Review approvals", "tool": "sint__pending", "args": {} } }]
+        "examples": [{ "message": "Approval queue has blocked actions", "action": { "label": "Review approvals", "tool": "nosih__pending", "args": {} } }]
       }
     },
     {
-      "name": "sint__interface_mode",
+      "name": "nosih__interface_mode",
       "description": "Change how the operator interface presents information. Requires one of hud, compact, voice-only, or silent.",
       "inputSchema": {
         "type": "object",
@@ -244,7 +244,7 @@
       }
     },
     {
-      "name": "sint__delegate_to_agent",
+      "name": "nosih__delegate_to_agent",
       "description": "Issue a delegated capability token to a sub-agent with narrower scope than the current token. Returns token metadata including depth and expiry.",
       "inputSchema": {
         "type": "object",
@@ -260,12 +260,12 @@
       }
     },
     {
-      "name": "sint__list_delegations",
+      "name": "nosih__list_delegations",
       "description": "List the active delegation tree rooted at the current token. Read-only. Returns a JSON array of delegation nodes and scope relationships.",
       "inputSchema": { "type": "object", "properties": {}, "required": [], "additionalProperties": false, "examples": [{}] }
     },
     {
-      "name": "sint__revoke_delegation_tree",
+      "name": "nosih__revoke_delegation_tree",
       "description": "Cascade-revoke a delegated token and all of its descendants. Requires the root delegated token ID and optionally a revocation reason.",
       "inputSchema": {
         "type": "object",

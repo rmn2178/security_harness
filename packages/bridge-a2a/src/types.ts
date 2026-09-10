@@ -1,5 +1,5 @@
 /**
- * SINT Bridge A2A — Google Agent-to-Agent Protocol types.
+ * NOSIH Bridge A2A — Google Agent-to-Agent Protocol types.
  *
  * Based on the A2A Protocol specification (April 2025):
  *   https://google.github.io/A2A/specification/
@@ -7,7 +7,7 @@
  * A2A defines a JSON-RPC 2.0 based protocol for agent-to-agent
  * task delegation with a standardised task lifecycle and streaming.
  *
- * @module @sint/bridge-a2a/types
+ * @module @nosih/bridge-a2a/types
  */
 
 import type { ISO8601, UUIDv7 } from "@pshkv/core";
@@ -28,7 +28,7 @@ export interface A2AAgentCard {
   /** Agent version string. */
   readonly version: string;
   /**
-   * The skills this agent exposes — used by SINT for resource URI mapping.
+   * The skills this agent exposes — used by NOSIH for resource URI mapping.
    * Each skill maps to `a2a://<hostname>/<skillId>`.
    */
   readonly skills: readonly A2ASkill[];
@@ -95,7 +95,7 @@ export interface A2ASkill {
   /** Input/output schema hints (JSON Schema fragment). */
   readonly inputModes?: readonly string[];
   readonly outputModes?: readonly string[];
-  /** Tags for categorisation (used by SINT tier assignment). */
+  /** Tags for categorisation (used by NOSIH tier assignment). */
   readonly tags?: readonly string[];
 }
 
@@ -214,13 +214,13 @@ export interface A2ASendTaskParams {
   readonly sessionId?: string;
   readonly message: A2AMessage;
   readonly metadata?: Record<string, unknown>;
-  /** The target skill to invoke (used by SINT for resource mapping). */
+  /** The target skill to invoke (used by NOSIH for resource mapping). */
   readonly skillId?: string;
 }
 
-// ── SINT bridge types ─────────────────────────────────────────────────────────
+// ── NOSIH bridge types ─────────────────────────────────────────────────────────
 
-/** SINT-specific result of intercepting an A2A request. */
+/** NOSIH-specific result of intercepting an A2A request. */
 export type A2AInterceptResult =
   | { readonly action: "forward"; readonly task: A2ATask }
   | {
@@ -241,9 +241,9 @@ export interface A2AInterceptorConfig {
   /** The target agent's Agent Card. */
   readonly agentCard: A2AAgentCard;
   /**
-   * Maps A2A skill tags to SINT ApprovalTier hints.
+   * Maps A2A skill tags to NOSIH ApprovalTier hints.
    * Keys: A2A skill tag strings.
-   * Values: SINT tier strings ("T0_observe", "T1_prepare", "T2_act", "T3_commit").
+   * Values: NOSIH tier strings ("T0_observe", "T1_prepare", "T2_act", "T3_commit").
    */
   readonly skillTierHints?: Readonly<Record<string, string>>;
 }
@@ -260,10 +260,10 @@ export const A2A_ERROR_CODES = {
   TASK_NOT_CANCELABLE: -32002,
   PUSH_NOTIFICATION_NOT_SUPPORTED: -32003,
   UNSUPPORTED_OPERATION: -32004,
-  // SINT-specific
-  SINT_POLICY_DENY: -33001,
-  SINT_ESCALATION_REQUIRED: -33002,
-  SINT_RATE_LIMIT: -33003,
+  // NOSIH-specific
+  NOSIH_POLICY_DENY: -33001,
+  NOSIH_ESCALATION_REQUIRED: -33002,
+  NOSIH_RATE_LIMIT: -33003,
 } as const;
 
 /** UUIDv7 alias for task IDs. */

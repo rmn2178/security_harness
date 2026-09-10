@@ -20,7 +20,7 @@ describe("Nav2 navigation policy receipts fixture v1", () => {
       bridge: "ros2",
       projectContext: "nav2",
       boundary: "navigation intent to physical motion",
-      goal: "Test whether navigation goals and docking-related motion can carry auditable policy receipts without making SINT a required Nav2 runtime dependency.",
+      goal: "Test whether navigation goals and docking-related motion can carry auditable policy receipts without making NOSIH a required Nav2 runtime dependency.",
       nonGoal: "This fixture does not propose changes to Nav2 core APIs.",
     });
     expect(fixture.requirements).toEqual({

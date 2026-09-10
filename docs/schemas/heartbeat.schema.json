@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sint.gg/schemas/heartbeat.schema.json",
-  "title": "SINT Heartbeat Message",
+  "$id": "https://nosih.gg/schemas/heartbeat.schema.json",
+  "title": "NOSIH Heartbeat Message",
   "description": "Server-originated keepalive emitted on the approvals WebSocket every 30 seconds. Used by clients to detect connection liveness. Also emitted as a bare SSE comment line (': heartbeat') on approval and risk-score SSE streams.",
   "type": "object",
   "additionalProperties": false,

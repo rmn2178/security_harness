@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Cost-aware routing for Economic Layer v1.
+ * NOSIH Protocol — Cost-aware routing for Economic Layer v1.
  *
  * Scores candidate routes using estimated token cost, latency, and reliability.
  * Supports optional x402 pay-per-call quotes when available.
  *
- * @module @sint/bridge-economy/cost-aware-routing
+ * @module @nosih/bridge-economy/cost-aware-routing
  */
 
 import type {

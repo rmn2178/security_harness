@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — Engine HAL internal types.
+ * NOSIH Protocol — Engine HAL internal types.
  *
  * Resource monitoring types and threshold configuration used
  * by the Hardware Abstraction Layer to track system resource
  * utilization and trigger alerts.
  *
- * @module @sint/engine-hal/types
+ * @module @nosih/engine-hal/types
  */
 
-import type { ISO8601, SintHardwareDeploymentProfile } from "@pshkv/core";
+import type { ISO8601, NosihHardwareDeploymentProfile } from "@pshkv/core";
 
 /**
  * A point-in-time snapshot of system resource utilization.
@@ -62,7 +62,7 @@ export const DEFAULT_THRESHOLDS: ResourceThresholds = {
 };
 
 /**
- * Configuration for the SINT Engine HAL.
+ * Configuration for the NOSIH Engine HAL.
  *
  * @example
  * ```ts
@@ -74,7 +74,7 @@ export const DEFAULT_THRESHOLDS: ResourceThresholds = {
  * ```
  */
 export interface EngineConfig {
-  readonly deploymentProfile?: SintHardwareDeploymentProfile;
+  readonly deploymentProfile?: NosihHardwareDeploymentProfile;
   readonly resourceThresholds?: Partial<ResourceThresholds>;
   readonly samplingIntervalMs?: number;
 }

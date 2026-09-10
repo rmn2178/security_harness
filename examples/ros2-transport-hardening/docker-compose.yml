@@ -3,7 +3,7 @@ version: "3.9"
 # Transport-level hardening demo.
 #
 # Layout:
-#   gateway          — SINT Policy Gateway (application-layer decision point)
+#   gateway          — NOSIH Policy Gateway (application-layer decision point)
 #   keystore-init    — one-shot: builds SROS2 keystore + enclaves in /keystore
 #   guarded-talker   — runs with ROS_SECURITY_ENABLE=true Enforce, mounted keystore
 #   attacker         — same network + domain, NO keystore / enclave
@@ -20,12 +20,12 @@ services:
     ports:
       - "3100:3100"
     environment:
-      SINT_PORT: "3100"
-      SINT_STORE: postgres
-      SINT_CACHE: redis
-      DATABASE_URL: postgresql://sint:sint@postgres:5432/sint
+      NOSIH_PORT: "3100"
+      NOSIH_STORE: postgres
+      NOSIH_CACHE: redis
+      DATABASE_URL: postgresql://nosih:nosih@postgres:5432/nosih
       REDIS_URL: redis://redis:6379
-      SINT_LOG_LEVEL: info
+      NOSIH_LOG_LEVEL: info
     depends_on:
       postgres:
         condition: service_healthy
@@ -41,14 +41,14 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: sint
-      POSTGRES_PASSWORD: sint
-      POSTGRES_DB: sint
+      POSTGRES_USER: nosih
+      POSTGRES_PASSWORD: nosih
+      POSTGRES_DB: nosih
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ../../packages/persistence/migrations:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sint -d sint"]
+      test: ["CMD-SHELL", "pg_isready -U nosih -d nosih"]
       interval: 5s
       timeout: 5s
       start_period: 10s
@@ -79,7 +79,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      SINT_GATEWAY_URL: http://gateway:3100
+      NOSIH_GATEWAY_URL: http://gateway:3100
       ROS_SECURITY_ENABLE: "true"
       ROS_SECURITY_STRATEGY: "Enforce"
       ROS_SECURITY_KEYSTORE: /keystore

@@ -1,4 +1,4 @@
-"""Tests for sint.scanner — tier classification and scan_server reporting."""
+"""Tests for nosih.scanner — tier classification and scan_server reporting."""
 
 from __future__ import annotations
 
@@ -8,14 +8,14 @@ from unittest.mock import patch
 
 import pytest
 
-from sint.scanner import (
+from nosih.scanner import (
     MCPToolAnnotations,
     ServerScanReport,
     ToolScanResult,
     scan_server,
     scan_tool,
 )
-from sint.types import ApprovalTier
+from nosih.types import ApprovalTier
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +242,7 @@ class TestExitCodeLogic:
 
 class TestCLIMain:
     def test_cli_json_output_for_bash(self, capsys: pytest.CaptureFixture[str]) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit) as exc_info:
             main(["--server", "myserver", "--json", "bash"])
@@ -254,7 +254,7 @@ class TestCLIMain:
         assert exc_info.value.code == 2
 
     def test_cli_json_output_for_read_file(self, capsys: pytest.CaptureFixture[str]) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit) as exc_info:
             main(["--server", "fs", "--json", "readFile"])
@@ -264,21 +264,21 @@ class TestCLIMain:
         assert exc_info.value.code == 0
 
     def test_cli_exit_0_for_safe_tools(self) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit) as exc_info:
             main(["--server", "fs", "--json", "readFile", "listDir"])
         assert exc_info.value.code == 0
 
     def test_cli_exit_2_for_critical(self) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit) as exc_info:
             main(["--server", "fs", "--json", "bash"])
         assert exc_info.value.code == 2
 
     def test_cli_no_tools_error(self) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit) as exc_info:
             main(["--server", "fs"])
@@ -286,7 +286,7 @@ class TestCLIMain:
         assert exc_info.value.code != 0
 
     def test_cli_no_color_flag(self, capsys: pytest.CaptureFixture[str]) -> None:
-        from sint.scanner import main
+        from nosih.scanner import main
 
         with pytest.raises(SystemExit):
             main(["--server", "fs", "--no-color", "readFile"])

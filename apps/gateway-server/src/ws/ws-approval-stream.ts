@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Approval Event Bus.
+ * NOSIH Gateway Server — Approval Event Bus.
  *
  * In-process event bus for real-time T2/T3 approval and decision events.
  * Shared between the intercept route (publisher) and the WebSocket transport
@@ -9,7 +9,7 @@
  *  - APPROVAL_REQUIRED: a request has been escalated and needs human review.
  *  - DECISION: a T2+ PolicyGateway decision (allow, deny, or escalate).
  *
- * @module @sint/gateway-server/ws/ws-approval-stream
+ * @module @nosih/gateway-server/ws/ws-approval-stream
  */
 
 /** An escalation event requiring human review. */

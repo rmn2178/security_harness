@@ -1,5 +1,5 @@
 /**
- * SINT — W3C DID identity tests.
+ * NOSIH — W3C DID identity tests.
  *
  * Verifies keyToDid, didToKey, and isValidDid against known vectors.
  */

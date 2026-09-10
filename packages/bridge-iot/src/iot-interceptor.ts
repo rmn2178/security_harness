@@ -1,15 +1,15 @@
 /**
- * SINT bridge-iot — IoT Interceptor.
+ * NOSIH bridge-iot — IoT Interceptor.
  *
  * Wraps MQTT/CoAP publish and subscribe calls with PolicyGateway enforcement.
  * For safety topics: extracts HardwareSafetyContext from payload and attaches
- * it to the SintRequest.executionContext before calling gateway.intercept().
+ * it to the NosihRequest.executionContext before calling gateway.intercept().
  *
  * The existing evaluateHardwareSafetyHandshake() in PolicyGateway then
  * handles the deny + ledger event for estop/interlock/permit violations.
  */
 
-import type { PolicyDecision, SintRequest, ApprovalTier, SintSiteDeploymentProfile } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest, ApprovalTier, NosihSiteDeploymentProfile } from "@pshkv/core";
 import type { IoTDeviceProfile } from "./device-profiles.js";
 import {
   isSafetyTopic,
@@ -19,7 +19,7 @@ import {
 
 /** Minimal gateway interface — avoids a hard package dependency on gate-policy-gateway. */
 export interface IotGatewayLike {
-  intercept(request: SintRequest): Promise<PolicyDecision>;
+  intercept(request: NosihRequest): Promise<PolicyDecision>;
 }
 
 export interface IotInterceptorConfig {
@@ -92,8 +92,8 @@ export class IotInterceptor {
       }
     }
 
-    // 3. Build SintRequest
-    const request: SintRequest = {
+    // 3. Build NosihRequest
+    const request: NosihRequest = {
       requestId: makeIotRequestId() as `${string}-${string}-${string}-${string}-${string}`,
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -106,7 +106,7 @@ export class IotInterceptor {
         payloadSize: typeof payload === "string" ? payload.length : payload.byteLength,
       },
       executionContext: {
-        ...(this.deploymentProfile && { deploymentProfile: this.deploymentProfile as SintSiteDeploymentProfile }),
+        ...(this.deploymentProfile && { deploymentProfile: this.deploymentProfile as NosihSiteDeploymentProfile }),
         ...(hardwareSafety && { hardwareSafety }),
       },
     };
@@ -119,7 +119,7 @@ export class IotInterceptor {
   async interceptSubscribe(topicPattern: string): Promise<IotInterceptResult> {
     const resource = `iot://${this.broker}/${topicPattern}`;
 
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: makeIotRequestId() as `${string}-${string}-${string}-${string}-${string}`,
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -128,7 +128,7 @@ export class IotInterceptor {
       action: "subscribe",
       params: { topicPattern },
       executionContext: this.deploymentProfile
-        ? { deploymentProfile: this.deploymentProfile as SintSiteDeploymentProfile }
+        ? { deploymentProfile: this.deploymentProfile as NosihSiteDeploymentProfile }
         : undefined,
     };
 

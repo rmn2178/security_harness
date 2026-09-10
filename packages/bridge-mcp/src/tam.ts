@@ -1,9 +1,9 @@
 /**
- * SINT Protocol — Tool Auth Manifest (TAM) validation.
+ * NOSIH Protocol — Tool Auth Manifest (TAM) validation.
  *
  * Implements the enforcement side of MCP SEP-2385 (Tool Authorization Manifest).
  * SEP-2385 proposes that MCP servers declare per-tool authorization requirements
- * as machine-readable metadata. SINT's capability tokens are the *proof* that
+ * as machine-readable metadata. NOSIH's capability tokens are the *proof* that
  * a calling agent satisfies those requirements.
  *
  * The TAM declares: "to call tool X, you need at least tier T2 and a token
@@ -12,13 +12,13 @@
  *
  * Ref: https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2385
  *
- * @module @sint/bridge-mcp/tam
+ * @module @nosih/bridge-mcp/tam
  */
 
 import { ApprovalTier } from "@pshkv/core";
 import type {
-  SintCapabilityToken,
-  SintPhysicalConstraints,
+  NosihCapabilityToken,
+  NosihPhysicalConstraints,
 } from "@pshkv/core";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -38,13 +38,13 @@ export interface ToolAuthManifest {
   readonly serverName: string;
 
   /**
-   * Minimum SINT approval tier required to call this tool.
+   * Minimum NOSIH approval tier required to call this tool.
    * The calling agent's capability token must authorize this tier or higher.
    */
   readonly minApprovalTier: ApprovalTier;
 
   /**
-   * Whether the caller must present a SINT capability token.
+   * Whether the caller must present a NOSIH capability token.
    * If false, the tool is open to any authenticated MCP client.
    */
   readonly requiresCapabilityToken: boolean;
@@ -68,7 +68,7 @@ export interface ToolAuthManifest {
    * Relevant when the tool has physical side effects.
    */
   readonly maxPhysicalConstraints?: Pick<
-    SintPhysicalConstraints,
+    NosihPhysicalConstraints,
     "maxForceNewtons" | "maxVelocityMps"
   >;
 
@@ -139,7 +139,7 @@ function matchesPattern(resource: string, pattern: string): boolean {
  * ```
  */
 export function validateAgainstTam(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   manifest: ToolAuthManifest,
   assignedTier: ApprovalTier,
 ): TamValidationResult {

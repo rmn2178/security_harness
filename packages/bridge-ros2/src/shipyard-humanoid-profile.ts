@@ -173,7 +173,7 @@ export function shipyardHumanoidWeldStartToRobotActionProfile(
       human_approval: true,
       safety_zone_clear: true,
     },
-    adapter_hint: "sint-adapter-shipyard-humanoid-welding",
+    adapter_hint: "nosih-adapter-shipyard-humanoid-welding",
   });
 }
 
@@ -191,7 +191,7 @@ export function shipyardHumanoidWeldStartProfile(
       options.stageUri ??
       `isaac-sim://stage/${options.siteId}/${options.vesselBlockId}/${options.robotId}`,
     measuredMaxForceNewtons: action.motion.max_force_newtons,
-    signedBy: "sint-shipyard-humanoid-profile",
+    signedBy: "nosih-shipyard-humanoid-profile",
   });
   const guardedMessage = robotActionProfileToRos2TopicMessage(action, {
     topicName,
@@ -236,7 +236,7 @@ export function shipyardHumanoidWeldStartProfile(
       "timestamp",
     ],
     scope_note:
-      "Shipyard humanoid weld-start profile only: SINT gates policy, approvals, receipts, and evidence before execution; it does not certify welding procedure, robot hardware, or shipyard safety.",
+      "Shipyard humanoid weld-start profile only: NOSIH gates policy, approvals, receipts, and evidence before execution; it does not certify welding procedure, robot hardware, or shipyard safety.",
   };
 
   return shipyardHumanoidWeldStartProfileSchema.parse(

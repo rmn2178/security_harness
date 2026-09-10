@@ -1,10 +1,10 @@
 /**
- * Lightweight HTTP client for the SINT Policy Gateway.
+ * Lightweight HTTP client for the NOSIH Policy Gateway.
  *
- * Uses native fetch — no external dependencies beyond @sint/client types.
+ * Uses native fetch — no external dependencies beyond @nosih/client types.
  */
 
-import type { SintGovernanceConfig, SintInterceptResult } from "./types.js";
+import type { NosihGovernanceConfig, NosihInterceptResult } from "./types.js";
 
 interface InterceptRequest {
   agentId: string;
@@ -15,12 +15,12 @@ interface InterceptRequest {
 }
 
 /**
- * Send an intercept request to the SINT Policy Gateway.
+ * Send an intercept request to the NOSIH Policy Gateway.
  */
 export async function intercept(
-  config: SintGovernanceConfig,
+  config: NosihGovernanceConfig,
   request: InterceptRequest
-): Promise<SintInterceptResult> {
+): Promise<NosihInterceptResult> {
   const url = `${config.gatewayUrl}/v1/intercept`;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

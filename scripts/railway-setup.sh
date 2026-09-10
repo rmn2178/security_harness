@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SINT Protocol — Railway Setup Script
+# NOSIH Protocol — Railway Setup Script
 #
 # Provisions PostgreSQL + Redis on Railway and runs migrations.
 #
@@ -12,7 +12,7 @@
 
 set -euo pipefail
 
-echo "🛡️  SINT Protocol — Railway Database Setup"
+echo "🛡️  NOSIH Protocol — Railway Database Setup"
 echo "============================================"
 echo ""
 
@@ -33,7 +33,7 @@ echo ""
 
 # Create project if not linked
 if ! railway status &> /dev/null 2>&1; then
-  echo "📦 Creating Railway project: sint-protocol"
+  echo "📦 Creating Railway project: nosih-protocol"
   railway init
 fi
 
@@ -79,9 +79,9 @@ echo "✅ Railway setup complete!"
 echo ""
 echo "Next steps:"
 echo "  1. Set env vars on your Railway service:"
-echo "     railway variables --set SINT_STORE=postgres"
-echo "     railway variables --set SINT_CACHE=redis"
-echo "     railway variables --set SINT_API_KEY=your-secret-key"
+echo "     railway variables --set NOSIH_STORE=postgres"
+echo "     railway variables --set NOSIH_CACHE=redis"
+echo "     railway variables --set NOSIH_API_KEY=your-secret-key"
 echo ""
 echo "  2. Deploy the gateway server:"
 echo "     railway up"
@@ -89,5 +89,5 @@ echo ""
 echo "  3. Or connect locally:"
 echo "     export DATABASE_URL=\"$DB_URL\""
 echo "     export REDIS_URL=\"$REDIS_URL\""
-echo "     SINT_STORE=postgres SINT_CACHE=redis pnpm --filter @sint/gateway-server run dev"
+echo "     NOSIH_STORE=postgres NOSIH_CACHE=redis pnpm --filter @nosih/gateway-server run dev"
 echo ""

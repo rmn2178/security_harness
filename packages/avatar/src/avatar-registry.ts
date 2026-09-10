@@ -1,18 +1,18 @@
 /**
- * SINT Protocol — Avatar Registry.
+ * NOSIH Protocol — Avatar Registry.
  *
  * In-memory store for AvatarProfiles. In production, back this with a
- * PostgreSQL adapter (same pattern as @sint/persistence).
+ * PostgreSQL adapter (same pattern as @nosih/persistence).
  *
  * The registry computes profiles from raw ledger events via
  * `updateFromEvents()`. It does NOT query the ledger directly — the caller
  * provides the events (dependency injection, testable without ledger).
  *
- * @module @sint/avatar/avatar-registry
+ * @module @nosih/avatar/avatar-registry
  */
 
 import { computeCsml } from "@pshkv/gate-evidence-ledger";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 import { DEFAULT_CSML_COEFFICIENTS } from "@pshkv/core";
 import type { AvatarProfile, AgentPersona, CsmlSnapshot } from "./types.js";
 
@@ -108,7 +108,7 @@ export class AvatarRegistry {
    * Recomputes CSML and updates all counters.
    * Creates the profile if it does not exist.
    */
-  updateFromEvents(agentId: string, events: readonly SintLedgerEvent[]): AvatarProfile {
+  updateFromEvents(agentId: string, events: readonly NosihLedgerEvent[]): AvatarProfile {
     // Ensure profile exists
     this.getOrCreate(agentId);
     const profile = this.profiles.get(agentId)!;

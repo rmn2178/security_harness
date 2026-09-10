@@ -1,7 +1,7 @@
 {
   "fixtureId": "mission-authority-reference-gateway-readiness-v1",
   "schemaVersion": "1.0.0",
-  "description": "Public synthetic readiness checklist for the SINT Mission Authority reference gateway and Signed Effect edge execution path.",
+  "description": "Public synthetic readiness checklist for the NOSIH Mission Authority reference gateway and Signed Effect edge execution path.",
   "referencePath": {
     "guide": "docs/guides/mission-authority-reference-gateway.md",
     "missionAuthorityDoc": "docs/mission-authority.md",
@@ -52,7 +52,7 @@
       "status": "implemented",
       "evidence": [
         "createSignedEffectPack",
-        "SintEdgeRunner",
+        "NosihEdgeRunner",
         "physicalBindings"
       ]
     },

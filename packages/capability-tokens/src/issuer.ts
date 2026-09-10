@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Capability Token Issuer.
+ * NOSIH Protocol — Capability Token Issuer.
  *
  * Creates and signs capability tokens with Ed25519.
  * The issuer is the authority that grants permissions to agents.
@@ -10,14 +10,14 @@
  * - Secrets never appear in error messages or logs
  * - Timestamps use ISO 8601 with microsecond precision in UTC
  *
- * @module @sint/gate-capability-tokens/issuer
+ * @module @nosih/gate-capability-tokens/issuer
  */
 
 import {
   type CapabilityTokenError,
   type Result,
-  type SintCapabilityToken,
-  type SintCapabilityTokenRequest,
+  type NosihCapabilityToken,
+  type NosihCapabilityTokenRequest,
   capabilityTokenRequestSchema,
   err,
   ok,
@@ -38,7 +38,7 @@ import { canonicalJSONStringify, generateUUIDv7, nowISO8601 } from "./utils.js";
  * ```
  */
 export function computeSigningPayload(
-  token: Omit<SintCapabilityToken, "signature"> | SintCapabilityToken,
+  token: Omit<NosihCapabilityToken, "signature"> | NosihCapabilityToken,
 ): string {
   return canonicalJSONStringify({
     actions: token.actions,
@@ -97,9 +97,9 @@ export function computeSigningPayload(
  * ```
  */
 export function issueCapabilityToken(
-  request: SintCapabilityTokenRequest,
+  request: NosihCapabilityTokenRequest,
   issuerPrivateKey: string,
-): Result<SintCapabilityToken, CapabilityTokenError> {
+): Result<NosihCapabilityToken, CapabilityTokenError> {
   // Validate input via Zod schema
   const parsed = capabilityTokenRequestSchema.safeParse(request);
   if (!parsed.success) {
@@ -124,7 +124,7 @@ export function issueCapabilityToken(
   const issuedAt = nowISO8601();
 
   // Construct the unsigned token
-  const unsignedToken: Omit<SintCapabilityToken, "signature"> = {
+  const unsignedToken: Omit<NosihCapabilityToken, "signature"> = {
     tokenId,
     issuer: request.issuer,
     subject: request.subject,

@@ -25,7 +25,7 @@ describe("Open-RMF handoff policy receipts fixture v1", () => {
     expect(fixture.scope).toEqual({
       bridge: "open-rmf",
       boundary: "fleet handoff and facility workflow",
-      goal: "Test whether handoff and facility-control actions can carry auditable policy receipts without making SINT a required Open-RMF runtime dependency.",
+      goal: "Test whether handoff and facility-control actions can carry auditable policy receipts without making NOSIH a required Open-RMF runtime dependency.",
       nonGoal: "This fixture does not propose changes to Open-RMF core APIs.",
     });
     expect(fixture.requirements).toEqual({

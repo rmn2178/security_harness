@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — WebSocket Approval Stream Hook.
+ * NOSIH Dashboard — WebSocket Approval Stream Hook.
  *
  * Connects to the gateway's WebSocket endpoint (/v1/approvals/ws) and
  * delivers a live feed of T2/T3 APPROVAL_REQUIRED and DECISION events.

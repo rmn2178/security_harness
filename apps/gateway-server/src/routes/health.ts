@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Health route.
+ * NOSIH Gateway Server — Health route.
  */
 
 import { Hono } from "hono";
@@ -14,7 +14,7 @@ export function healthRoutes(ctx: ServerContext): Hono {
     return c.json({
       status: "ok",
       version: "0.1.0",
-      protocol: "SINT Gate",
+      protocol: "NOSIH Gate",
       tokens: tokenCount,
       ledgerEvents: ctx.ledger.length,
       revokedTokens: ctx.revocationStore.size,

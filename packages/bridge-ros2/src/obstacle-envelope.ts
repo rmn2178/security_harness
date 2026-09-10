@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ObstacleAwareEnvelope reference implementation.
+ * NOSIH Protocol — ObstacleAwareEnvelope reference implementation.
  *
  * Implements DynamicEnvelopePlugin for ROS 2 agents. Tightens velocity
  * constraints based on nearest-obstacle distance from a laser scan or
@@ -30,11 +30,11 @@
  * });
  * ```
  *
- * @module @sint/bridge-ros2/obstacle-envelope
+ * @module @nosih/bridge-ros2/obstacle-envelope
  */
 
 import type { DynamicEnvelopePlugin } from "@pshkv/gate-policy-gateway";
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 
 /** Configuration for ObstacleAwareEnvelope. */
 export interface ObstacleAwareEnvelopeConfig {
@@ -45,7 +45,7 @@ export interface ObstacleAwareEnvelopeConfig {
    *
    * Return Infinity when no obstacle is within sensing range.
    */
-  getNearestObstacleM: (request: SintRequest) => number | Promise<number>;
+  getNearestObstacleM: (request: NosihRequest) => number | Promise<number>;
 
   /**
    * Reaction factor: effectiveVelocity = obstacleDistanceM * reactionFactor
@@ -94,7 +94,7 @@ export class ObstacleAwareEnvelope implements DynamicEnvelopePlugin {
     };
   }
 
-  async computeEnvelope(request: SintRequest): Promise<{
+  async computeEnvelope(request: NosihRequest): Promise<{
     maxVelocityMps?: number;
     maxForceNewtons?: number;
     reason?: string;

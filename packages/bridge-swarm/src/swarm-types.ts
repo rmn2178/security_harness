@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Swarm Coordination types.
+ * NOSIH Protocol — Swarm Coordination types.
  *
  * Defines the collective constraint model for multi-agent physical systems.
  *
@@ -13,10 +13,10 @@
  * - Cascade: one agent failure triggers chain of denied requests across swarm
  * - Byzantine: k compromised agents in a coordinated attack
  *
- * @module @sint/bridge-swarm/swarm-types
+ * @module @nosih/bridge-swarm/swarm-types
  */
 
-import type { ApprovalTier, SintCapabilityToken } from "@pshkv/core";
+import type { ApprovalTier, NosihCapabilityToken } from "@pshkv/core";
 
 // ─── Swarm constraints ────────────────────────────────────────────────────────
 
@@ -78,7 +78,7 @@ export interface SwarmAgentState {
   readonly agentId: string;
 
   /** Current capability token. */
-  readonly token: SintCapabilityToken;
+  readonly token: NosihCapabilityToken;
 
   /** Current 3D position (NED frame, meters from reference). */
   readonly position?: {

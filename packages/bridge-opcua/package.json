@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-opcua",
   "version": "0.1.0",
-  "description": "SINT Bridge — OPC UA profile adapter for PLC/OT interoperability with tiered physical safety",
+  "description": "NOSIH Bridge — OPC UA profile adapter for PLC/OT interoperability with tiered physical safety",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

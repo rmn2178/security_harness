@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://docs.sint.gg/specs/robot-action.schema.json",
+  "$id": "https://docs.nosih.gg/specs/robot-action.schema.json",
   "title": "RobotActionProfile",
   "description": "Vendor-neutral robot action request for industrial execution control.",
   "type": "object",

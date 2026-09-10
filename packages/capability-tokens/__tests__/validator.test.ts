@@ -9,7 +9,7 @@ import {
   validateDelegationDepth,
   isPointInPolygon,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest, SintCapabilityToken } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest, NosihCapabilityToken } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -17,11 +17,11 @@ function futureISO(hoursFromNow: number): string {
 }
 
 function createValidToken(
-  overrides?: Partial<SintCapabilityTokenRequest>,
-): SintCapabilityToken {
+  overrides?: Partial<NosihCapabilityTokenRequest>,
+): NosihCapabilityToken {
   const issuer = generateKeypair();
   const subject = generateKeypair();
-  const request: SintCapabilityTokenRequest = {
+  const request: NosihCapabilityTokenRequest = {
     issuer: issuer.publicKey,
     subject: subject.publicKey,
     resource: "ros2:///cmd_vel",
@@ -106,7 +106,7 @@ describe("Capability Token Validator", () => {
           signature: "pq-signature-placeholder",
         },
       ],
-    } as SintCapabilityToken;
+    } as NosihCapabilityToken;
     const result = validateCapabilityToken(hybrid, {
       resource: "ros2:///cmd_vel",
       action: "publish",
@@ -145,11 +145,11 @@ describe("Capability Token Validator", () => {
           signature: "pq-signature-placeholder",
         },
       ],
-    } as Omit<SintCapabilityToken, "signature">;
+    } as Omit<NosihCapabilityToken, "signature">;
     const hybrid = {
       ...unsignedHybrid,
       signature: sign(issuer.privateKey, computeSigningPayload(unsignedHybrid)),
-    } as SintCapabilityToken;
+    } as NosihCapabilityToken;
 
     let verifierSawPayload = false;
     const result = validateCapabilityToken(hybrid, {
@@ -306,7 +306,7 @@ describe("Capability Token Validator", () => {
         allowedPurposes: ["TREAT"],
       },
     });
-    const tampered: SintCapabilityToken = {
+    const tampered: NosihCapabilityToken = {
       ...token,
       regulatedDataPolicy: {
         ...token.regulatedDataPolicy,

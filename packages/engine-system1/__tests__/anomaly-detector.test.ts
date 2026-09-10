@@ -1,16 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { AnomalyDetector } from "../src/anomaly-detector.js";
-import type { SintWorldState, SintPerceivedObject, SintPose } from "@pshkv/core";
+import type { NosihWorldState, NosihPerceivedObject, NosihPose } from "@pshkv/core";
 
-const DEFAULT_POSE: SintPose = {
+const DEFAULT_POSE: NosihPose = {
   position: { x: 0, y: 0, z: 0 },
   orientation: { roll: 0, pitch: 0, yaw: 0 },
 };
 
 function makeWorldState(
-  objects: SintPerceivedObject[],
-  pose: SintPose = DEFAULT_POSE,
-): SintWorldState {
+  objects: NosihPerceivedObject[],
+  pose: NosihPose = DEFAULT_POSE,
+): NosihWorldState {
   return {
     timestamp: "2026-03-17T10:00:00.000000Z",
     objects,
@@ -25,7 +25,7 @@ function makeObject(
   confidence: number,
   position: { x: number; y: number; z: number } = { x: 5, y: 5, z: 0 },
   isHuman = false,
-): SintPerceivedObject {
+): NosihPerceivedObject {
   return {
     classLabel,
     confidence,
@@ -141,7 +141,7 @@ describe("AnomalyDetector", () => {
     const detector = new AnomalyDetector({ confidenceThreshold: 0.5 });
 
     // Object that is low confidence AND near robot AND human
-    const dangerObject: SintPerceivedObject = {
+    const dangerObject: NosihPerceivedObject = {
       classLabel: "person",
       confidence: 0.2,
       boundingBox3D: {

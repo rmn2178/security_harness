@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { OperatorMemory } from "../operator-memory.js";
 import type { LedgerWriterLike } from "../operator-memory.js";
-import type { SintEventType } from "@pshkv/core";
+import type { NosihEventType } from "@pshkv/core";
 
 interface LedgerCall {
-  eventType: SintEventType;
+  eventType: NosihEventType;
   agentId: string;
   payload: Record<string, unknown>;
 }
@@ -12,7 +12,7 @@ interface LedgerCall {
 function makeMockLedger(): { ledger: LedgerWriterLike; calls: LedgerCall[] } {
   const calls: LedgerCall[] = [];
   const ledger: LedgerWriterLike = {
-    append: vi.fn((input: { eventType: SintEventType; agentId: string; payload: Record<string, unknown> }) => {
+    append: vi.fn((input: { eventType: NosihEventType; agentId: string; payload: Record<string, unknown> }) => {
       calls.push({ eventType: input.eventType, agentId: input.agentId, payload: input.payload });
       return { eventId: "mock-event-id" };
     }),

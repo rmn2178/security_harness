@@ -1,7 +1,7 @@
 /**
  * Code-as-policy robot-agent skill guard conformance.
  *
- * This covers the Waddle-shaped pattern without binding SINT to a vendor API:
+ * This covers the Waddle-shaped pattern without binding NOSIH to a vendor API:
  * an agent writes robot code, promotes reusable skills, and executes physical
  * primitives only through gateway-backed receipts.
  */
@@ -20,7 +20,7 @@ describe("Code-as-policy skill guard fixture v1", () => {
       bridge: "ros2",
       projectContext: "code-as-policy-robot-agent",
       boundary: "agent-generated robot program to physical actuation",
-      goal: "Test whether a robot agent that writes and revises control programs can stage code, register reusable skills, and execute primitives only through SINT-governed receipts.",
+      goal: "Test whether a robot agent that writes and revises control programs can stage code, register reusable skills, and execute primitives only through NOSIH-governed receipts.",
       nonGoal: "This fixture does not depend on a specific vendor API, model family, robot embodiment, or training stack.",
     });
     expect(fixture.requirements).toEqual({

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — PolicyGateway CSML escalation integration tests.
+ * NOSIH Protocol — PolicyGateway CSML escalation integration tests.
  *
  * Tests the csmlEscalation hook added to PolicyGateway:
  * - No plugin → existing behavior unchanged
@@ -19,7 +19,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(h = 1): string {
@@ -29,9 +29,9 @@ function futureISO(h = 1): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-let token: SintCapabilityToken;
+let token: NosihCapabilityToken;
 
-function makeToken(resource = "ros2:///camera/front", actions = ["subscribe"]): SintCapabilityToken {
+function makeToken(resource = "ros2:///camera/front", actions = ["subscribe"]): NosihCapabilityToken {
   const result = issueCapabilityToken({
     issuer: root.publicKey,
     subject: agent.publicKey,
@@ -46,7 +46,7 @@ function makeToken(resource = "ros2:///camera/front", actions = ["subscribe"]): 
   return result.value;
 }
 
-function makeRequest(resource = "ros2:///camera/front", action = "subscribe"): SintRequest {
+function makeRequest(resource = "ros2:///camera/front", action = "subscribe"): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

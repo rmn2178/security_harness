@@ -2,7 +2,7 @@
  * PX4 ULog correlation artifact conformance.
  *
  * Ensures the encrypted-log correlation artifact has the minimum
- * fields/operators need for incident replay across SINT + PX4 timelines.
+ * fields/operators need for incident replay across NOSIH + PX4 timelines.
  */
 
 import { describe, expect, it } from "vitest";

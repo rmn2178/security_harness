@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Evidence Ledger Reader unit tests.
+ * NOSIH Protocol — Evidence Ledger Reader unit tests.
  *
  * Tests the pure query and replay functions.
  */
@@ -7,13 +7,13 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { LedgerWriter } from "../src/writer.js";
 import { queryLedger, replayEvents } from "../src/reader.js";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 describe("queryLedger", () => {
   const agent1 = "a".repeat(64);
   const agent2 = "b".repeat(64);
   let writer: LedgerWriter;
-  let events: readonly SintLedgerEvent[];
+  let events: readonly NosihLedgerEvent[];
 
   beforeEach(() => {
     writer = new LedgerWriter();

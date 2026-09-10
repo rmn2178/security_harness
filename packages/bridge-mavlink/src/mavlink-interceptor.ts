@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — MAVLink Interceptor.
+ * NOSIH Protocol — MAVLink Interceptor.
  *
  * Intercepts MAVLink commands before they reach the autopilot (ArduPilot/PX4).
  * Sits between the Ground Control Station (QGroundControl, Mission Planner) or
@@ -7,7 +7,7 @@
  *
  * Architecture:
  *   GCS/Companion  →  MAVLinkInterceptor  →  PolicyGateway  →  Autopilot
- *                         (SINT gate)
+ *                         (NOSIH gate)
  *
  * Safety guarantees:
  *   - ARM command requires T3_COMMIT (capability token + human approval)
@@ -20,17 +20,17 @@
  * BVLOS context: when `humanPresent=false`, the tier assignment factors
  * in that no human operator is nearby — autonomous flight at T2_ACT minimum.
  *
- * @module @sint/bridge-mavlink/mavlink-interceptor
+ * @module @nosih/bridge-mavlink/mavlink-interceptor
  */
 
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { generateUUIDv7, nowISO8601 } from "@pshkv/gate-capability-tokens";
 import type { MavlinkIntercept, MavlinkInterceptResult } from "./mavlink-types.js";
-import { mapMavlinkToSint } from "./mavlink-resource-mapper.js";
+import { mapMavlinkToNosih } from "./mavlink-resource-mapper.js";
 
 /** Configuration for the MAVLink interceptor. */
 export interface MAVLinkInterceptorConfig {
-  /** The SINT Policy Gateway instance. */
+  /** The NOSIH Policy Gateway instance. */
   readonly gateway: PolicyGateway;
   /** Agent ID (Ed25519 public key of the autopilot or GCS). */
   readonly agentId: string;
@@ -53,7 +53,7 @@ export interface MAVLinkInterceptorConfig {
 }
 
 /**
- * MAVLink Interceptor — routes all drone commands through the SINT security gate.
+ * MAVLink Interceptor — routes all drone commands through the NOSIH security gate.
  *
  * Deploy as a MAVLink router on the companion computer (Raspberry Pi, Jetson)
  * or as a GCS plugin. All safety-relevant commands are intercepted; pure
@@ -108,7 +108,7 @@ export class MAVLinkInterceptor {
    * @returns The interception result — action is "forward", "deny", or "escalate"
    */
   async intercept(message: MavlinkIntercept): Promise<MavlinkInterceptResult> {
-    const mapped = mapMavlinkToSint(message, this.humanPresent);
+    const mapped = mapMavlinkToNosih(message, this.humanPresent);
 
     const request = {
       requestId: generateUUIDv7(),

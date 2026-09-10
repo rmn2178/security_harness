@@ -1,15 +1,15 @@
 /**
- * SINT Protocol — Perception Pipeline for System 1.
+ * NOSIH Protocol — Perception Pipeline for System 1.
  *
  * Orchestrates the full perception cycle: sensor fusion, neural inference,
  * anomaly detection, action prediction, and event emission. Runs at a
  * configurable frequency (default 10 Hz) or can be invoked for a single
  * cycle via {@link PerceptionPipeline.runOnce}.
  *
- * @module @sint/engine-system1/perception-pipeline
+ * @module @nosih/engine-system1/perception-pipeline
  */
 
-import type { Result, SintWorldState } from "@pshkv/core";
+import type { Result, NosihWorldState } from "@pshkv/core";
 import { err, ok } from "@pshkv/core";
 import type { OnnxModelExecutor, PerceptionConfig } from "./types.js";
 import { DEFAULT_PERCEPTION_CONFIG } from "./types.js";
@@ -156,7 +156,7 @@ export class PerceptionPipeline {
    * }
    * ```
    */
-  async runOnce(): Promise<Result<SintWorldState, Error>> {
+  async runOnce(): Promise<Result<NosihWorldState, Error>> {
     const startTime = Date.now();
 
     // Step 1: Fuse sensor readings
@@ -187,7 +187,7 @@ export class PerceptionPipeline {
     const anomalyFlags = this.anomalyDetector.analyze(baseWorldState);
 
     // Step 4: Build enriched world state with anomaly flags
-    const enrichedWorldState: SintWorldState = {
+    const enrichedWorldState: NosihWorldState = {
       ...baseWorldState,
       anomalyFlags: [...baseWorldState.anomalyFlags, ...anomalyFlags],
     };

@@ -6,7 +6,7 @@
     "bridge": "mavlink",
     "projectContext": "px4",
     "boundary": "arming, offboard mode, and continuous setpoints",
-    "goal": "Test whether MAVLink arming, offboard-mode, fence-change, and velocity-setpoint actions can carry auditable policy receipts without making SINT a required PX4 runtime dependency.",
+    "goal": "Test whether MAVLink arming, offboard-mode, fence-change, and velocity-setpoint actions can carry auditable policy receipts without making NOSIH a required PX4 runtime dependency.",
     "nonGoal": "This fixture does not propose changes to PX4 flight-control internals."
   },
   "requirements": {
@@ -21,11 +21,11 @@
     "siteId": "drone-lab-01",
     "vehicleId": "px4-07",
     "systemId": 11,
-    "missionRef": "sint://mission/px4/px4-07/delivery-4481",
-    "corridorRef": "sint://corridor/utm/delivery-zone-a",
+    "missionRef": "nosih://mission/px4/px4-07/delivery-4481",
+    "corridorRef": "nosih://corridor/utm/delivery-zone-a",
     "takeoffZoneId": "pad-3",
     "px4LogFormat": "ulge",
-    "px4LogEvidenceRef": "sint://evidence/px4/px4-07/delivery-4481"
+    "px4LogEvidenceRef": "nosih://evidence/px4/px4-07/delivery-4481"
   },
   "receiptSchema": {
     "requiredFields": [
@@ -56,8 +56,8 @@
       "vehicleId": "px4-07",
       "systemId": 11,
       "flightMode": "OFFBOARD",
-      "missionRef": "sint://mission/px4/px4-07/delivery-4481",
-      "corridorRef": "sint://corridor/utm/delivery-zone-a",
+      "missionRef": "nosih://mission/px4/px4-07/delivery-4481",
+      "corridorRef": "nosih://corridor/utm/delivery-zone-a",
       "takeoffZoneId": "pad-3",
       "decisionDigest": "digest:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "eventHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -202,7 +202,7 @@
       "expectedTier": "T2_act",
       "constraints": {
         "maxVelocityMps": 15,
-        "corridorRef": "sint://corridor/utm/delivery-zone-a"
+        "corridorRef": "nosih://corridor/utm/delivery-zone-a"
       },
       "receiptRequired": true
     },

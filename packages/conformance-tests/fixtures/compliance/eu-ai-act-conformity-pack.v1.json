@@ -25,7 +25,7 @@
     ]
   },
   "deployment": {
-    "systemName": "SINT-governed warehouse humanoid fleet",
+    "systemName": "NOSIH-governed warehouse humanoid fleet",
     "intendedPurpose": "Govern AI agent requests that observe, plan, move, manipulate, hand off, and stop humanoid robots in shared warehouse workspaces.",
     "operatorRole": "warehouse-safety-operator",
     "robotCategory": "service-robot-near-humans",
@@ -87,7 +87,7 @@
       }
     ],
     "knownLimitations": [
-      "SINT provides operational governance evidence; it does not certify the robot hardware.",
+      "NOSIH provides operational governance evidence; it does not certify the robot hardware.",
       "Deployment-specific risk classification remains the provider and deployer responsibility.",
       "Sensor, perception, and motion-controller safety claims require external validation."
     ],
@@ -128,18 +128,18 @@
     },
     "operatorTrainingEvidence": {
       "required": true,
-      "artifactRef": "sint://compliance/operator-training/warehouse-safety-operator"
+      "artifactRef": "nosih://compliance/operator-training/warehouse-safety-operator"
     },
     "postIncidentReview": {
       "required": true,
-      "artifactRef": "sint://compliance/post-incident-review"
+      "artifactRef": "nosih://compliance/post-incident-review"
     }
   },
   "annexIVChecklist": [
     {
       "id": "annex-iv-1-system-description",
       "title": "General description of the AI system",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "docs/guides/humanoid-warehouse-pilot.md",
         "packages/conformance-tests/fixtures/physical-ai/humanoid-profile.v1.json"
       ]
@@ -147,7 +147,7 @@
     {
       "id": "annex-iv-2-system-components",
       "title": "System components and interaction with external systems",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "packages/core/src/constants/tiers.ts",
         "packages/conformance-tests/fixtures/physical-ai/humanoid-warehouse-pilot.v1.json"
       ]
@@ -155,7 +155,7 @@
     {
       "id": "annex-iv-3-risk-management",
       "title": "Risk management and foreseeable misuse controls",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "packages/policy-gateway/src/index.ts",
         "packages/conformance-tests/src/humanoid-warehouse-pilot-conformance.test.ts"
       ]
@@ -163,7 +163,7 @@
     {
       "id": "annex-iv-4-human-oversight",
       "title": "Human oversight measures",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "packages/conformance-tests/fixtures/compliance/eu-ai-act-conformity-pack.v1.json",
         "packages/conformance-tests/src/eu-ai-act-conformity-pack-conformance.test.ts"
       ]
@@ -171,7 +171,7 @@
     {
       "id": "annex-iv-5-logging",
       "title": "Logging, traceability, and record retention",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "packages/evidence-ledger/src/index.ts",
         "docs/guides/humanoid-warehouse-pilot.md"
       ]
@@ -179,7 +179,7 @@
     {
       "id": "annex-iv-6-cybersecurity",
       "title": "Cybersecurity and access control",
-      "sintArtifactRefs": [
+      "nosihArtifactRefs": [
         "packages/capability-tokens/src/index.ts",
         "docs/roadmaps/post-quantum-crypto-agility.md"
       ]
@@ -188,22 +188,22 @@
   "iso13482Crosswalk": [
     {
       "topic": "protective stop",
-      "sintControl": "unconditional e-stop event with rollback evidence",
+      "nosihControl": "unconditional e-stop event with rollback evidence",
       "evidenceSource": "safety.estop.triggered"
     },
     {
       "topic": "speed and separation monitoring",
-      "sintControl": "token-bound max velocity and dynamic envelope checks",
+      "nosihControl": "token-bound max velocity and dynamic envelope checks",
       "evidenceSource": "physicalContext.currentVelocityMps"
     },
     {
       "topic": "force limiting",
-      "sintControl": "token-bound max force constraints",
+      "nosihControl": "token-bound max force constraints",
       "evidenceSource": "physicalContext.currentForceNewtons"
     },
     {
       "topic": "human presence near service robot",
-      "sintControl": "humanDetected context escalates or denies physical action according to policy",
+      "nosihControl": "humanDetected context escalates or denies physical action according to policy",
       "evidenceSource": "physicalContext.humanDetected"
     }
   ],

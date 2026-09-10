@@ -10,7 +10,7 @@ import {
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
 import { ApprovalTier } from "@pshkv/core";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 function futureISO(h = 1): string {
   return new Date(Date.now() + h * 3_600_000).toISOString().replace(/\.(\d{3})Z$/, ".$1000Z");
@@ -18,7 +18,7 @@ function futureISO(h = 1): string {
 
 const rootKP = generateKeypair();
 
-function makeToken(agentPublicKey: string, resource = "ros2:///cmd_vel"): SintCapabilityToken {
+function makeToken(agentPublicKey: string, resource = "ros2:///cmd_vel"): NosihCapabilityToken {
   const result = issueCapabilityToken({
     issuer: rootKP.publicKey,
     subject: agentPublicKey,
@@ -33,7 +33,7 @@ function makeToken(agentPublicKey: string, resource = "ros2:///cmd_vel"): SintCa
   return result.value;
 }
 
-function makeRequest(agentId: string, tokenId: string, velocityMps?: number): SintRequest {
+function makeRequest(agentId: string, tokenId: string, velocityMps?: number): NosihRequest {
   return {
     requestId: `req-${agentId}`,
     timestamp: new Date().toISOString(),
@@ -46,7 +46,7 @@ function makeRequest(agentId: string, tokenId: string, velocityMps?: number): Si
   };
 }
 
-function makeGateway(token: SintCapabilityToken): PolicyGateway {
+function makeGateway(token: NosihCapabilityToken): PolicyGateway {
   return new PolicyGateway({ resolveToken: () => token });
 }
 

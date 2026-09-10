@@ -1,16 +1,16 @@
 /**
- * SINT Bridge A2A — Agent Card Registry.
+ * NOSIH Bridge A2A — Agent Card Registry.
  *
  * Maintains a registry of known A2A agents (their Agent Cards).
  * Used by the A2AInterceptor to resolve agent capabilities and
- * build SINT resource URIs.
+ * build NOSIH resource URIs.
  *
  * In production, Agent Cards are fetched from
  *   GET <agentUrl>/.well-known/agent.json
  * and cached here.  This module provides the in-memory cache
  * plus a fetch helper for production use.
  *
- * @module @sint/bridge-a2a/agent-card-registry
+ * @module @nosih/bridge-a2a/agent-card-registry
  */
 
 import type { A2AAgentCard, A2AExternalEvidenceReference } from "./types.js";

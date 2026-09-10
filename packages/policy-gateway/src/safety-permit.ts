@@ -1,9 +1,9 @@
 /**
- * SINT Protocol — SafetyPermitPlugin.
+ * NOSIH Protocol — SafetyPermitPlugin.
  *
  * Optional plugin for deployments where hardware safety state must be
  * resolved asynchronously from an external source (OPC-UA, PLC REST API,
- * cached MQTT subscription) rather than embedded in every SintRequest.
+ * cached MQTT subscription) rather than embedded in every NosihRequest.
  *
  * When provided via PolicyGatewayConfig.safetyPermit, the gateway calls
  * resolvePermit() before evaluateHardwareSafetyHandshake(). The result is
@@ -13,10 +13,10 @@
  * Fail-open: if resolvePermit() throws, the error is logged and the built-in
  * hardware safety check proceeds using request.executionContext only.
  *
- * @module @sint/gate-policy-gateway/safety-permit
+ * @module @nosih/gate-policy-gateway/safety-permit
  */
 
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 
 export type PermitState = "granted" | "denied" | "unknown" | "stale";
 export type InterlockState = "closed" | "open" | "fault" | "unknown";
@@ -40,7 +40,7 @@ export interface SafetyPermitPlugin {
    * Return undefined to skip (fall through to request.executionContext.hardwareSafety).
    * Throw to trigger fail-open behavior.
    */
-  resolvePermit(request: SintRequest): Promise<SafetyPermitResult | undefined>;
+  resolvePermit(request: NosihRequest): Promise<SafetyPermitResult | undefined>;
 }
 
 /**
@@ -48,7 +48,7 @@ export interface SafetyPermitPlugin {
  * Use this as a placeholder or in tests where hardware state comes from the request.
  */
 export class NoopSafetyPermitPlugin implements SafetyPermitPlugin {
-  async resolvePermit(_request: SintRequest): Promise<undefined> {
+  async resolvePermit(_request: NosihRequest): Promise<undefined> {
     return undefined;
   }
 }

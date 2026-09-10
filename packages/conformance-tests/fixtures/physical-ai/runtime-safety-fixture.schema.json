@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sint.ai/physical-ai/runtime-safety-fixture.v0.1.schema.json",
+  "$id": "https://schemas.nosih.ai/physical-ai/runtime-safety-fixture.v0.1.schema.json",
   "title": "Physical AI Runtime Safety Fixture v0.1",
   "type": "object",
   "required": ["fixtureId", "schemaVersion", "description", "profile", "defaultToken", "cases"],

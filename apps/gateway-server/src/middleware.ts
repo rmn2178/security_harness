@@ -1,9 +1,9 @@
 /**
- * SINT Gateway Server — Middleware.
+ * NOSIH Gateway Server — Middleware.
  *
  * Request ID generation, error handling, CORS, and logging.
  *
- * @module @sint/gateway-server/middleware
+ * @module @nosih/gateway-server/middleware
  */
 
 import { Hono } from "hono";
@@ -26,7 +26,7 @@ export function applyMiddleware(app: Hono): void {
 
   // Error handler
   app.onError((err, c) => {
-    console.error(`[SINT] Error: ${err.message}`);
+    console.error(`[NOSIH] Error: ${err.message}`);
     return c.json(
       {
         error: "Internal server error",

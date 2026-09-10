@@ -24,7 +24,7 @@
     },
     "metadata": {
       "authoring_source": "factory-action-demo",
-      "created_by_agent": "sint-factory-compiler-stub",
+      "created_by_agent": "nosih-factory-compiler-stub",
       "currency": "USD"
     }
   },
@@ -36,7 +36,7 @@
         "type": "robot_arm",
         "vendor": "ABB",
         "controller": "OmniCore",
-        "adapter": "sint-adapter-abb-rapid",
+        "adapter": "nosih-adapter-abb-rapid",
         "safety_zone": "zone_A",
         "capabilities": ["pick_place", "palletize"]
       },
@@ -45,7 +45,7 @@
         "type": "robot_arm",
         "vendor": "FANUC",
         "controller": "R-30iB",
-        "adapter": "sint-adapter-fanuc-ls",
+        "adapter": "nosih-adapter-fanuc-ls",
         "safety_zone": "zone_A",
         "capabilities": ["pick_place", "palletize"]
       },
@@ -54,7 +54,7 @@
         "type": "robot_arm",
         "vendor": "KUKA",
         "controller": "KRC",
-        "adapter": "sint-adapter-kuka-krl",
+        "adapter": "nosih-adapter-kuka-krl",
         "safety_zone": "zone_A",
         "capabilities": ["pick_place", "palletize"]
       },
@@ -63,7 +63,7 @@
         "type": "robot_arm",
         "vendor": "Universal Robots",
         "controller": "PolyScope",
-        "adapter": "sint-adapter-ur-script",
+        "adapter": "nosih-adapter-ur-script",
         "safety_zone": "zone_A",
         "capabilities": ["pick_place", "palletize", "collaborative_motion"]
       },
@@ -72,7 +72,7 @@
         "type": "plc",
         "vendor": "Siemens",
         "controller": "S7-1500",
-        "adapter": "sint-adapter-siemens-tia-srci",
+        "adapter": "nosih-adapter-siemens-tia-srci",
         "capabilities": ["srci_command_profile", "cell_interlock"]
       }
     ],
@@ -106,7 +106,7 @@
       "human_approval": true,
       "safety_zone_clear": true
     },
-    "adapter_hint": "sint-adapter-abb-rapid"
+    "adapter_hint": "nosih-adapter-abb-rapid"
   },
   "simulationReceipt": {
     "simulation_receipt_id": "simr_packaging_001",
@@ -118,10 +118,10 @@
     "safety_zone_violations": 0,
     "max_force_newtons": 62,
     "approved_for_execution": true,
-    "signed_by": "sint-simulation-gateway",
+    "signed_by": "nosih-simulation-gateway",
     "metadata": {
       "decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "artifact_uri": "sint://simulation/packaging_cell_001/robotstudio/simr_packaging_001"
+      "artifact_uri": "nosih://simulation/packaging_cell_001/robotstudio/simr_packaging_001"
     }
   },
   "decisionPath": [
@@ -138,7 +138,7 @@
         "assignedTier": "T3_commit",
         "denial": {
           "reason": "SIMULATION_RECEIPT_MISSING",
-          "policyViolated": "sint.factory.robot.motion.v1"
+          "policyViolated": "nosih.factory.robot.motion.v1"
         }
       }
     },
@@ -185,7 +185,7 @@
   },
   "adapterStubs": [
     {
-      "adapterId": "sint-adapter-abb-rapid-stub",
+      "adapterId": "nosih-adapter-abb-rapid-stub",
       "vendor": "ABB",
       "targetLanguage": "RAPID",
       "executionResource": "robotstudio://packaging_cell_001/robot_abb_irb_1200_01/main",
@@ -200,7 +200,7 @@
       ]
     },
     {
-      "adapterId": "sint-adapter-fanuc-ls-stub",
+      "adapterId": "nosih-adapter-fanuc-ls-stub",
       "vendor": "FANUC",
       "targetLanguage": "LS",
       "executionResource": "roboguide://packaging_cell_001/robot_fanuc_lr_mate_01/main",
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "adapterId": "sint-adapter-kuka-krl-stub",
+      "adapterId": "nosih-adapter-kuka-krl-stub",
       "vendor": "KUKA",
       "targetLanguage": "KRL",
       "executionResource": "kuka-sim://packaging_cell_001/robot_kuka_kr6_01/main",
@@ -230,7 +230,7 @@
       ]
     },
     {
-      "adapterId": "sint-adapter-ur-script-stub",
+      "adapterId": "nosih-adapter-ur-script-stub",
       "vendor": "Universal Robots",
       "targetLanguage": "URScript",
       "executionResource": "polyscope://packaging_cell_001/robot_ur10e_01/main",

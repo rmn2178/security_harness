@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Decorator behavior tree nodes.
+ * NOSIH Protocol — Decorator behavior tree nodes.
  *
  * Decorators wrap a single child node and modify its behavior:
  * - InverterNode: inverts success/failure
  * - RepeatNode: repeats child N times
  * - RetryNode: retries child on failure
  *
- * @module @sint/engine-system2/bt/nodes/decorator
+ * @module @nosih/engine-system2/bt/nodes/decorator
  */
 
 import type { Blackboard } from "../blackboard.js";

@@ -6,7 +6,7 @@
     "bridge": "ros2",
     "projectContext": "solar-field-operations",
     "boundary": "inspection, cleaning, and installation actuation",
-    "goal": "Test whether solar field inspection, cleaning, and installation actions can carry auditable policy receipts without making SINT a required runtime dependency for field robots.",
+    "goal": "Test whether solar field inspection, cleaning, and installation actions can carry auditable policy receipts without making NOSIH a required runtime dependency for field robots.",
     "nonGoal": "This fixture does not propose changes to any vendor-specific robot controller."
   },
   "requirements": {
@@ -24,8 +24,8 @@
     "trackerId": "solaris-17",
     "cleanerRobotId": "mantis-03",
     "installerRobotId": "colossus-02",
-    "weatherPermitRef": "sint://permit/weather/solar-farm-01/row-17",
-    "lotoPermitRef": "sint://permit/loto/solar-farm-01/string-b17",
+    "weatherPermitRef": "nosih://permit/weather/solar-farm-01/row-17",
+    "lotoPermitRef": "nosih://permit/loto/solar-farm-01/string-b17",
     "workspaceId": "aisle-17"
   },
   "receiptSchema": {
@@ -59,8 +59,8 @@
       "rowId": "tracker-row-17",
       "robotId": "mantis-03",
       "missionType": "autonomous-cleaning",
-      "weatherPermitRef": "sint://permit/weather/solar-farm-01/row-17",
-      "lotoPermitRef": "sint://permit/loto/solar-farm-01/string-b17",
+      "weatherPermitRef": "nosih://permit/weather/solar-farm-01/row-17",
+      "lotoPermitRef": "nosih://permit/loto/solar-farm-01/string-b17",
       "workspaceId": "aisle-17",
       "decisionDigest": "digest:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "eventHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { PgTokenStore } from "../src/pg-token-store.js";
-import type { SintCapabilityToken } from "@pshkv/core";
+import type { NosihCapabilityToken } from "@pshkv/core";
 
-function makeToken(): SintCapabilityToken {
+function makeToken(): NosihCapabilityToken {
   return {
     tokenId: "0195f7c4-e8a7-7b3d-9a1e-f2c3d4e5f6a7",
     issuer: "issuer-pub-key",

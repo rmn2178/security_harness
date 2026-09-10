@@ -1,5 +1,5 @@
 /**
- * Type definitions for the SINT ↔ OpenClaw adapter.
+ * Type definitions for the NOSIH ↔ OpenClaw adapter.
  */
 
 /** OpenClaw tool call context — what OpenClaw provides to the adapter. */
@@ -38,15 +38,15 @@ export interface OpenClawNodeAction {
   params: Record<string, unknown>;
 }
 
-/** SINT tier classification for OpenClaw actions. */
-export type SintTier = "T0" | "T1" | "T2" | "T3";
+/** NOSIH tier classification for OpenClaw actions. */
+export type NosihTier = "T0" | "T1" | "T2" | "T3";
 
-/** Result of SINT governance check. */
+/** Result of NOSIH governance check. */
 export interface GovernanceResult {
   /** Whether the action is allowed. */
   allowed: boolean;
-  /** SINT tier assigned. */
-  tier: SintTier;
+  /** NOSIH tier assigned. */
+  tier: NosihTier;
   /** Outcome from the policy gateway. */
   outcome: "approve" | "deny" | "escalate";
   /** Human-readable reason. */
@@ -61,7 +61,7 @@ export interface GovernanceResult {
 
 /** Adapter configuration. */
 export interface OpenClawAdapterConfig {
-  /** SINT Gateway URL (e.g., "http://localhost:4100"). */
+  /** NOSIH Gateway URL (e.g., "http://localhost:4100"). */
   gatewayUrl: string;
   /** Agent identifier (Ed25519 public key hex). */
   agentId: string;
@@ -70,7 +70,7 @@ export interface OpenClawAdapterConfig {
   /** Admin API key. */
   apiKey?: string;
   /** Custom tier classifier override. */
-  tierClassifier?: (call: OpenClawToolCall | OpenClawMCPCall | OpenClawNodeAction) => SintTier;
+  tierClassifier?: (call: OpenClawToolCall | OpenClawMCPCall | OpenClawNodeAction) => NosihTier;
   /** Whether to block on deny. Default: true. */
   blockOnDeny?: boolean;
   /** Whether to wait for approval on escalate. Default: false (non-blocking). */

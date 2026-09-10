@@ -1,5 +1,5 @@
 {
-  "fixtureId": "sint.economy.payment-governance.v1",
+  "fixtureId": "nosih.economy.payment-governance.v1",
   "schemaVersion": "2026-04-07",
   "description": "Canonical conformance fixture for Economic Layer v1 payment governance: budget caps, rolling window controls, recipient allowlist, receipt replay rejection, and reserve/commit consistency.",
   "defaults": {
@@ -157,7 +157,7 @@
         "policy_violated": "payment.maxFrequencyPerWindow",
         "note": "Aggregate window check triggers after 10th request; requests 11-50 denied. First 10 may be allowed if individually valid."
       },
-      "sint_enforcement": "EconomyPlugin.maxPaymentsPerWindow rolling aggregate, not per-transaction threshold",
+      "nosih_enforcement": "EconomyPlugin.maxPaymentsPerWindow rolling aggregate, not per-transaction threshold",
       "coverage_status": "covered"
     },
     {
@@ -183,7 +183,7 @@
         "policy_violated": "receipt.subjectBinding",
         "note": "Receipt Ed25519 signature verifies against agent-alpha's public key. Verification fails for agent-beta's agentId."
       },
-      "sint_enforcement": "MemoryIntegrityPlugin ASI06 credential-funnel check; receipt.subject must match request.agentId",
+      "nosih_enforcement": "MemoryIntegrityPlugin ASI06 credential-funnel check; receipt.subject must match request.agentId",
       "coverage_status": "covered"
     },
     {
@@ -210,7 +210,7 @@
         "policy_violated": "payment.reserveCommitParity",
         "note": "Reserve was not rolled back after operation failure. Second commit attempt against same reserveId must be denied."
       },
-      "sint_enforcement": "EconomyPlugin.reservePayment() / commitPayment() / rollbackPayment() two-phase protocol; reserve state tracked per txId",
+      "nosih_enforcement": "EconomyPlugin.reservePayment() / commitPayment() / rollbackPayment() two-phase protocol; reserve state tracked per txId",
       "coverage_status": "partial",
       "coverage_note": "EconomyPlugin has reserve/commit/rollback primitives. Desync detection (rollback not called before retry) is not yet enforced — this fixture currently fails and represents a known gap."
     }

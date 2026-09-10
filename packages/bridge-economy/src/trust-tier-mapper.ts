@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — Trust Level to Approval Tier mapper.
+ * NOSIH Protocol — Trust Level to Approval Tier mapper.
  *
- * Maps the product API's trust levels to SINT approval tiers:
+ * Maps the product API's trust levels to NOSIH approval tiers:
  *
  *   unrestricted → T0_OBSERVE  (auto-approve)
  *   low_risk     → T1_PREPARE  (auto with audit)
@@ -12,7 +12,7 @@
  * The `mergedTier` function takes the higher (more restrictive)
  * of the security tier and the trust tier.
  *
- * @module @sint/bridge-economy/trust-tier-mapper
+ * @module @nosih/bridge-economy/trust-tier-mapper
  */
 
 import { ApprovalTier } from "@pshkv/core";
@@ -27,7 +27,7 @@ const TIER_ORDER: Record<string, number> = {
 };
 
 /**
- * Map an economy trust level to a SINT approval tier.
+ * Map an economy trust level to a NOSIH approval tier.
  *
  * @param trustLevel - Trust level from the economy service
  * @returns The corresponding approval tier, or null if blocked

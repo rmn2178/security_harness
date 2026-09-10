@@ -1,5 +1,5 @@
 /**
- * @sint/persistence-postgres — PostgreSQL persistence adapters for SINT Protocol.
+ * @nosih/persistence-postgres — PostgreSQL persistence adapters for NOSIH Protocol.
  *
  * @example
  * ```typescript

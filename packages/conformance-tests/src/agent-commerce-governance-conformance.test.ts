@@ -240,7 +240,7 @@ describe("Agent Commerce Governance Fixture Conformance", () => {
   const fixture = loadAgentCommerceGovernanceFixture();
 
   it("fixture exposes the v1 market and payment control vocabulary", () => {
-    expect(fixture.fixtureId).toBe("sint.economy.agent-commerce-governance.v1");
+    expect(fixture.fixtureId).toBe("nosih.economy.agent-commerce-governance.v1");
     expect(fixture.profile.resources).toEqual([
       "market://task/*",
       "market://settlement/*",

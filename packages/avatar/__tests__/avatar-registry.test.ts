@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from "vitest";
 import { AvatarRegistry, DEFAULT_CSML_THETA } from "../src/avatar-registry.js";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 const GENESIS = "0000000000000000000000000000000000000000000000000000000000000000";
 const AGENT_A = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2";
@@ -13,9 +13,9 @@ const AGENT_B = "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c
 function makeEvent(
   agentId: string,
   seq: bigint,
-  eventType: SintLedgerEvent["eventType"],
+  eventType: NosihLedgerEvent["eventType"],
   payload: Record<string, unknown> = {}
-): SintLedgerEvent {
+): NosihLedgerEvent {
   return {
     eventId: `event-${seq}` as any,
     sequenceNumber: seq,
@@ -29,7 +29,7 @@ function makeEvent(
   };
 }
 
-function makeRequestBatch(agentId: string, count: number, startSeq = 1n): SintLedgerEvent[] {
+function makeRequestBatch(agentId: string, count: number, startSeq = 1n): NosihLedgerEvent[] {
   return Array.from({ length: count }, (_, i) =>
     makeEvent(agentId, startSeq + BigInt(i), "request.received")
   );
@@ -82,7 +82,7 @@ describe("AvatarRegistry", () => {
 
   it("updateFromEvents counts safety events", () => {
     const reg = new AvatarRegistry();
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       ...makeRequestBatch(AGENT_A, 5),
       makeEvent(AGENT_A, 10n, "safety.force.exceeded"),
       makeEvent(AGENT_A, 11n, "safety.geofence.violation"),
@@ -94,7 +94,7 @@ describe("AvatarRegistry", () => {
 
   it("updateFromEvents counts denied requests", () => {
     const reg = new AvatarRegistry();
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       ...makeRequestBatch(AGENT_A, 10),
       makeEvent(AGENT_A, 20n, "approval.denied"),
       makeEvent(AGENT_A, 21n, "approval.denied"),
@@ -105,7 +105,7 @@ describe("AvatarRegistry", () => {
 
   it("filters events to only the target agent", () => {
     const reg = new AvatarRegistry();
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       ...makeRequestBatch(AGENT_A, 5),
       ...makeRequestBatch(AGENT_B, 10, 100n),
     ];
@@ -116,7 +116,7 @@ describe("AvatarRegistry", () => {
   it("persona is compliant when CSML is below theta with no safety events", () => {
     const reg = new AvatarRegistry();
     // Many requests, none denied, all complete → low CSML
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       ...makeRequestBatch(AGENT_A, 20),
       ...Array.from({ length: 20 }, (_, i) =>
         makeEvent(AGENT_A, BigInt(100 + i), "action.started")
@@ -132,7 +132,7 @@ describe("AvatarRegistry", () => {
   it("persona is high_risk when CSML exceeds theta", () => {
     const reg = new AvatarRegistry();
     // Many denials → high AR → CSML > 0.3
-    const events: SintLedgerEvent[] = [
+    const events: NosihLedgerEvent[] = [
       ...makeRequestBatch(AGENT_A, 20),
       ...Array.from({ length: 20 }, (_, i) =>
         makeEvent(AGENT_A, BigInt(50 + i), "approval.denied")

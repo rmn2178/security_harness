@@ -23,7 +23,7 @@ function encodeSegment(value: string): string {
   return encodeURIComponent(value.trim());
 }
 
-/** Canonical SINT resource URI for a gRPC method. */
+/** Canonical NOSIH resource URI for a gRPC method. */
 export function grpcMethodToResourceUri(
   service: string,
   method: string,
@@ -33,7 +33,7 @@ export function grpcMethodToResourceUri(
   return `grpc://${normalizedHost}/${encodeSegment(service)}/${encodeSegment(method)}`;
 }
 
-/** Map gRPC call pattern to canonical SINT action category. */
+/** Map gRPC call pattern to canonical NOSIH action category. */
 export function grpcPatternToAction(pattern: GrpcCallPattern): "observe" | "call" | "write" {
   switch (pattern) {
     case "server_stream":

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — MQTT Session Manager tests.
+ * NOSIH Protocol — MQTT Session Manager tests.
  *
  * 9 test cases covering:
  * 1. authorizedPublish → gateway allow → calls mqttClient.publish

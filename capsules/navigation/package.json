@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/capsule-navigation",
   "version": "1.0.0",
-  "description": "SINT Reference Capsule — Waypoint following navigation",
+  "description": "NOSIH Reference Capsule — Waypoint following navigation",
   "type": "module",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",

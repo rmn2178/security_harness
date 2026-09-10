@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Capsule Sandbox.
+ * NOSIH Protocol — Capsule Sandbox.
  *
  * Loads and executes WASM and TypeScript capsules with resource limits.
  * Memory limits are enforced via `WebAssembly.Memory({ initial, maximum })`.
@@ -7,10 +7,10 @@
  *
  * All public methods return `Result<T, CapsuleError>` — never throw.
  *
- * @module @sint/engine-capsule-sandbox/sandbox
+ * @module @nosih/engine-capsule-sandbox/sandbox
  */
 
-import type { Result, SintCapsuleManifest, UUIDv7 } from "@pshkv/core";
+import type { Result, NosihCapsuleManifest, UUIDv7 } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 import type { CapsuleApi, CapsuleError } from "./types.js";
 
@@ -22,7 +22,7 @@ export interface CapsuleSandboxConfig {
 
 /** Internal state for a loaded capsule. */
 interface LoadedCapsule {
-  manifest: SintCapsuleManifest;
+  manifest: NosihCapsuleManifest;
   wasmInstance?: WebAssembly.Instance;
   tsModule?: { execute: (api: CapsuleApi) => Promise<unknown> };
   state: "loaded" | "running" | "stopped" | "error";
@@ -78,7 +78,7 @@ export class CapsuleSandbox {
    * ```
    */
   async loadWasm(
-    manifest: SintCapsuleManifest,
+    manifest: NosihCapsuleManifest,
     wasmBytes: Uint8Array,
   ): Promise<Result<void, CapsuleError>> {
     if (this._capsules.has(manifest.capsuleId)) {
@@ -145,7 +145,7 @@ export class CapsuleSandbox {
    * ```
    */
   loadTypeScript(
-    manifest: SintCapsuleManifest,
+    manifest: NosihCapsuleManifest,
     module: { execute: (api: CapsuleApi) => Promise<unknown> },
   ): Result<void, CapsuleError> {
     if (this._capsules.has(manifest.capsuleId)) {

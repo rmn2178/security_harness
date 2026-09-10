@@ -1,12 +1,12 @@
 /**
- * SINT edge-mode conformance.
+ * NOSIH edge-mode conformance.
  *
  * Validates local T0/T1 behavior and fail-closed T2/T3 behavior when
  * central approval is unavailable.
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   generateKeypair,
   generateUUIDv7,
@@ -24,14 +24,14 @@ describe("Edge Mode Conformance", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let centralOnline = false;
 
   function issueAndStore(
-    overrides: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+    overrides: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",

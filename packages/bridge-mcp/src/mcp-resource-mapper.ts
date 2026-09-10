@@ -1,12 +1,12 @@
 /**
- * SINT Bridge-MCP — Resource Mapper.
+ * NOSIH Bridge-MCP — Resource Mapper.
  *
- * Maps MCP tool names to SINT resource URIs and provides
+ * Maps MCP tool names to NOSIH resource URIs and provides
  * risk classification hints for the tier assignment engine.
  *
  * The URI scheme is: mcp://{serverName}/{toolName}
  *
- * @module @sint/bridge-mcp/mcp-resource-mapper
+ * @module @nosih/bridge-mcp/mcp-resource-mapper
  */
 
 import { ApprovalTier } from "@pshkv/core";
@@ -15,7 +15,7 @@ import type { MCPRiskHint, MCPToolAnnotations, MCPToolCall } from "./types.js";
 export type { MCPToolAnnotations };
 
 /**
- * Resolve SINT approval tier from MCP tool annotations (MCP spec §tool-annotations).
+ * Resolve NOSIH approval tier from MCP tool annotations (MCP spec §tool-annotations).
  * Annotations take precedence over keyword-based risk hints when present.
  */
 export function tierFromAnnotations(annotations: MCPToolAnnotations): ApprovalTier | undefined {
@@ -408,7 +408,7 @@ export function isShellExecTool(toolCall: MCPToolCall): boolean {
 }
 
 /**
- * Map an MCP tool call to a SINT resource URI.
+ * Map an MCP tool call to a NOSIH resource URI.
  *
  * @example
  * ```ts
@@ -469,10 +469,10 @@ export function getRiskHint(toolCall: MCPToolCall): MCPRiskHint {
 }
 
 /**
- * Get the SINT action string for a tool call.
+ * Get the NOSIH action string for a tool call.
  * Most MCP calls are "call", but exec tools use "exec.run".
  */
-export function toSintAction(toolCall: MCPToolCall): string {
+export function toNosihAction(toolCall: MCPToolCall): string {
   return getRiskHint(toolCall).action;
 }
 

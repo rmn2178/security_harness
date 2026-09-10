@@ -2,14 +2,14 @@ import {
   ApprovalTier,
   RiskTier,
   type PolicyDecision,
-  type SintCapabilityToken,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihRequest,
 } from "@pshkv/core";
 
 export interface HumanAuthorityPolicyPlugin {
   evaluate(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     context: { readonly requestId: string; readonly timestamp: string },
   ): Promise<PolicyDecision | undefined> | PolicyDecision | undefined;
 }
@@ -23,8 +23,8 @@ const ASSURANCE_RANK: Record<"humanhood" | "uniqueness" | "delegation" | "contex
 
 export class DefaultHumanAuthorityPolicy implements HumanAuthorityPolicyPlugin {
   evaluate(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     context: { readonly requestId: string; readonly timestamp: string },
   ): PolicyDecision | undefined {
     const requirements = token.humanAuthorityRequirements;
@@ -119,9 +119,9 @@ export class DefaultHumanAuthorityPolicy implements HumanAuthorityPolicyPlugin {
   }
 
   private checkBinding(
-    required: NonNullable<SintCapabilityToken["humanAuthorityRequirements"]>["requiredBinding"],
-    proofBinding: NonNullable<NonNullable<SintRequest["executionContext"]>["humanAuthority"]>["binding"],
-    request: SintRequest,
+    required: NonNullable<NosihCapabilityToken["humanAuthorityRequirements"]>["requiredBinding"],
+    proofBinding: NonNullable<NonNullable<NosihRequest["executionContext"]>["humanAuthority"]>["binding"],
+    request: NosihRequest,
   ): { readonly ok: boolean; readonly reason: string } {
     if (!required || !proofBinding) {
       return { ok: true, reason: "" };
@@ -200,7 +200,7 @@ export class DefaultHumanAuthorityPolicy implements HumanAuthorityPolicyPlugin {
     return { ok: true, reason: "" };
   }
 
-  private readNumericValue(request: SintRequest): number | undefined {
+  private readNumericValue(request: NosihRequest): number | undefined {
     const params = request.params;
     if (!params || typeof params !== "object") {
       return undefined;
@@ -215,7 +215,7 @@ export class DefaultHumanAuthorityPolicy implements HumanAuthorityPolicyPlugin {
     return undefined;
   }
 
-  private readCurrency(request: SintRequest): string | undefined {
+  private readCurrency(request: NosihRequest): string | undefined {
     const params = request.params;
     if (!params || typeof params !== "object") {
       return undefined;

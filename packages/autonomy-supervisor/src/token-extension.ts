@@ -10,7 +10,7 @@ import {
   err,
   ok,
   type Result,
-  type SintCapabilityToken,
+  type NosihCapabilityToken,
 } from "@pshkv/core";
 import { AUTONOMY_DEFAULT_GUARD_PROFILE_ID } from "./guard-registry.js";
 
@@ -60,9 +60,9 @@ export function validateAutonomyPolicy(
 }
 
 export function getTokenAutonomyPolicy(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
 ): Result<AutonomyPolicy, AutonomyPolicyValidationError> {
-  const candidate = (token as SintCapabilityToken & {
+  const candidate = (token as NosihCapabilityToken & {
     readonly autonomyPolicy?: unknown;
   }).autonomyPolicy;
 

@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Ed25519 cryptographic utilities.
+ * NOSIH Protocol — Ed25519 cryptographic utilities.
  *
  * Wraps @noble/ed25519 for deterministic, side-effect-free
  * cryptographic operations on capability tokens.
  *
- * @module @sint/gate-capability-tokens/crypto
+ * @module @nosih/gate-capability-tokens/crypto
  */
 
 import * as ed25519 from "@noble/ed25519";
@@ -46,7 +46,7 @@ export function generateKeypair(): {
  *
  * @example
  * ```ts
- * const signature = sign("deadbeef...", "Hello, SINT!");
+ * const signature = sign("deadbeef...", "Hello, NOSIH!");
  * ```
  */
 export function sign(privateKeyHex: string, message: string): Ed25519Signature {
@@ -62,7 +62,7 @@ export function sign(privateKeyHex: string, message: string): Ed25519Signature {
  *
  * @example
  * ```ts
- * const valid = verify("a1b2c3...", "sig...", "Hello, SINT!");
+ * const valid = verify("a1b2c3...", "sig...", "Hello, NOSIH!");
  * ```
  */
 export function verify(
@@ -85,7 +85,7 @@ export function verify(
  *
  * @example
  * ```ts
- * const hash = hashSha256("Hello, SINT!");
+ * const hash = hashSha256("Hello, NOSIH!");
  * ```
  */
 export function hashSha256(data: string): SHA256 {

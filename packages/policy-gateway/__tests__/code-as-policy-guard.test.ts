@@ -1,9 +1,9 @@
 /**
- * SINT code-as-policy robot-agent guard tests.
+ * NOSIH code-as-policy robot-agent guard tests.
  */
 
 import { describe, expect, it, vi } from "vitest";
-import { ApprovalTier, type SintCapabilityToken, type SintRequest } from "@pshkv/core";
+import { ApprovalTier, type NosihCapabilityToken, type NosihRequest } from "@pshkv/core";
 import {
   generateKeypair,
   issueCapabilityToken,
@@ -25,7 +25,7 @@ function futureISO(h = 1): string {
     .replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): SintCapabilityToken {
+function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -49,9 +49,9 @@ function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]
 
 let seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   const suffix = String(++seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${suffix}` as any,
@@ -62,16 +62,16 @@ function makeRequest(
     action: token.actions[0] ?? "execute",
     params: {
       codeAsPolicy: {
-        programRef: "sint://program/code-policy/fold-shirt.py",
+        programRef: "nosih://program/code-policy/fold-shirt.py",
         programDigest: VALID_PROGRAM_DIGEST,
         approvedProgramDigest: VALID_PROGRAM_DIGEST,
-        skillRef: "sint://skill/fold-grasp/v4",
+        skillRef: "nosih://skill/fold-grasp/v4",
         skillDigest: VALID_SKILL_DIGEST,
         approvedSkillDigest: VALID_SKILL_DIGEST,
-        primitiveSetRef: "sint://primitive-set/manipulation-safe-v1",
+        primitiveSetRef: "nosih://primitive-set/manipulation-safe-v1",
         primitives: ["bounding_box", "detect_in_base", "preset", "approach_until", "reset_home"],
         robotIds: ["arm-left-01", "arm-right-01"],
-        trialRef: "sint://trial/fold-shirt/001",
+        trialRef: "nosih://trial/fold-shirt/001",
         trialIndex: 12,
         trialBudget: 100,
       },
@@ -134,7 +134,7 @@ describe("DefaultCodeAsPolicyGuard", () => {
         codeAsPolicy: {
           programDigest: VALID_PROGRAM_DIGEST,
           approvedProgramDigest: VALID_PROGRAM_DIGEST,
-          skillRef: "sint://skill/fold-grasp/v4",
+          skillRef: "nosih://skill/fold-grasp/v4",
           skillDigest: `digest:sha256:${"4".repeat(64)}`,
           approvedSkillDigest: VALID_SKILL_DIGEST,
           primitives: ["bounding_box", "raw_joint_override"],

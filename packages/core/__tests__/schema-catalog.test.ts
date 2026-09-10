@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { SINT_SCHEMA_CATALOG } from "../src/constants/schema-catalog.js";
+import { NOSIH_SCHEMA_CATALOG } from "../src/constants/schema-catalog.js";
 
 describe("schema catalog request contract", () => {
   it("exposes executionContext with verifiable and hardware safety blocks", () => {
-    const requestSchema = SINT_SCHEMA_CATALOG.request as Record<string, unknown>;
+    const requestSchema = NOSIH_SCHEMA_CATALOG.request as Record<string, unknown>;
     const requestProperties = requestSchema.properties as Record<string, unknown>;
     const executionContext = requestProperties.executionContext as Record<string, unknown>;
     const executionContextProperties = executionContext.properties as Record<string, unknown>;
@@ -15,7 +15,7 @@ describe("schema catalog request contract", () => {
   });
 
   it("exposes constraint language v1 envelope groups with legacy aliases", () => {
-    const envelopeSchema = SINT_SCHEMA_CATALOG["constraint-envelope"] as Record<string, unknown>;
+    const envelopeSchema = NOSIH_SCHEMA_CATALOG["constraint-envelope"] as Record<string, unknown>;
     const properties = envelopeSchema.properties as Record<string, unknown>;
 
     expect(properties.version).toBeDefined();
@@ -33,8 +33,8 @@ describe("schema catalog request contract", () => {
   });
 
   it("publishes mission authority wire contracts", () => {
-    expect(SINT_SCHEMA_CATALOG["mission-manifest"]).toBeDefined();
-    expect(SINT_SCHEMA_CATALOG["authority-decision"]).toBeDefined();
-    expect(SINT_SCHEMA_CATALOG["mission-evidence-bundle"]).toBeDefined();
+    expect(NOSIH_SCHEMA_CATALOG["mission-manifest"]).toBeDefined();
+    expect(NOSIH_SCHEMA_CATALOG["authority-decision"]).toBeDefined();
+    expect(NOSIH_SCHEMA_CATALOG["mission-evidence-bundle"]).toBeDefined();
   });
 });

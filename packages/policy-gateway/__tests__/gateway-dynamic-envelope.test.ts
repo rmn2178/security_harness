@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — PolicyGateway DynamicEnvelopePlugin tests.
+ * NOSIH Protocol — PolicyGateway DynamicEnvelopePlugin tests.
  *
  * Validates environment-adaptive safety envelope tightening (ROSClaw gap fix).
  *
@@ -26,7 +26,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 function futureISO(h = 1): string {
   return new Date(Date.now() + h * 3_600_000)
@@ -47,7 +47,7 @@ function makeToken(
     maxForceNewtons?: number;
     resource?: string;
   } = {},
-): SintCapabilityToken {
+): NosihCapabilityToken {
   const resource = opts.resource ?? "ros2:///camera/front";
   const result = issueCapabilityToken(
     {
@@ -74,10 +74,10 @@ function makeToken(
  * Physical context values are passed through for constraint checking.
  */
 function makeRequest(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   velocityMps?: number,
   forceNewtons?: number,
-): SintRequest {
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f000",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

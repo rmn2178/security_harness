@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Plan Executor.
+ * NOSIH Protocol — Plan Executor.
  *
  * Executes a validated plan step-by-step, routing each step through
  * an action callback (typically connected to PolicyGateway).
  *
- * @module @sint/engine-system2/planner/plan-executor
+ * @module @nosih/engine-system2/planner/plan-executor
  */
 
-import type { Result, SintPlan, SintPlanStep } from "@pshkv/core";
+import type { Result, NosihPlan, NosihPlanStep } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 
 /** Event emitted by the plan executor. */
@@ -35,12 +35,12 @@ export interface PlanExecutorEvent {
  */
 export class PlanExecutor {
   private readonly _onAction: (
-    step: SintPlanStep,
+    step: NosihPlanStep,
   ) => Promise<Result<void, Error>>;
   private readonly _onEvent?: (event: PlanExecutorEvent) => void;
 
   constructor(
-    onAction: (step: SintPlanStep) => Promise<Result<void, Error>>,
+    onAction: (step: NosihPlanStep) => Promise<Result<void, Error>>,
     onEvent?: (event: PlanExecutorEvent) => void,
   ) {
     this._onAction = onAction;
@@ -65,7 +65,7 @@ export class PlanExecutor {
    * }
    * ```
    */
-  async execute(plan: SintPlan): Promise<Result<void, Error>> {
+  async execute(plan: NosihPlan): Promise<Result<void, Error>> {
     for (let i = 0; i < plan.steps.length; i++) {
       const step = plan.steps[i];
       if (step === undefined) {

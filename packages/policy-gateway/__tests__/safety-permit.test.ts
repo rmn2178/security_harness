@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — SafetyPermitPlugin tests (Phase 9.3).
+ * NOSIH Protocol — SafetyPermitPlugin tests (Phase 9.3).
  *
  * Validates async hardware safety state resolution from an external source
  * (OPC-UA, PLC REST API, MQTT) before the built-in hardware safety handshake.
@@ -20,7 +20,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -40,7 +40,7 @@ function pastISO(offsetMs: number): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-function makeToken(resource = "ros2:///cmd_vel"): SintCapabilityToken {
+function makeToken(resource = "ros2:///cmd_vel"): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -59,18 +59,18 @@ function makeToken(resource = "ros2:///cmd_vel"): SintCapabilityToken {
 }
 
 /** T1 resource (camera subscribe → T0_OBSERVE → auto-allow). */
-function makeT1Token(): SintCapabilityToken {
+function makeT1Token(): NosihCapabilityToken {
   return makeToken("ros2:///camera/front");
 }
 
 /**
- * Build a minimal SintRequest.
+ * Build a minimal NosihRequest.
  * resource defaults to the T2_ACT cmd_vel topic; use camera/front for T0/T1.
  */
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f001",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -351,7 +351,7 @@ describe("SafetyPermitPlugin", () => {
       source: "plc",
     });
 
-    let capturedRequest: SintRequest | undefined;
+    let capturedRequest: NosihRequest | undefined;
     const gw = new PolicyGateway({
       resolveToken: () => token,
       safetyPermit: plugin,
@@ -374,7 +374,7 @@ describe("SafetyPermitPlugin", () => {
     // Plugin was called with the original request
     expect(plugin.resolvePermit).toHaveBeenCalledWith(req);
     // Capture and verify via spy that resolvePermit received the expected request shape
-    const callArg = (plugin.resolvePermit as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] as SintRequest;
+    const callArg = (plugin.resolvePermit as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] as NosihRequest;
     expect(callArg.executionContext?.deploymentProfile).toBe("warehouse-amr");
     capturedRequest = callArg;
     expect(capturedRequest).toBeDefined();

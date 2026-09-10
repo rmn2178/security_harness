@@ -1,16 +1,16 @@
 /**
- * SINT Protocol — OWASP Agentic AI Top 10 compliance types.
+ * NOSIH Protocol — OWASP Agentic AI Top 10 compliance types.
  *
- * Maps SINT components to OWASP ASI categories so that compliance
+ * Maps NOSIH components to OWASP ASI categories so that compliance
  * teams and security auditors can trace coverage.
  *
  * Reference: OWASP Top 10 for Agentic Applications 2026
  * https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
  *
  * EU AI Act Article 14(4)(e): human supervisors must be able to interrupt
- * high-risk AI systems. SINT's CircuitBreakerPlugin fulfils this requirement.
+ * high-risk AI systems. NOSIH's CircuitBreakerPlugin fulfils this requirement.
  *
- * @module @sint/core/types/compliance
+ * @module @nosih/core/types/compliance
  */
 
 import type { ApprovalTier } from "./policy.js";
@@ -44,44 +44,44 @@ export enum OwaspAsi {
 
 /** Coverage level for a given OWASP ASI category. */
 export type OwaspCoverageLevel =
-  | "full"      // SINT fully enforces this at the gate
-  | "partial"   // SINT mitigates some vectors but not all
+  | "full"      // NOSIH fully enforces this at the gate
+  | "partial"   // NOSIH mitigates some vectors but not all
   | "none";     // Not addressed
 
 /** A single OWASP coverage entry. */
 export interface OwaspCoverageEntry {
   readonly category: OwaspAsi;
   readonly level: OwaspCoverageLevel;
-  /** Which SINT components implement this coverage. */
+  /** Which NOSIH components implement this coverage. */
   readonly implementedBy: readonly string[];
-  /** What SINT enforces for this category. */
+  /** What NOSIH enforces for this category. */
   readonly description: string;
-  /** Gaps — what SINT does NOT cover in this category. */
+  /** Gaps — what NOSIH does NOT cover in this category. */
   readonly gaps?: string;
 }
 
-/** Compliance frameworks used for SINT tier crosswalk mapping. */
-export type SintComplianceFramework =
+/** Compliance frameworks used for NOSIH tier crosswalk mapping. */
+export type NosihComplianceFramework =
   | "nist-ai-rmf-1.0"
   | "iso-iec-42001-2023"
   | "eu-ai-act-2024-1689";
 
-/** Mapping row for a single framework reference at a given SINT tier. */
-export interface SintTierComplianceReference {
-  readonly framework: SintComplianceFramework;
+/** Mapping row for a single framework reference at a given NOSIH tier. */
+export interface NosihTierComplianceReference {
+  readonly framework: NosihComplianceFramework;
   /** Canonical control/article/clause identifier. */
   readonly reference: string;
   /** What this reference means operationally for this tier. */
   readonly requirement: string;
-  /** How SINT enforces the requirement for this tier. */
-  readonly sintEnforcement: string;
+  /** How NOSIH enforces the requirement for this tier. */
+  readonly nosihEnforcement: string;
 }
 
-/** Full crosswalk entry for one SINT approval tier. */
-export interface SintTierComplianceCrosswalkEntry {
+/** Full crosswalk entry for one NOSIH approval tier. */
+export interface NosihTierComplianceCrosswalkEntry {
   readonly tier: ApprovalTier;
   /** Human-readable severity posture for this tier. */
   readonly consequenceClass: "monitoring" | "bounded-write" | "physical-state-change" | "irreversible-commit";
   /** Framework mappings that apply at this tier. */
-  readonly mappings: readonly SintTierComplianceReference[];
+  readonly mappings: readonly NosihTierComplianceReference[];
 }

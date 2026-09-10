@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://docs.sint.gg/specs/cell-graph.schema.json",
+  "$id": "https://docs.nosih.gg/specs/cell-graph.schema.json",
   "title": "CellGraph",
   "description": "Canonical production-cell graph for industrial planning and execution control.",
   "type": "object",
@@ -58,7 +58,7 @@
           },
           "adapter": {
             "type": "string",
-            "pattern": "^sint-adapter-[A-Za-z0-9._-]+$"
+            "pattern": "^nosih-adapter-[A-Za-z0-9._-]+$"
           },
           "safety_zone": {
             "type": "string"

@@ -1,5 +1,5 @@
 /**
- * SINT SDK — Client contract tests.
+ * NOSIH SDK — Client contract tests.
  *
  * These tests intentionally mirror gateway v0.2 route contracts.
  */
@@ -9,11 +9,11 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
-  SintClient,
-  SintError,
-  createSintClient,
-  type SintDiscovery,
-  type SintHealth,
+  NosihClient,
+  NosihError,
+  createNosihClient,
+  type NosihDiscovery,
+  type NosihHealth,
 } from "../index.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -39,24 +39,24 @@ function mockFetch(status: number, body: unknown): ReturnType<typeof vi.spyOn> {
 }
 
 const BASE_URL = "http://localhost:3100";
-let client: SintClient;
+let client: NosihClient;
 
 beforeEach(() => {
-  client = new SintClient({ baseUrl: BASE_URL, apiKey: "test-key" });
+  client = new NosihClient({ baseUrl: BASE_URL, apiKey: "test-key" });
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("SintClient", () => {
+describe("NosihClient", () => {
   it("discovery() matches well-known v0.2 fixture shape", async () => {
-    const payload = loadJson<SintDiscovery>("protocol/well-known-sint.v0.2.example.json");
+    const payload = loadJson<NosihDiscovery>("protocol/well-known-nosih.v0.2.example.json");
     mockFetch(200, payload);
 
     const result = await client.discovery();
 
-    expect(result.name).toBe("SINT Protocol");
+    expect(result.name).toBe("NOSIH Protocol");
     expect(result.version).toBe("0.2.0");
     expect(Array.isArray(result.supportedBridges)).toBe(true);
     expect(Array.isArray(result.deploymentProfiles)).toBe(true);
@@ -64,10 +64,10 @@ describe("SintClient", () => {
   });
 
   it("health() returns gateway contract fields", async () => {
-    const health: SintHealth = {
+    const health: NosihHealth = {
       status: "ok",
       version: "0.1.0",
-      protocol: "SINT Gate",
+      protocol: "NOSIH Gate",
       tokens: 1,
       ledgerEvents: 10,
       revokedTokens: 0,
@@ -76,7 +76,7 @@ describe("SintClient", () => {
 
     const result = await client.health();
     expect(result.status).toBe("ok");
-    expect(result.protocol).toBe("SINT Gate");
+    expect(result.protocol).toBe("NOSIH Gate");
     expect(typeof result.ledgerEvents).toBe("number");
   });
 
@@ -225,13 +225,13 @@ describe("SintClient", () => {
     expect((schemaIndexSpy.mock.calls[0]?.[0] as string)).toContain("/v1/schemas");
 
     vi.restoreAllMocks();
-    const singleSchemaSpy = mockFetch(200, { title: "SINT Request", type: "object" });
+    const singleSchemaSpy = mockFetch(200, { title: "NOSIH Request", type: "object" });
     const schema = await client.schema("request");
-    expect(schema["title"]).toBe("SINT Request");
+    expect(schema["title"]).toBe("NOSIH Request");
     expect((singleSchemaSpy.mock.calls[0]?.[0] as string)).toContain("/v1/schemas/request");
   });
 
-  it("throws SintError on 5xx/4xx responses with gateway error body", async () => {
+  it("throws NosihError on 5xx/4xx responses with gateway error body", async () => {
     mockFetch(500, { code: "INTERNAL_ERROR", message: "Database unavailable" });
 
     await expect(
@@ -242,27 +242,27 @@ describe("SintClient", () => {
         action: "publish",
       }),
     ).rejects.toMatchObject({
-      name: "SintError",
+      name: "NosihError",
       status: 500,
       code: "INTERNAL_ERROR",
       message: "Database unavailable",
-    } satisfies Partial<SintError>);
+    } satisfies Partial<NosihError>);
   });
 
-  it("createSintClient() returns a functional SintClient instance", async () => {
-    const sint = createSintClient({ baseUrl: BASE_URL });
-    expect(sint).toBeInstanceOf(SintClient);
+  it("createNosihClient() returns a functional NosihClient instance", async () => {
+    const nosih = createNosihClient({ baseUrl: BASE_URL });
+    expect(nosih).toBeInstanceOf(NosihClient);
 
     mockFetch(200, {
       status: "ok",
       version: "0.1.0",
-      protocol: "SINT Gate",
+      protocol: "NOSIH Gate",
       tokens: 0,
       ledgerEvents: 0,
       revokedTokens: 0,
     });
 
-    const health = await sint.health();
+    const health = await nosih.health();
     expect(health.status).toBe("ok");
   });
 });

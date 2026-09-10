@@ -1,11 +1,11 @@
 /**
- * SINT Gateway Server — Authentication Middleware.
+ * NOSIH Gateway Server — Authentication Middleware.
  *
  * - Ed25519 request signing for agent endpoints
  * - API key authentication for admin endpoints
  * - Per-key rate limiting
  *
- * @module @sint/gateway-server/middleware/auth
+ * @module @nosih/gateway-server/middleware/auth
  */
 
 import type { Context, Next } from "hono";
@@ -15,7 +15,7 @@ import { verify } from "@pshkv/gate-capability-tokens";
 const EXEMPT_PATHS = new Set([
   "/v1/health",
   "/v1/keypair",
-  "/.well-known/sint.json",
+  "/.well-known/nosih.json",
   "/v1/openapi.json",
   "/v1/schemas",
 ]);
@@ -91,7 +91,7 @@ export function ed25519Auth() {
  * API key authentication for admin endpoints.
  *
  * Header: `X-API-Key: <key>`
- * Key is validated against `SINT_API_KEY` environment variable.
+ * Key is validated against `NOSIH_API_KEY` environment variable.
  */
 export function apiKeyAuth(apiKey?: string) {
   return async (c: Context, next: Next) => {

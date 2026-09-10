@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — MQTT Session Manager.
+ * NOSIH Protocol — MQTT Session Manager.
  *
  * Wraps an MQTT client (injected, not imported — zero-dep) to intercept
  * every publish and subscribe through the PolicyGateway before forwarding.
@@ -18,12 +18,12 @@
  * ```
  */
 
-import type { PolicyDecision, SintRequest } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest } from "@pshkv/core";
 import { mqttTopicToResourceUri } from "./iot-resource-mapper.js";
 
 /** Minimal gateway interface — avoids a package dependency on gate-policy-gateway. */
 export interface GatewayLike {
-  intercept(request: SintRequest): Promise<PolicyDecision>;
+  intercept(request: NosihRequest): Promise<PolicyDecision>;
 }
 
 export interface MqttClientAdapter {
@@ -98,7 +98,7 @@ export class MqttGatewaySession {
     options?: { qos?: 0 | 1 | 2; retain?: boolean },
   ): Promise<PolicyDecision> {
     const resource = mqttTopicToResourceUri(this.config.broker, topic);
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: makeMqttRequestId() as any,
       timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
       agentId: this.config.agentId,
@@ -129,7 +129,7 @@ export class MqttGatewaySession {
     options?: { qos?: 0 | 1 | 2 },
   ): Promise<PolicyDecision> {
     const resource = mqttTopicToResourceUri(this.config.broker, topicPattern);
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: makeMqttRequestId() as any,
       timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
       agentId: this.config.agentId,

@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Operator Login Screen.
+ * NOSIH Dashboard — Operator Login Screen.
  *
  * Collects operator name and API key before granting
  * access to the approval dashboard.
@@ -24,7 +24,7 @@ export function LoginScreen() {
       <form className="login-card" onSubmit={(e) => void handleSubmit(e)}>
         <div className="login-header">
           <span className="login-icon">&#x1F6E1;</span>
-          <h1 className="login-title">SINT Dashboard</h1>
+          <h1 className="login-title">NOSIH Dashboard</h1>
           <p className="login-subtitle">Operator Authentication</p>
         </div>
 
@@ -62,14 +62,14 @@ export function LoginScreen() {
             id="api-key"
             type="password"
             className="login-input"
-            placeholder="SINT gateway API key"
+            placeholder="NOSIH gateway API key"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
             required
             disabled={loading}
           />
           <span className="login-hint">
-            Set via SINT_API_KEY environment variable on the gateway server.
+            Set via NOSIH_API_KEY environment variable on the gateway server.
           </span>
         </div>
 
@@ -82,7 +82,7 @@ export function LoginScreen() {
         </button>
 
         <div className="login-footer">
-          <span className="login-protocol">SINT Gate Protocol v0.1</span>
+          <span className="login-protocol">NOSIH Gate Protocol v0.1</span>
         </div>
       </form>
     </div>

@@ -1,24 +1,24 @@
 /**
- * SINT Persistence — In-Memory Token Store.
+ * NOSIH Persistence — In-Memory Token Store.
  *
- * @module @sint/persistence/in-memory-token-store
+ * @module @nosih/persistence/in-memory-token-store
  */
 
-import type { SintCapabilityToken, UUIDv7 } from "@pshkv/core";
+import type { NosihCapabilityToken, UUIDv7 } from "@pshkv/core";
 import type { TokenStore } from "./interfaces.js";
 
 export class InMemoryTokenStore implements TokenStore {
-  private tokens = new Map<string, SintCapabilityToken>();
+  private tokens = new Map<string, NosihCapabilityToken>();
 
-  async store(token: SintCapabilityToken): Promise<void> {
+  async store(token: NosihCapabilityToken): Promise<void> {
     this.tokens.set(token.tokenId, token);
   }
 
-  async get(tokenId: UUIDv7): Promise<SintCapabilityToken | undefined> {
+  async get(tokenId: UUIDv7): Promise<NosihCapabilityToken | undefined> {
     return this.tokens.get(tokenId);
   }
 
-  async getBySubject(subject: string): Promise<readonly SintCapabilityToken[]> {
+  async getBySubject(subject: string): Promise<readonly NosihCapabilityToken[]> {
     return Array.from(this.tokens.values()).filter(
       (t) => t.subject === subject,
     );

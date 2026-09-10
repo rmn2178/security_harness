@@ -1,19 +1,19 @@
-"""Tests for sint.openai_agents governance adapter."""
+"""Tests for nosih.openai_agents governance adapter."""
 
 from __future__ import annotations
 
 import pytest
 
-from sint.openai_agents import (
+from nosih.openai_agents import (
     ApprovalResolution,
     OpenAIAgentsGovernanceAdapter,
-    SintApprovalDeniedError,
-    SintApprovalRequiredError,
-    SintApprovalTimeoutError,
-    SintDeniedError,
+    NosihApprovalDeniedError,
+    NosihApprovalRequiredError,
+    NosihApprovalTimeoutError,
+    NosihDeniedError,
 )
-from sint.openai_agents_runtime import governed_tool_call
-from sint.types import LedgerEvent, PolicyDecision, SintRequest
+from nosih.openai_agents_runtime import governed_tool_call
+from nosih.types import LedgerEvent, PolicyDecision, NosihRequest
 
 
 class _FakeGatewayClient:
@@ -26,7 +26,7 @@ class _FakeGatewayClient:
         self._ledger_events = ledger_events or []
         self.resolve_calls: list[dict[str, str | None]] = []
 
-    async def intercept(self, request: SintRequest) -> PolicyDecision:  # noqa: ARG002
+    async def intercept(self, request: NosihRequest) -> PolicyDecision:  # noqa: ARG002
         return self._decision
 
     async def resolve_approval(
@@ -49,8 +49,8 @@ class _FakeGatewayClient:
         return self._ledger_events
 
 
-def _request() -> SintRequest:
-    return SintRequest.model_validate({
+def _request() -> NosihRequest:
+    return NosihRequest.model_validate({
         "requestId": "01905f7c-0000-7000-8000-000000000011",
         "timestamp": "2026-04-06T12:00:00.000000Z",
         "agentId": "a" * 64,
@@ -110,7 +110,7 @@ async def test_authorize_transform_returns_decision() -> None:
 async def test_authorize_deny_raises_typed_error() -> None:
     client = _FakeGatewayClient(_decision("deny"))
     adapter = OpenAIAgentsGovernanceAdapter(client)  # type: ignore[arg-type]
-    with pytest.raises(SintDeniedError) as exc:
+    with pytest.raises(NosihDeniedError) as exc:
         await adapter.authorize_tool_call(_request())
     assert exc.value.policy_violated == "INSUFFICIENT_PERMISSIONS"
 
@@ -119,7 +119,7 @@ async def test_authorize_deny_raises_typed_error() -> None:
 async def test_escalation_without_resolver_raises_required() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = OpenAIAgentsGovernanceAdapter(client)  # type: ignore[arg-type]
-    with pytest.raises(SintApprovalRequiredError) as exc:
+    with pytest.raises(NosihApprovalRequiredError) as exc:
         await adapter.authorize_tool_call(_request())
     assert exc.value.approval_request_id == "req-approve-001"
 
@@ -128,7 +128,7 @@ async def test_escalation_without_resolver_raises_required() -> None:
 async def test_escalation_timeout_fail_closed_denies_queue() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = OpenAIAgentsGovernanceAdapter(client)  # type: ignore[arg-type]
-    with pytest.raises(SintApprovalTimeoutError):
+    with pytest.raises(NosihApprovalTimeoutError):
         await adapter.authorize_tool_call(_request(), approval_timeout_s=0.0)
 
     assert client.resolve_calls[0]["request_id"] == "req-approve-001"
@@ -140,7 +140,7 @@ async def test_escalation_with_approved_resolution_returns_decision() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = OpenAIAgentsGovernanceAdapter(client)  # type: ignore[arg-type]
 
-    async def resolver(_req: SintRequest, _decision: PolicyDecision) -> ApprovalResolution:
+    async def resolver(_req: NosihRequest, _decision: PolicyDecision) -> ApprovalResolution:
         return ApprovalResolution(status="approved", by="operator@example.com", reason="approved for demo")
 
     decision = await adapter.authorize_tool_call(_request(), on_escalation=resolver)
@@ -153,10 +153,10 @@ async def test_escalation_with_denied_resolution_raises_typed_error() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = OpenAIAgentsGovernanceAdapter(client)  # type: ignore[arg-type]
 
-    async def resolver(_req: SintRequest, _decision: PolicyDecision) -> ApprovalResolution:
+    async def resolver(_req: NosihRequest, _decision: PolicyDecision) -> ApprovalResolution:
         return ApprovalResolution(status="denied", by="operator@example.com", reason="unsafe")
 
-    with pytest.raises(SintApprovalDeniedError):
+    with pytest.raises(NosihApprovalDeniedError):
         await adapter.authorize_tool_call(_request(), on_escalation=resolver)
     assert client.resolve_calls[0]["status"] == "denied"
 
@@ -236,6 +236,6 @@ async def test_governed_tool_call_does_not_execute_on_denial() -> None:
         executed.append("ran")
         return "should-not-run"
 
-    with pytest.raises(SintDeniedError):
+    with pytest.raises(NosihDeniedError):
         await governed_tool_call(adapter, _request(), _execute)
     assert executed == []

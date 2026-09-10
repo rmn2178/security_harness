@@ -3,7 +3,7 @@
  * Minimal Notes MCP Server.
  *
  * A simple MCP server that manages text notes. Designed to be
- * run behind the SINT MCP proxy to demonstrate policy enforcement
+ * run behind the NOSIH MCP proxy to demonstrate policy enforcement
  * across all four approval tiers:
  *
  *   T0 (observe)  — listNotes, getNote

@@ -1,7 +1,7 @@
 /**
  * Automotive and industrial-cell safety pack conformance.
  *
- * H5 translates existing SINT hardware-safety primitives into a safety-case
+ * H5 translates existing NOSIH hardware-safety primitives into a safety-case
  * support pack: industrial cell policy templates, FMEA rows, timing KPIs, and
  * SOTIF / ISO 26262 support boundaries.
  */
@@ -83,7 +83,7 @@ describe("Industrial cell safety pack fixture v1", () => {
     );
     expect(estop?.expectedDecision).toBe("rollback");
     expect(estop?.expectedTier).toBe(ApprovalTier.T3_COMMIT);
-    expect(estop?.rollbackTargetRef).toMatch(/^sint:\/\/action\//);
+    expect(estop?.rollbackTargetRef).toMatch(/^nosih:\/\/action\//);
   });
 
   it("maps safety-controller OPC UA resources into high-consequence handling", () => {
@@ -106,7 +106,7 @@ describe("Industrial cell safety pack fixture v1", () => {
       expect(scenarioIds.has(row.sourceScenarioId), row.failureMode).toBe(true);
       expect(riskPriorityNumber(row), row.failureMode).toBeGreaterThan(0);
       expect(row.requiredEvidence, row.failureMode).toContain("eventHash");
-      expect(row.sintControl.length, row.failureMode).toBeGreaterThan(0);
+      expect(row.nosihControl.length, row.failureMode).toBeGreaterThan(0);
     }
   });
 
@@ -130,7 +130,7 @@ describe("Industrial cell safety pack fixture v1", () => {
   it("keeps SOTIF / ISO 26262 language as alignment support, not certification", () => {
     expect(fixture.sotifIso26262Mapping.length).toBeGreaterThanOrEqual(4);
     for (const mapping of fixture.sotifIso26262Mapping) {
-      expect(mapping.sintSupport.length, mapping.topic).toBeGreaterThan(0);
+      expect(mapping.nosihSupport.length, mapping.topic).toBeGreaterThan(0);
       expect(mapping.claimBoundary, mapping.topic).toMatch(/support|requires assessor|does not replace/);
     }
   });

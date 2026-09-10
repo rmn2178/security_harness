@@ -1,12 +1,12 @@
 /**
- * SINT bridge-iot — Hardware Safety Bridge.
+ * NOSIH bridge-iot — Hardware Safety Bridge.
  *
- * Extracts SintHardwareSafetyContext from MQTT/CoAP payload bytes.
+ * Extracts NosihHardwareSafetyContext from MQTT/CoAP payload bytes.
  * Used by IotInterceptor to populate executionContext.hardwareSafety
  * before calling PolicyGateway.intercept().
  */
 
-import type { SintHardwareSafetyContext } from "@pshkv/core";
+import type { NosihHardwareSafetyContext } from "@pshkv/core";
 import type { IoTDeviceProfile } from "./device-profiles.js";
 
 export interface HardwareSafetyPayload {
@@ -17,13 +17,13 @@ export interface HardwareSafetyPayload {
 }
 
 /**
- * Build a SintHardwareSafetyContext from a parsed MQTT safety payload.
+ * Build a NosihHardwareSafetyContext from a parsed MQTT safety payload.
  * observedAt defaults to now if not provided.
  */
 export function hardwareSafetyContextFromPayload(
   payload: HardwareSafetyPayload,
   observedAt?: string,
-): SintHardwareSafetyContext {
+): NosihHardwareSafetyContext {
   return {
     ...(payload.estop !== undefined && { estopState: payload.estop }),
     ...(payload.permit !== undefined && { permitState: payload.permit }),

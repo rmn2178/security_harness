@@ -110,7 +110,7 @@ export function parseSparkplugTopic(topic: string): SparkplugTopicParts | undefi
   };
 }
 
-/** Convert Sparkplug topic to canonical SINT resource URI. */
+/** Convert Sparkplug topic to canonical NOSIH resource URI. */
 export function sparkplugTopicToResourceUri(topic: string): string | undefined {
   const parsed = parseSparkplugTopic(topic);
   if (!parsed) {
@@ -123,7 +123,7 @@ export function sparkplugTopicToResourceUri(topic: string): string | undefined {
   return `mqtt-sparkplug:///${encodeSegment(parsed.groupId)}/${encodeSegment(parsed.edgeNodeId)}${devicePath}/${message}`;
 }
 
-/** Map Sparkplug message type to canonical SINT action. */
+/** Map Sparkplug message type to canonical NOSIH action. */
 export function sparkplugActionForMessageType(
   messageType: string,
 ): "observe" | "publish" | "call" {

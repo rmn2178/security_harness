@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime, timezone
 
-from sint import GatewayClient, GatewayConfig, SintRequest
+from nosih import GatewayClient, GatewayConfig, NosihRequest
 
 
 async def main() -> None:
@@ -17,7 +17,7 @@ async def main() -> None:
         health = await client.health()
         print("health:", health.get("status"))
 
-        request = SintRequest(
+        request = NosihRequest(
             request_id="01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f701",
             timestamp=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "000Z",
             agent_id="warehouse-amr-agent",

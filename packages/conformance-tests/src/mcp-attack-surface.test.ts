@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — MCP Attack Surface Conformance Tests.
+ * NOSIH Protocol — MCP Attack Surface Conformance Tests.
  *
- * Covers 10 canonical MCP attack scenarios and verifies that SINT
+ * Covers 10 canonical MCP attack scenarios and verifies that NOSIH
  * correctly mitigates each. These tests must pass on every PR that
- * touches @sint/bridge-mcp, @sint/gate-policy-gateway, or
- * @sint/gate-capability-tokens.
+ * touches @nosih/bridge-mcp, @nosih/gate-policy-gateway, or
+ * @nosih/gate-capability-tokens.
  *
  * Attack categories addressed:
  *   ASI01 — Tool name spoofing
@@ -18,7 +18,7 @@
  *   ASI09 — Forbidden operation sequence (writeFile → execute)
  *   ASI10 — Supply-chain model fingerprint mismatch
  *
- * @module @sint/conformance-tests/mcp-attack-surface
+ * @module @nosih/conformance-tests/mcp-attack-surface
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -34,9 +34,9 @@ import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
 import { MCPInterceptor } from "@pshkv/bridge-mcp";
 import type { MCPToolCall } from "@pshkv/bridge-mcp";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 import { InMemoryRateLimitStore } from "@pshkv/persistence";
@@ -49,8 +49,8 @@ function futureISO(hoursFromNow: number): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: generateUUIDv7(),
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -74,11 +74,11 @@ function makeToolCall(overrides?: Partial<MCPToolCall>): MCPToolCall {
 
 // ── Shared fixtures ───────────────────────────────────────────────────────────
 
-describe("MCP Attack Surface — SINT mitigation coverage", () => {
+describe("MCP Attack Surface — NOSIH mitigation coverage", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
   let interceptor: MCPInterceptor;
@@ -105,9 +105,9 @@ describe("MCP Attack Surface — SINT mitigation coverage", () => {
   });
 
   function issueAndStore(
-    overrides?: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides?: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://*",
@@ -151,7 +151,7 @@ describe("MCP Attack Surface — SINT mitigation coverage", () => {
       }),
     );
 
-    // SINT must deny: server mismatch between session and tool call
+    // NOSIH must deny: server mismatch between session and tool call
     expect(result.action).toBe("deny");
   });
 
@@ -294,7 +294,7 @@ describe("MCP Attack Surface — SINT mitigation coverage", () => {
     const a5 = generateKeypair();
 
     // Root → a1 (depth 0)
-    const baseReq: SintCapabilityTokenRequest = {
+    const baseReq: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: a1.publicKey,
       resource: "mcp://filesystem/readFile",
@@ -336,7 +336,7 @@ describe("MCP Attack Surface — SINT mitigation coverage", () => {
     // Craft a token that appears expired by copying the token with a past expiresAt
     // (We cannot call issueCapabilityToken with a past date, so we put a
     // structurally-valid-but-expired token directly into the store)
-    const expiredToken: SintCapabilityToken = {
+    const expiredToken: NosihCapabilityToken = {
       ...validToken,
       tokenId: generateUUIDv7(),
       expiresAt: new Date(Date.now() - 3600_000).toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

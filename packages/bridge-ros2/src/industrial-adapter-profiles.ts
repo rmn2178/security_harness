@@ -1,10 +1,10 @@
 /**
- * SINT Bridge-ROS2 — Industrial adapter profile helpers.
+ * NOSIH Bridge-ROS2 — Industrial adapter profile helpers.
  *
  * These helpers turn the neutral RobotActionProfile into partner-facing
  * command shapes while preserving the normal ROS 2 PolicyGateway choke point.
  *
- * @module @sint/bridge-ros2/industrial-adapter-profiles
+ * @module @nosih/bridge-ros2/industrial-adapter-profiles
  */
 
 import { createHash } from "node:crypto";
@@ -366,8 +366,8 @@ function buildAbbRapidProgram(
     Pick<RobotProgramExportStubOptions, "programName" | "simulationReceiptId" | "approvalId">,
 ): { readonly programName: string; readonly programText: string } {
   const programName = sanitizeProgramName(
-    options.programName ?? `SINT_${options.cellId}_RAPID`,
-    "SINT_RAPID",
+    options.programName ?? `NOSIH_${options.cellId}_RAPID`,
+    "NOSIH_RAPID",
   );
   const procName = sanitizeProgramName(
     `${action.motion.source_pose}_to_${action.motion.target_pose}`,
@@ -375,23 +375,23 @@ function buildAbbRapidProgram(
   );
   const lines = [
     `MODULE ${programName}`,
-    "  ! SINT export stub only. Do not run on a controller without a real adapter backend.",
+    "  ! NOSIH export stub only. Do not run on a controller without a real adapter backend.",
     "  ! Required gate: simulation receipt, human approval, safety-zone clear.",
-    `  CONST string sint_action_type := "${quoted(action.action_type)}";`,
-    `  CONST string sint_cell_id := "${quoted(options.cellId)}";`,
-    `  CONST string sint_robot_asset_id := "${quoted(options.robotAssetId)}";`,
-    `  CONST string sint_source_pose := "${quoted(action.motion.source_pose)}";`,
-    `  CONST string sint_target_pose := "${quoted(action.motion.target_pose)}";`,
-    `  CONST num sint_max_velocity_mps := ${action.motion.max_velocity_mps};`,
-    `  CONST num sint_max_force_newtons := ${action.motion.max_force_newtons};`,
-    `  CONST num sint_payload_kg := ${action.tool.payload_kg};`,
-    `  CONST string sint_simulation_receipt_id := "${quoted(options.simulationReceiptId ?? "required")}";`,
-    `  CONST string sint_approval_id := "${quoted(options.approvalId ?? "required")}";`,
+    `  CONST string nosih_action_type := "${quoted(action.action_type)}";`,
+    `  CONST string nosih_cell_id := "${quoted(options.cellId)}";`,
+    `  CONST string nosih_robot_asset_id := "${quoted(options.robotAssetId)}";`,
+    `  CONST string nosih_source_pose := "${quoted(action.motion.source_pose)}";`,
+    `  CONST string nosih_target_pose := "${quoted(action.motion.target_pose)}";`,
+    `  CONST num nosih_max_velocity_mps := ${action.motion.max_velocity_mps};`,
+    `  CONST num nosih_max_force_newtons := ${action.motion.max_force_newtons};`,
+    `  CONST num nosih_payload_kg := ${action.tool.payload_kg};`,
+    `  CONST string nosih_simulation_receipt_id := "${quoted(options.simulationReceiptId ?? "required")}";`,
+    `  CONST string nosih_approval_id := "${quoted(options.approvalId ?? "required")}";`,
     "",
     `  PROC ${procName}()`,
-    "    ! Adapter backend resolves named poses and tool data after SINT approval.",
+    "    ! Adapter backend resolves named poses and tool data after NOSIH approval.",
     "    ! Placeholder motion line is intentionally non-operational.",
-    "    TPWrite \"SINT approved export stub reached adapter boundary\";",
+    "    TPWrite \"NOSIH approved export stub reached adapter boundary\";",
     "  ENDPROC",
     "ENDMODULE",
   ];
@@ -404,16 +404,16 @@ function buildFanucLsProgram(
     Pick<RobotProgramExportStubOptions, "programName" | "simulationReceiptId" | "approvalId">,
 ): { readonly programName: string; readonly programText: string } {
   const programName = sanitizeProgramName(
-    options.programName ?? `SINT_${options.cellId}_LS`,
-    "SINT_LS",
+    options.programName ?? `NOSIH_${options.cellId}_LS`,
+    "NOSIH_LS",
   ).toUpperCase();
   const lines = [
     `/PROG ${programName}`,
     "/ATTR",
     "OWNER       = MNEDITOR;",
-    "COMMENT     = \"SINT export stub\";",
+    "COMMENT     = \"NOSIH export stub\";",
     "/MN",
-    "   1:  ! SINT export stub only ;",
+    "   1:  ! NOSIH export stub only ;",
     "   2:  ! Do not run without real adapter backend ;",
     `   3:  ! action=${action.action_type} ;`,
     `   4:  ! cell=${options.cellId} ;`,
@@ -425,7 +425,7 @@ function buildFanucLsProgram(
     `  10:  ! payload_kg=${action.tool.payload_kg} ;`,
     `  11:  ! simulation_receipt_id=${options.simulationReceiptId ?? "required"} ;`,
     `  12:  ! approval_id=${options.approvalId ?? "required"} ;`,
-    "  13:  ! Adapter backend resolves positions after SINT approval ;",
+    "  13:  ! Adapter backend resolves positions after NOSIH approval ;",
     "/POS",
     "/END",
   ];
@@ -438,12 +438,12 @@ function buildKukaKrlProgram(
     Pick<RobotProgramExportStubOptions, "programName" | "simulationReceiptId" | "approvalId">,
 ): { readonly programName: string; readonly programText: string } {
   const programName = sanitizeProgramName(
-    options.programName ?? `SINT_${options.cellId}_KRL`,
-    "SINT_KRL",
+    options.programName ?? `NOSIH_${options.cellId}_KRL`,
+    "NOSIH_KRL",
   );
   const lines = [
     `DEF ${programName}()`,
-    "  ; SINT export stub only. Do not run without a real adapter backend.",
+    "  ; NOSIH export stub only. Do not run without a real adapter backend.",
     "  ; Required gate: simulation receipt, human approval, safety-zone clear.",
     `  ; action=${action.action_type}`,
     `  ; cell=${options.cellId}`,
@@ -455,7 +455,7 @@ function buildKukaKrlProgram(
     `  ; payload_kg=${action.tool.payload_kg}`,
     `  ; simulation_receipt_id=${options.simulationReceiptId ?? "required"}`,
     `  ; approval_id=${options.approvalId ?? "required"}`,
-    "  ; Adapter backend resolves frames and SafeOperation envelope after SINT approval.",
+    "  ; Adapter backend resolves frames and SafeOperation envelope after NOSIH approval.",
     "  HALT",
     "END",
   ];
@@ -468,23 +468,23 @@ function buildUrScriptProgram(
     Pick<RobotProgramExportStubOptions, "programName" | "simulationReceiptId" | "approvalId">,
 ): { readonly programName: string; readonly programText: string } {
   const programName = sanitizeProgramName(
-    options.programName ?? `sint_${options.cellId}_urscript`,
-    "sint_urscript",
+    options.programName ?? `nosih_${options.cellId}_urscript`,
+    "nosih_urscript",
   );
   const lines = [
     `def ${programName}():`,
-    "  # SINT export stub only. Do not run without a real adapter backend.",
+    "  # NOSIH export stub only. Do not run without a real adapter backend.",
     "  # Required gate: simulation receipt, human approval, safety-zone clear.",
-    `  textmsg("sint_action_type=${quoted(action.action_type)}")`,
-    `  textmsg("sint_cell_id=${quoted(options.cellId)}")`,
-    `  textmsg("sint_robot_asset_id=${quoted(options.robotAssetId)}")`,
-    `  textmsg("sint_source_pose=${quoted(action.motion.source_pose)}")`,
-    `  textmsg("sint_target_pose=${quoted(action.motion.target_pose)}")`,
-    `  textmsg("sint_max_velocity_mps=${action.motion.max_velocity_mps}")`,
-    `  textmsg("sint_max_force_newtons=${action.motion.max_force_newtons}")`,
-    `  textmsg("sint_payload_kg=${action.tool.payload_kg}")`,
-    `  textmsg("sint_simulation_receipt_id=${quoted(options.simulationReceiptId ?? "required")}")`,
-    `  textmsg("sint_approval_id=${quoted(options.approvalId ?? "required")}")`,
+    `  textmsg("nosih_action_type=${quoted(action.action_type)}")`,
+    `  textmsg("nosih_cell_id=${quoted(options.cellId)}")`,
+    `  textmsg("nosih_robot_asset_id=${quoted(options.robotAssetId)}")`,
+    `  textmsg("nosih_source_pose=${quoted(action.motion.source_pose)}")`,
+    `  textmsg("nosih_target_pose=${quoted(action.motion.target_pose)}")`,
+    `  textmsg("nosih_max_velocity_mps=${action.motion.max_velocity_mps}")`,
+    `  textmsg("nosih_max_force_newtons=${action.motion.max_force_newtons}")`,
+    `  textmsg("nosih_payload_kg=${action.tool.payload_kg}")`,
+    `  textmsg("nosih_simulation_receipt_id=${quoted(options.simulationReceiptId ?? "required")}")`,
+    `  textmsg("nosih_approval_id=${quoted(options.approvalId ?? "required")}")`,
     "  halt",
     "end",
   ];
@@ -586,7 +586,7 @@ export function robotActionProfileToUniversalRobotsRos2DemoPath(
   const guardedMessage = robotActionProfileToRos2TopicMessage(
     {
       ...parsed,
-      adapter_hint: parsed.adapter_hint ?? "sint-adapter-ur-polyscope-srci-ros2",
+      adapter_hint: parsed.adapter_hint ?? "nosih-adapter-ur-polyscope-srci-ros2",
     },
     {
       ...options,
@@ -612,7 +612,7 @@ export function robotActionProfileToUniversalRobotsRos2DemoPath(
         kind: "topic" as const,
         name: policyTopic,
         resource: factoryRobotActionToRos2ResourceUri({ topicName: policyTopic }),
-        purpose: "SINT-gated factory action envelope",
+        purpose: "NOSIH-gated factory action envelope",
       },
       {
         kind: "action" as const,
@@ -626,18 +626,18 @@ export function robotActionProfileToUniversalRobotsRos2DemoPath(
             "/scaled_joint_trajectory_controller/follow_joint_trajectory",
           ),
         ),
-        purpose: "UR ROS 2 driver trajectory handoff after SINT approval",
+        purpose: "UR ROS 2 driver trajectory handoff after NOSIH approval",
       },
       {
         kind: "topic" as const,
         name: namespaced(driverNamespace, "/script_command"),
         resource: topicToResourceUri(namespaced(driverNamespace, "/script_command")),
-        purpose: "URScript handoff stub after SINT approval",
+        purpose: "URScript handoff stub after NOSIH approval",
       },
     ],
     required_preconditions: requiredPreconditions(parsed),
     scope_note:
-      "Demo mapping only: SINT produces the gated command envelope and adapter plan, not live UR control.",
+      "Demo mapping only: NOSIH produces the gated command envelope and adapter plan, not live UR control.",
   };
 
   return universalRobotsRos2DemoPathSchema.parse(path);
@@ -667,7 +667,7 @@ export function robotActionProfileToSrciCommandProfile(
     tool: parsed.tool,
     requires: parsed.requires,
     scope_note:
-      "SRCI profile mapping only: PLC or robot execution still requires SINT policy approval and a real adapter backend.",
+      "SRCI profile mapping only: PLC or robot execution still requires NOSIH policy approval and a real adapter backend.",
   };
 
   return srciCommandProfileSchema.parse(profile);
@@ -701,7 +701,7 @@ export function robotActionProfileToAbbRapidExportStub(
     maps_action_fields: adapterFieldMap(),
     required_preconditions: requiredPreconditions(parsed),
     scope_note:
-      "RAPID export stub only: RobotStudio or controller execution requires a real adapter backend and SINT approval.",
+      "RAPID export stub only: RobotStudio or controller execution requires a real adapter backend and NOSIH approval.",
   });
 }
 
@@ -733,7 +733,7 @@ export function robotActionProfileToFanucLsExportStub(
     maps_action_fields: adapterFieldMap(),
     required_preconditions: requiredPreconditions(parsed),
     scope_note:
-      "FANUC LS export stub only: ROBOGUIDE or controller execution requires a real adapter backend and SINT approval.",
+      "FANUC LS export stub only: ROBOGUIDE or controller execution requires a real adapter backend and NOSIH approval.",
   });
 }
 
@@ -765,7 +765,7 @@ export function robotActionProfileToKukaKrlExportStub(
     maps_action_fields: adapterFieldMap(),
     required_preconditions: requiredPreconditions(parsed),
     scope_note:
-      "KUKA KRL export stub only: KUKA.Sim or controller execution requires a real adapter backend and SINT approval.",
+      "KUKA KRL export stub only: KUKA.Sim or controller execution requires a real adapter backend and NOSIH approval.",
   });
 }
 
@@ -797,7 +797,7 @@ export function robotActionProfileToUrScriptExportStub(
     maps_action_fields: adapterFieldMap(),
     required_preconditions: requiredPreconditions(parsed),
     scope_note:
-      "URScript export stub only: PolyScope or controller execution requires a real adapter backend and SINT approval.",
+      "URScript export stub only: PolyScope or controller execution requires a real adapter backend and NOSIH approval.",
   });
 }
 
@@ -823,9 +823,9 @@ export function robotActionProfileToIsaacSimSimulationReceiptStub(
       simulator: "Isaac_Sim",
       defaultArtifactUri: (cellId, assetId) =>
         `isaac-sim://stage/${cellId}/${assetId}`,
-      defaultSigner: "sint-isaac-sim-receipt-stub",
+      defaultSigner: "nosih-isaac-sim-receipt-stub",
       scopeNote:
-        "Isaac Sim receipt stub only: it models the receipt shape SINT expects after simulation, not a certified simulator result.",
+        "Isaac Sim receipt stub only: it models the receipt shape NOSIH expects after simulation, not a certified simulator result.",
     },
   );
 
@@ -845,7 +845,7 @@ export function robotActionProfileToRoboDkSimulationReceiptStub(
       simulator: "RoboDK",
       defaultArtifactUri: (cellId, assetId) =>
         `robodk://station/${cellId}/${assetId}`,
-      defaultSigner: "sint-robodk-receipt-stub",
+      defaultSigner: "nosih-robodk-receipt-stub",
       scopeNote:
         "RoboDK receipt stub only: it models simulation evidence for offline-programming artifacts, not certified live execution.",
     }),
@@ -862,7 +862,7 @@ export function robotActionProfileToRobotStudioSimulationReceiptStub(
       simulator: "RobotStudio",
       defaultArtifactUri: (cellId, assetId) =>
         `robotstudio://station/${cellId}/${assetId}`,
-      defaultSigner: "sint-robotstudio-receipt-stub",
+      defaultSigner: "nosih-robotstudio-receipt-stub",
       scopeNote:
         "RobotStudio receipt stub only: it models simulation evidence for ABB RAPID artifacts, not certified live execution.",
     }),
@@ -879,7 +879,7 @@ export function robotActionProfileToRoboGuideSimulationReceiptStub(
       simulator: "ROBOGUIDE",
       defaultArtifactUri: (cellId, assetId) =>
         `roboguide://cell/${cellId}/${assetId}`,
-      defaultSigner: "sint-roboguide-receipt-stub",
+      defaultSigner: "nosih-roboguide-receipt-stub",
       scopeNote:
         "ROBOGUIDE receipt stub only: it models FANUC offline-programming evidence, not certified live execution.",
     }),
@@ -896,7 +896,7 @@ export function robotActionProfileToKukaSimSimulationReceiptStub(
       simulator: "KUKA.Sim",
       defaultArtifactUri: (cellId, assetId) =>
         `kuka-sim://cell/${cellId}/${assetId}`,
-      defaultSigner: "sint-kuka-sim-receipt-stub",
+      defaultSigner: "nosih-kuka-sim-receipt-stub",
       scopeNote:
         "KUKA.Sim receipt stub only: it models KRL simulation evidence and SafeOperation envelope checks, not certified live execution.",
     }),

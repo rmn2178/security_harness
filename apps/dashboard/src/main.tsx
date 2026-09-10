@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Entry Point.
+ * NOSIH Dashboard — Entry Point.
  */
 
 import { StrictMode } from "react";

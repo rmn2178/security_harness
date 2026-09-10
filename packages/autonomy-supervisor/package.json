@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/autonomy-supervisor",
   "version": "0.1.0",
-  "description": "SINT managed-autonomy authority pre-gate for runtime autonomy state supervision",
+  "description": "NOSIH managed-autonomy authority pre-gate for runtime autonomy state supervision",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

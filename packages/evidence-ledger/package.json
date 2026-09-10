@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/gate-evidence-ledger",
   "version": "0.1.0",
-  "description": "SINT Gate — Append-only tamper-evident Evidence Ledger",
+  "description": "NOSIH Gate — Append-only tamper-evident Evidence Ledger",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sint-ai/sint-protocol",
+    "url": "https://github.com/nosih-ai/nosih-protocol",
     "directory": "packages/evidence-ledger"
   },
-  "homepage": "https://github.com/sint-ai/sint-protocol#readme",
+  "homepage": "https://github.com/nosih-ai/nosih-protocol#readme",
   "bugs": {
-    "url": "https://github.com/sint-ai/sint-protocol/issues"
+    "url": "https://github.com/nosih-ai/nosih-protocol/issues"
   },
   "license": "Apache-2.0"
 }

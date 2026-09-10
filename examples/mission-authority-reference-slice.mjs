@@ -19,8 +19,8 @@ import { InMemoryMissionManifestStore } from "../packages/persistence/dist/index
 import {
   createSignedDispatchEnvelope,
   createSignedEffectPack,
-  SintEdgeRunner,
-} from "../packages/sint-edge-agent/dist/index.js";
+  NosihEdgeRunner,
+} from "../packages/nosih-edge-agent/dist/index.js";
 
 function isoFromNow(milliseconds) {
   return new Date(Date.now() + milliseconds)
@@ -178,7 +178,7 @@ async function main() {
   if (!token.ok) throw new Error(token.error);
 
   const pack = createSignedEffectPack({
-    schemaVersion: "sint-effect-pack/1",
+    schemaVersion: "nosih-effect-pack/1",
     packId: "reference.motion",
     version: "1.0.0",
     issuedAt: nowISO8601(),
@@ -201,7 +201,7 @@ async function main() {
   if (!pack.ok) throw new Error(pack.error);
 
   const dispatch = createSignedDispatchEnvelope({
-    schemaVersion: "sint-dispatch/1",
+    schemaVersion: "nosih-dispatch/1",
     dispatchId: generateUUIDv7(),
     requestId: generateUUIDv7(),
     actionRef,
@@ -225,7 +225,7 @@ async function main() {
   }, gatewaySigner.privateKey);
   if (!dispatch.ok) throw new Error(dispatch.error);
 
-  const runner = new SintEdgeRunner({
+  const runner = new NosihEdgeRunner({
     runnerId: "edge-reference-runner",
     admission: {
       trustedPackIssuers: [packIssuer.publicKey],
@@ -264,7 +264,7 @@ async function main() {
     throw new Error(`Outcome finalization failed: ${finalized.status}`);
   }
 
-  console.log("SINT Mission Authority reference slice");
+  console.log("NOSIH Mission Authority reference slice");
   console.log("Command: pnpm run build && pnpm run demo:mission-authority-reference");
   printStep("1. Manifest registered", {
     status: stored.status,

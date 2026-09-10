@@ -1,10 +1,10 @@
 /**
- * SINT Persistence Postgres — Lazy pg pool loader.
+ * NOSIH Persistence Postgres — Lazy pg pool loader.
  *
  * Loads `pg` at runtime so the package has zero hard dependencies at install
  * time. If `pg` is not installed, throws a helpful error message.
  *
- * @module @sint/persistence-postgres/pg-pool
+ * @module @nosih/persistence-postgres/pg-pool
  */
 
 /**
@@ -49,7 +49,7 @@ export async function createPgPool(config: PgPoolConfig): Promise<PgPool> {
     pgMod = await dynamicImport("pg");
   } catch {
     throw new Error(
-      "[sint/persistence-postgres] pg is not installed. " +
+      "[nosih/persistence-postgres] pg is not installed. " +
       "Run: npm install pg  (or pnpm add pg / yarn add pg)",
     );
   }
@@ -58,7 +58,7 @@ export async function createPgPool(config: PgPoolConfig): Promise<PgPool> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   const Pool = pgMod?.default?.Pool ?? pgMod?.Pool;
   if (!Pool) {
-    throw new Error("[sint/persistence-postgres] Could not resolve pg.Pool — unexpected pg module shape.");
+    throw new Error("[nosih/persistence-postgres] Could not resolve pg.Pool — unexpected pg module shape.");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return

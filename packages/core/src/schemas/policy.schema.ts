@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — Zod validation schemas for policy gateway requests.
+ * NOSIH Protocol — Zod validation schemas for policy gateway requests.
  *
- * @module @sint/core/schemas/policy
+ * @module @nosih/core/schemas/policy
  */
 
 import { z } from "zod";
@@ -113,7 +113,7 @@ export const executionContextSchema = z.object({
   humanAuthority: humanAuthorityProofSchema.optional(),
 }).strict();
 
-export const sintRequestSchema = z.object({
+export const nosihRequestSchema = z.object({
   requestId: uuidV7Schema,
   timestamp: iso8601Schema,
   agentId: ed25519PublicKeySchema,
@@ -126,4 +126,4 @@ export const sintRequestSchema = z.object({
   executionContext: executionContextSchema.optional(),
 }).strict();
 
-export type ValidatedSintRequest = z.infer<typeof sintRequestSchema>;
+export type ValidatedNosihRequest = z.infer<typeof nosihRequestSchema>;

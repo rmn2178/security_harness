@@ -1,5 +1,5 @@
 /**
- * SINT regulated-data runtime policy.
+ * NOSIH regulated-data runtime policy.
  *
  * Enforces processor, region, model, and context-minimization guardrails for
  * requests that carry `params.regulatedData` metadata.
@@ -9,8 +9,8 @@ import {
   ApprovalTier,
   RiskTier,
   type PolicyDecision,
-  type SintCapabilityToken,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihRequest,
 } from "@pshkv/core";
 
 export type RegulatedDataClass = "PHI" | "PII" | "ADMIN" | string;
@@ -42,8 +42,8 @@ export interface RegulatedDataPolicyConfig {
 
 export interface RegulatedDataPolicyPlugin {
   evaluate(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     context: { readonly requestId: string; readonly timestamp: string },
   ): Promise<PolicyDecision | undefined> | PolicyDecision | undefined;
 }
@@ -66,8 +66,8 @@ export class DefaultRegulatedDataPolicyPlugin implements RegulatedDataPolicyPlug
   }
 
   evaluate(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     context: { readonly requestId: string; readonly timestamp: string },
   ): PolicyDecision | undefined {
     const metadata = parseRegulatedDataMetadata(request.params[REGULATED_METADATA_PARAM]);
@@ -182,7 +182,7 @@ export class DefaultRegulatedDataPolicyPlugin implements RegulatedDataPolicyPlug
     );
   }
 
-  private resolveEffectivePolicy(token: SintCapabilityToken): EffectiveRegulatedDataPolicy {
+  private resolveEffectivePolicy(token: NosihCapabilityToken): EffectiveRegulatedDataPolicy {
     const tokenPolicy = token.regulatedDataPolicy;
     return {
       approvedProcessors: intersectIfPresent(
@@ -268,7 +268,7 @@ function parseFallback(value: unknown): RegulatedDataFallbackRoute | undefined {
 
 function assignRegulatedDataTier(
   metadata: RegulatedDataRequestMetadata,
-  request: SintRequest,
+  request: NosihRequest,
 ): ApprovalTier {
   if (request.resource.startsWith("health://consent/") && request.action !== "read") {
     return ApprovalTier.T3_COMMIT;

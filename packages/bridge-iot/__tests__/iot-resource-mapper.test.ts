@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — @sint/bridge-iot IoT Resource Mapper tests.
+ * NOSIH Protocol — @nosih/bridge-iot IoT Resource Mapper tests.
  *
  * 12 test cases covering:
  * 1. MQTT sensor topic → T0_OBSERVE URI

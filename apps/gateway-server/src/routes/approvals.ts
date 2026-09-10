@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Approval routes.
+ * NOSIH Gateway Server — Approval routes.
  *
  * REST endpoints for managing the human approval queue.
  * Real-time transports:

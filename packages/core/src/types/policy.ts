@@ -1,16 +1,16 @@
 /**
- * SINT Protocol — Policy Gateway types.
+ * NOSIH Protocol — Policy Gateway types.
  *
  * The Policy Gateway is the SINGLE choke point. No agent action —
  * tool call, ROS 2 topic publish, actuator command, capsule execution —
  * EVER bypasses the Policy Gateway.
  *
- * @module @sint/core/types/policy
+ * @module @nosih/core/types/policy
  */
 
 import type {
-  SintPhysicalConstraints,
-  SintVerifiableComputeProofType,
+  NosihPhysicalConstraints,
+  NosihVerifiableComputeProofType,
 } from "./capability-token.js";
 import type { HumanAuthorityProof } from "./authority.js";
 import type {
@@ -51,22 +51,22 @@ export enum RiskTier {
 }
 
 /** K-of-N approval quorum attached to escalated requests. */
-export interface SintApprovalQuorum {
+export interface NosihApprovalQuorum {
   /** Number of distinct approvals required before the request can proceed. */
   readonly required: number;
   /** Approver identifiers (e.g. DIDs or public keys) permitted to sign off. */
   readonly authorized: readonly string[];
 }
 
-/** Well-known deployment profiles for industrial SINT rollouts. */
-export type SintSiteDeploymentProfile =
+/** Well-known deployment profiles for industrial NOSIH rollouts. */
+export type NosihSiteDeploymentProfile =
   | "warehouse-amr"
   | "industrial-cell"
   | "edge-gateway"
   | string;
 
 /** Runtime identity metadata for the executor handling the request. */
-export interface SintExecutorIdentity {
+export interface NosihExecutorIdentity {
   /** Logical runtime identifier (e.g. "ros2-bridge", "mcp-server"). */
   readonly runtimeId?: string;
   /** Physical or logical node this runtime is executing on. */
@@ -78,7 +78,7 @@ export interface SintExecutorIdentity {
 }
 
 /** Model runtime metadata attached to a request. */
-export interface SintModelRuntimeContext {
+export interface NosihModelRuntimeContext {
   /** Model identifier (e.g. "claude-opus-4-7", "gpt-4.1"). Checked against `modelConstraints.allowedModelIds`. */
   readonly modelId?: string;
   /** Model version string; compared against `modelConstraints.maxModelVersion` as semver. */
@@ -88,7 +88,7 @@ export interface SintModelRuntimeContext {
 }
 
 /** Attestation metadata attached to a request. */
-export interface SintAttestationContext {
+export interface NosihAttestationContext {
   /** Attestation grade: 0 none, 1 self-attested, 2 TEE-backed, 3 remote-attested TEE. */
   readonly grade?: 0 | 1 | 2 | 3;
   /** Trusted execution environment backend reporting the attestation. */
@@ -98,9 +98,9 @@ export interface SintAttestationContext {
 }
 
 /** Verifiable compute proof metadata attached to a request. */
-export interface SintVerifiableComputeContext {
+export interface NosihVerifiableComputeContext {
   /** Proof system in use (e.g. "risc0-groth16", "snark"). */
-  readonly proofType?: SintVerifiableComputeProofType;
+  readonly proofType?: NosihVerifiableComputeProofType;
   /** Reference to the serialized proof object (URL or storage handle). */
   readonly proofRef?: string;
   /** SHA-256 hash of the proof bytes for integrity. */
@@ -114,7 +114,7 @@ export interface SintVerifiableComputeContext {
 }
 
 /** Hardware safety-controller handshake metadata attached to a request. */
-export interface SintHardwareSafetyContext {
+export interface NosihHardwareSafetyContext {
   /**
    * Permit state from the safety controller.
    * T2/T3 industrial actions are expected to run only when this is "granted".
@@ -131,7 +131,7 @@ export interface SintHardwareSafetyContext {
 }
 
 /** Pre-approved execution corridor metadata attached to a request. */
-export interface SintPreapprovedCorridor {
+export interface NosihPreapprovedCorridor {
   /** Identifier of the corridor envelope previously approved for this agent. */
   readonly corridorId: string;
   /** Mission class approved for this corridor execution window. */
@@ -145,7 +145,7 @@ export interface SintPreapprovedCorridor {
 }
 
 /** Hash-linked factory evidence item carried with industrial action approvals. */
-export interface SintFactoryReceiptChainEntry {
+export interface NosihFactoryReceiptChainEntry {
   /** Stable step label for the action lifecycle (plan, simulation, approval, execution). */
   readonly step: string;
   /** Ledger event type represented by this digest. */
@@ -162,9 +162,9 @@ export interface SintFactoryReceiptChainEntry {
  * gateway can reason about model identity, attestation, safety interlocks,
  * and pre-approved corridors when making tier assignments.
  */
-export interface SintExecutionContext {
+export interface NosihExecutionContext {
   /** Named deployment profile driving policy defaults. */
-  readonly deploymentProfile?: SintSiteDeploymentProfile;
+  readonly deploymentProfile?: NosihSiteDeploymentProfile;
   /** Operator-assigned site identifier (facility, warehouse, cell). */
   readonly siteId?: string;
   /** Identifier of the bridge that normalized the request. */
@@ -172,19 +172,19 @@ export interface SintExecutionContext {
   /** Wire protocol the bridge translates (e.g. "ros2", "mcp", "mqtt"). */
   readonly bridgeProtocol?: string;
   /** Runtime identity of the process dispatching the action. */
-  readonly executor?: SintExecutorIdentity;
+  readonly executor?: NosihExecutorIdentity;
   /** Model runtime context for model-bound token constraints. */
-  readonly model?: SintModelRuntimeContext;
+  readonly model?: NosihModelRuntimeContext;
   /** TEE attestation context for attestation-bound token constraints. */
-  readonly attestation?: SintAttestationContext;
+  readonly attestation?: NosihAttestationContext;
   /** Verifiable compute proof context for proof-bound token constraints. */
-  readonly verifiableCompute?: SintVerifiableComputeContext;
+  readonly verifiableCompute?: NosihVerifiableComputeContext;
   /** Hardware safety interlock / permit state observed at request time. */
-  readonly hardwareSafety?: SintHardwareSafetyContext;
+  readonly hardwareSafety?: NosihHardwareSafetyContext;
   /** Pre-approved execution corridor, if this request is executing under one. */
-  readonly preapprovedCorridor?: SintPreapprovedCorridor;
+  readonly preapprovedCorridor?: NosihPreapprovedCorridor;
   /** Compact append-only factory evidence chain for operator approval context. */
-  readonly factoryReceiptChain?: readonly SintFactoryReceiptChainEntry[];
+  readonly factoryReceiptChain?: readonly NosihFactoryReceiptChainEntry[];
   /** Privacy-preserving human authority proof attached to the request. */
   readonly humanAuthority?: HumanAuthorityProof;
 }
@@ -192,7 +192,7 @@ export interface SintExecutionContext {
 /**
  * A request entering the Policy Gateway for evaluation.
  */
-export interface SintRequest {
+export interface NosihRequest {
   /** Unique, client-supplied request identifier. */
   readonly requestId: UUIDv7;
   /** When the request was emitted by the bridge (ISO 8601, microsecond precision). */
@@ -240,7 +240,7 @@ export interface SintRequest {
   readonly recentActions?: readonly string[];
 
   /** Optional execution/deployment metadata for policy and audit correlation. */
-  readonly executionContext?: SintExecutionContext;
+  readonly executionContext?: NosihExecutionContext;
 }
 
 /**
@@ -256,7 +256,7 @@ export interface PolicyDecision {
 
   /** Transformations applied even on "allow" (e.g. reduced velocity). */
   readonly transformations?: {
-    readonly constraintOverrides?: Partial<SintPhysicalConstraints>;
+    readonly constraintOverrides?: Partial<NosihPhysicalConstraints>;
     readonly additionalAuditFields?: Record<string, unknown>;
   };
 
@@ -266,7 +266,7 @@ export interface PolicyDecision {
     readonly reason: string;
     readonly timeoutMs: DurationMs;
     readonly fallbackAction: "deny" | "safe-stop";
-    readonly approvalQuorum?: SintApprovalQuorum;
+    readonly approvalQuorum?: NosihApprovalQuorum;
   };
 
   /** Present when action is "deny". */
@@ -332,17 +332,17 @@ export type ApprovalRequestStatus =
   | "expired";
 
 /**
- * A batch intercept request — array of SintRequests.
+ * A batch intercept request — array of NosihRequests.
  */
 export interface BatchInterceptRequest {
-  readonly requests: readonly SintRequest[];
+  readonly requests: readonly NosihRequest[];
 }
 
 /**
  * Rate-limit store — sliding-window counter per token.
  *
  * Implemented by CacheStore adapters.  The key is typically
- * `sint:rate:<tokenId>:<windowBucket>`.
+ * `nosih:rate:<tokenId>:<windowBucket>`.
  */
 export interface RateLimitStore {
   /** Increment the call count for a key and return the new count. */

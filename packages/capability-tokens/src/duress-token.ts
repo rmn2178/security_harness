@@ -1,7 +1,7 @@
 import {
   type CapabilityTokenError,
   type Result,
-  type SintCapabilityToken,
+  type NosihCapabilityToken,
   err,
   ok,
 } from "@pshkv/core";
@@ -19,7 +19,7 @@ export interface DuressControlProfile {
 }
 
 export interface DuressCapabilityToken {
-  readonly baseToken: SintCapabilityToken;
+  readonly baseToken: NosihCapabilityToken;
   readonly duressControl: DuressControlProfile;
   readonly evidenceEscrow: DuressEvidenceEscrow;
   readonly createdAt: string;
@@ -47,7 +47,7 @@ export interface CoercionDetectionOptions {
 const ISO8601_MICRO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/;
 
 export function createDuressCapabilityToken(
-  baseToken: SintCapabilityToken,
+  baseToken: NosihCapabilityToken,
   profile: DuressControlProfile,
   escrow: DuressEvidenceEscrow,
   createdAt: string = nowIso8601Micros(),

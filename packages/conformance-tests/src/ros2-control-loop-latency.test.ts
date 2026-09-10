@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   generateKeypair,
   generateUUIDv7,
@@ -49,12 +49,12 @@ describe("ROS2 control-loop latency", () => {
     const root = generateKeypair();
     const agent = generateKeypair();
 
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     const gateway = new PolicyGateway({
       resolveToken: (tokenId) => tokenStore.get(tokenId),
     });
 
-    const tokenReq: SintCapabilityTokenRequest = {
+    const tokenReq: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",
@@ -123,8 +123,8 @@ describe("ROS2 control-loop latency", () => {
     const steadyP95 = median(batchP95s);
     const steadyP99 = median(batchP99s);
     const worstBatchP99 = Math.max(...batchP99s);
-    const strict = process.env.SINT_STRICT_BENCH === "true";
-    const nonStrictSteadyP99Limit = positiveNumberFromEnv("SINT_BENCH_NON_STRICT_P99_MS", 125);
+    const strict = process.env.NOSIH_STRICT_BENCH === "true";
+    const nonStrictSteadyP99Limit = positiveNumberFromEnv("NOSIH_BENCH_NON_STRICT_P99_MS", 125);
 
     // Expose metrics in test output for reporting automation.
     // eslint-disable-next-line no-console
@@ -151,7 +151,7 @@ describe("ROS2 control-loop latency", () => {
       // Under concurrent CI loads, steady-state latency is the stable SLO.
       // Thresholds relaxed for Turbo parallel execution — all packages run
       // simultaneously on shared cores, causing 3–5× latency spikes vs isolated
-      // runs. Strict mode (SINT_STRICT_BENCH=true) enforces the real <10ms SLO.
+      // runs. Strict mode (NOSIH_STRICT_BENCH=true) enforces the real <10ms SLO.
       expect(steadyP95).toBeLessThan(50);
       expect(steadyP99).toBeLessThan(nonStrictSteadyP99Limit);
       expect(worstBatchP99).toBeLessThan(250);

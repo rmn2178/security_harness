@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sint.gg/schemas/task-report.schema.json",
-  "title": "SINT Task Report (Action Ledger Event)",
-  "description": "Ledger event reporting the outcome of an agent action. Written to the Evidence Ledger after action.started, action.completed, action.failed, or action.rolledback. This is the SINT equivalent of a 'task report' — an immutable, hash-chained record of what the agent did and how it ended. Derived from SintLedgerEvent in packages/core/src/types/evidence.ts.",
+  "$id": "https://nosih.gg/schemas/task-report.schema.json",
+  "title": "NOSIH Task Report (Action Ledger Event)",
+  "description": "Ledger event reporting the outcome of an agent action. Written to the Evidence Ledger after action.started, action.completed, action.failed, or action.rolledback. This is the NOSIH equivalent of a 'task report' — an immutable, hash-chained record of what the agent did and how it ended. Derived from NosihLedgerEvent in packages/core/src/types/evidence.ts.",
   "type": "object",
   "additionalProperties": false,
   "required": ["eventId", "sequenceNumber", "timestamp", "eventType", "agentId", "payload", "previousHash", "hash"],
@@ -51,7 +51,7 @@
           "type": "string",
           "format": "uuid",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-          "description": "Correlates the report back to a SINT request that was previously intercepted."
+          "description": "Correlates the report back to a NOSIH request that was previously intercepted."
         },
         "resource": {
           "type": "string",

@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-MCP — MCP Tool Annotation tests.
+ * NOSIH Bridge-MCP — MCP Tool Annotation tests.
  * Tests tier resolution from MCP spec §tool-annotations fields.
  */
 

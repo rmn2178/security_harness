@@ -1,4 +1,4 @@
-# SINT Gateway Server — Multi-stage Docker build.
+# NOSIH Gateway Server — Multi-stage Docker build.
 # Build context must be the repo root (docker-compose sets this automatically).
 
 # ── Stage 1: Install & Build ─────────────────────────────────────────────────
@@ -91,19 +91,19 @@ COPY --from=builder /app/apps/gateway-server/dist/              apps/gateway-ser
 RUN pnpm install --frozen-lockfile --prod
 
 # Runtime environment defaults (override via docker-compose or -e flags)
-ENV SINT_PORT=3100 \
+ENV NOSIH_PORT=3100 \
     PORT=3100 \
-    SINT_STORE=memory \
-    SINT_CACHE=memory \
-    SINT_LOG_LEVEL=info \
+    NOSIH_STORE=memory \
+    NOSIH_CACHE=memory \
+    NOSIH_LOG_LEVEL=info \
     DATABASE_URL="" \
     REDIS_URL="" \
-    SINT_API_KEY=""
+    NOSIH_API_KEY=""
 
 EXPOSE 3100
 
 HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:${SINT_PORT:-3100}/v1/ready || exit 1
+  CMD curl -f http://localhost:${NOSIH_PORT:-3100}/v1/ready || exit 1
 
 # Drop to non-root user for runtime
 USER node

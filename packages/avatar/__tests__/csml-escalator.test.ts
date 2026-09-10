@@ -5,16 +5,16 @@
 import { describe, it, expect } from "vitest";
 import { CsmlEscalator } from "../src/csml-escalator.js";
 import { ApprovalTier } from "@pshkv/core";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 const GENESIS = "0000000000000000000000000000000000000000000000000000000000000000";
 const AGENT = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2";
 
 function makeEvent(
   seq: bigint,
-  eventType: SintLedgerEvent["eventType"],
+  eventType: NosihLedgerEvent["eventType"],
   agentId = AGENT
-): SintLedgerEvent {
+): NosihLedgerEvent {
   return {
     eventId: `event-${seq}` as any,
     sequenceNumber: seq,
@@ -29,7 +29,7 @@ function makeEvent(
 }
 
 /** Events that produce CSML > 0.3 (many denials). */
-function highCsmlEvents(): SintLedgerEvent[] {
+function highCsmlEvents(): NosihLedgerEvent[] {
   return [
     ...Array.from({ length: 20 }, (_, i) => makeEvent(BigInt(i + 1), "request.received")),
     ...Array.from({ length: 20 }, (_, i) => makeEvent(BigInt(i + 30), "approval.denied")),
@@ -37,7 +37,7 @@ function highCsmlEvents(): SintLedgerEvent[] {
 }
 
 /** Events that produce CSML ≈ 0 (all allowed, all complete). */
-function lowCsmlEvents(): SintLedgerEvent[] {
+function lowCsmlEvents(): NosihLedgerEvent[] {
   return [
     ...Array.from({ length: 20 }, (_, i) => makeEvent(BigInt(i + 1), "request.received")),
     ...Array.from({ length: 20 }, (_, i) => makeEvent(BigInt(i + 30), "action.started")),

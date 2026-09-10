@@ -1,7 +1,7 @@
 /**
- * SINT bridge-mqtt — MQTT QoS to Approval Tier Mapping
+ * NOSIH bridge-mqtt — MQTT QoS to Approval Tier Mapping
  *
- * Maps MQTT Quality of Service levels to SINT approval tiers,
+ * Maps MQTT Quality of Service levels to NOSIH approval tiers,
  * providing graduated risk management for IoT message delivery guarantees.
  *
  * @module @pshkv/bridge-mqtt
@@ -15,7 +15,7 @@ import { ApprovalTier } from "@pshkv/core";
 export type MQTTQoS = 0 | 1 | 2;
 
 /**
- * Map MQTT QoS level to SINT approval tier.
+ * Map MQTT QoS level to NOSIH approval tier.
  *
  * QoS 0 (At most once): Fire-and-forget, best effort delivery
  * → T0_OBSERVE: Observation only, no action required
@@ -27,7 +27,7 @@ export type MQTTQoS = 0 | 1 | 2;
  * → T2_ACT: AI can act immediately, logged for review
  *
  * @param qos - MQTT QoS level (0, 1, or 2)
- * @returns Corresponding SINT approval tier
+ * @returns Corresponding NOSIH approval tier
  *
  * @example
  * ```typescript
@@ -54,10 +54,10 @@ export function mapQoSToTier(qos: MQTTQoS): ApprovalTier {
 }
 
 /**
- * Map SINT approval tier to recommended MQTT QoS level.
+ * Map NOSIH approval tier to recommended MQTT QoS level.
  * Inverse of mapQoSToTier for publishing MQTT messages.
  *
- * @param tier - SINT approval tier
+ * @param tier - NOSIH approval tier
  * @returns Recommended MQTT QoS level
  *
  * @example

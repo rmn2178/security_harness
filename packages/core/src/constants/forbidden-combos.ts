@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Default forbidden tool combinations.
+ * NOSIH Protocol — Default forbidden tool combinations.
  *
  * These are sequences of actions that, when performed by the same agent
  * within a time window, indicate potential capability laundering or
  * attack escalation. They must be blocked or escalated to T3_COMMIT.
  *
- * @module @sint/core/constants/forbidden-combos
+ * @module @nosih/core/constants/forbidden-combos
  */
 
 import { ApprovalTier } from "../types/policy.js";

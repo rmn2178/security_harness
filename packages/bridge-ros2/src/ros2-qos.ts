@@ -1,10 +1,10 @@
 /**
- * SINT Bridge-ROS2 — QoS Profiles.
+ * NOSIH Bridge-ROS2 — QoS Profiles.
  *
  * Quality of Service presets for different communication patterns.
  * Maps to ROS 2 DDS QoS policies.
  *
- * @module @sint/bridge-ros2/ros2-qos
+ * @module @nosih/bridge-ros2/ros2-qos
  */
 
 export type ReliabilityPolicy = "reliable" | "best_effort";

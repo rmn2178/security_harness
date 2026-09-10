@@ -36,7 +36,7 @@ export type {
   GuardRegistryError,
 } from "./guard-registry.js";
 export {
-  asSintEventType,
+  asNosihEventType,
   autonomyEvaluationPayloadSchema,
   autonomyEvaluationToLedgerEvents,
   autonomyEventTypeSchema,

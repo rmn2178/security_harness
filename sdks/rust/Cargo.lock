@@ -973,7 +973,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sint-client"
+name = "nosih-client"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -986,7 +986,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sint-edge-authority"
+name = "nosih-edge-authority"
 version = "0.1.0"
 dependencies = [
  "serde",

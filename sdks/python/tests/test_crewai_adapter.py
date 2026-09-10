@@ -1,15 +1,15 @@
-"""Tests for sint.crewai guardrail adapter."""
+"""Tests for nosih.crewai guardrail adapter."""
 
 from __future__ import annotations
 
 import pytest
 
-from sint.client import GatewayError
-from sint.crewai import (
+from nosih.client import GatewayError
+from nosih.crewai import (
     ApprovalResolution,
     CrewAIGuardrailProviderCompat,
 )
-from sint.types import PolicyDecision, SintRequest
+from nosih.types import PolicyDecision, NosihRequest
 
 
 class _FakeGatewayClient:
@@ -23,7 +23,7 @@ class _FakeGatewayClient:
         self._stale_on_resolve = stale_on_resolve
         self.resolve_calls: list[dict[str, str | None]] = []
 
-    async def intercept(self, request: SintRequest) -> PolicyDecision:  # noqa: ARG002
+    async def intercept(self, request: NosihRequest) -> PolicyDecision:  # noqa: ARG002
         return self._decision
 
     async def resolve_approval(
@@ -45,8 +45,8 @@ class _FakeGatewayClient:
         return call
 
 
-def _request() -> SintRequest:
-    return SintRequest.model_validate({
+def _request() -> NosihRequest:
+    return NosihRequest.model_validate({
         "requestId": "01905f7c-0000-7000-8000-000000000021",
         "timestamp": "2026-04-06T12:00:00.000000Z",
         "agentId": "a" * 64,
@@ -123,7 +123,7 @@ async def test_resolver_approved_maps_to_allow() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = CrewAIGuardrailProviderCompat(client)  # type: ignore[arg-type]
 
-    async def resolver(_req: SintRequest, _decision: PolicyDecision) -> ApprovalResolution:
+    async def resolver(_req: NosihRequest, _decision: PolicyDecision) -> ApprovalResolution:
         return ApprovalResolution(status="approved", by="operator@example.com")
 
     decision = await adapter.pre_tool_call(_request(), on_escalation=resolver)
@@ -136,7 +136,7 @@ async def test_resolver_denied_maps_to_deny() -> None:
     client = _FakeGatewayClient(_decision("escalate", with_approval_id=True))
     adapter = CrewAIGuardrailProviderCompat(client)  # type: ignore[arg-type]
 
-    async def resolver(_req: SintRequest, _decision: PolicyDecision) -> ApprovalResolution:
+    async def resolver(_req: NosihRequest, _decision: PolicyDecision) -> ApprovalResolution:
         return ApprovalResolution(status="denied", by="operator@example.com", reason="unsafe")
 
     decision = await adapter.pre_tool_call(_request(), on_escalation=resolver)
@@ -152,7 +152,7 @@ async def test_stale_approval_maps_to_deny_stale() -> None:
     )
     adapter = CrewAIGuardrailProviderCompat(client)  # type: ignore[arg-type]
 
-    async def resolver(_req: SintRequest, _decision: PolicyDecision) -> ApprovalResolution:
+    async def resolver(_req: NosihRequest, _decision: PolicyDecision) -> ApprovalResolution:
         return ApprovalResolution(status="approved", by="operator@example.com")
 
     decision = await adapter.pre_tool_call(_request(), on_escalation=resolver)

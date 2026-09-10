@@ -1,7 +1,7 @@
 /**
  * Physical work market governance fixture conformance.
  *
- * Covers a SINT-native robotics market lifecycle:
+ * Covers a NOSIH-native robotics market lifecycle:
  * - scoped physical-work capabilities
  * - registered requester, robot, and validator identities
  * - supported robot subnets
@@ -301,7 +301,7 @@ describe("physical work market conformance", () => {
   const harness = new PhysicalWorkMarketHarness(fixture);
 
   it("declares the physical work market profile vocabulary", () => {
-    expect(fixture.fixtureId).toBe("sint.physical-ai.physical-work-market.v1");
+    expect(fixture.fixtureId).toBe("nosih.physical-ai.physical-work-market.v1");
     expect(fixture.profile.resources).toContain("pwork://task/*");
     expect(fixture.profile.resources).toContain("pwork://proof/*");
     expect(fixture.profile.actions).toContain("deploy_policy");

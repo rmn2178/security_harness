@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Risk Stream SSE Tests.
+ * NOSIH Gateway Server — Risk Stream SSE Tests.
  *
  * Tests the /v1/risk/stream Server-Sent Events endpoint:
  *   1. GET /v1/risk/stream returns content-type text/event-stream
@@ -7,7 +7,7 @@
  *   3. T3 decision emits riskScore ≈ 0.5 minimum (tier component)
  *   4. stream emits data within 100ms of intercept
  *
- * @module @sint/gateway-server/__tests__/risk-stream
+ * @module @nosih/gateway-server/__tests__/risk-stream
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -19,7 +19,7 @@ import {
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
 import { ApprovalTier } from "@pshkv/core";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -37,8 +37,8 @@ describe("Risk Stream SSE Endpoint", () => {
     app = createApp(ctx);
   });
 
-  async function issueAndStoreToken(overrides?: Partial<SintCapabilityTokenRequest>) {
-    const request: SintCapabilityTokenRequest = {
+  async function issueAndStoreToken(overrides?: Partial<NosihCapabilityTokenRequest>) {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",

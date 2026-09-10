@@ -1,5 +1,5 @@
 /**
- * SROS2 (Secure ROS2) enclave discovery and SINT policy bridge.
+ * SROS2 (Secure ROS2) enclave discovery and NOSIH policy bridge.
  *
  * SROS2 uses a keystore directory structure:
  *   $SROS2_KEYSTORE/
@@ -13,7 +13,7 @@
  *           governance.xml      ← topic encryption/auth settings
  *
  * We parse permissions.xml to extract allow/deny rules and map them
- * to SINT capability token constraints.
+ * to NOSIH capability token constraints.
  */
 
 import { readdir, readFile, access } from "node:fs/promises";
@@ -288,10 +288,10 @@ export function checkSros2Permission(
 }
 
 /**
- * Map SROS2 enclave permissions to SINT token constraints.
+ * Map SROS2 enclave permissions to NOSIH token constraints.
  * The resulting constraints can be used as additional token-level restrictions.
  */
-export function sros2ToSintConstraints(enclave: Sros2Enclave): {
+export function sros2ToNosihConstraints(enclave: Sros2Enclave): {
   allowedTopics: string[];
   deniedTopics: string[];
 } {

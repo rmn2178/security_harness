@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 import {
   computeActionCost,
   getBaseCost,
@@ -10,7 +10,7 @@ import {
   GLOBAL_MARKUP_MULTIPLIER,
 } from "../src/pricing-calculator.js";
 
-function makeRequest(overrides: Partial<SintRequest> = {}): SintRequest {
+function makeRequest(overrides: Partial<NosihRequest> = {}): NosihRequest {
   return {
     requestId: "req-001",
     timestamp: "2026-03-17T10:00:00.000000Z",

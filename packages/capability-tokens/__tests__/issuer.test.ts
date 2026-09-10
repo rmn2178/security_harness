@@ -5,7 +5,7 @@ import {
   issueCapabilityToken,
   validateCapabilityToken,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -21,7 +21,7 @@ describe("Capability Token Issuer", () => {
   const issuerKeypair = generateKeypair();
   const subjectKeypair = generateKeypair();
 
-  const validRequest: SintCapabilityTokenRequest = {
+  const validRequest: NosihCapabilityTokenRequest = {
     issuer: issuerKeypair.publicKey,
     subject: subjectKeypair.publicKey,
     resource: "ros2:///cmd_vel",
@@ -93,7 +93,7 @@ describe("Capability Token Issuer", () => {
   });
 
   it("should reject expired token requests", () => {
-    const expiredRequest: SintCapabilityTokenRequest = {
+    const expiredRequest: NosihCapabilityTokenRequest = {
       ...validRequest,
       expiresAt: pastISO(1),
     };

@@ -1,5 +1,5 @@
 /**
- * SINT bridge-iot — IoT Device Profiles.
+ * NOSIH bridge-iot — IoT Device Profiles.
  *
  * Typed device profiles for common IoT device classes.
  * Profiles drive tier overrides and safety topic detection
@@ -27,7 +27,7 @@ export interface IoTDeviceProfile {
   readonly broker: string;
   /** Topic suffixes (relative to topicPrefix) that carry hardware safety state. */
   readonly safetyTopics: readonly string[];
-  /** Maps to SintHardwareSafetyContext.controllerId */
+  /** Maps to NosihHardwareSafetyContext.controllerId */
   readonly controllerId?: string | undefined;
   /** Minimum tier overrides by topic pattern (glob-style suffix match). */
   readonly tierOverrides?: readonly { readonly pattern: string; readonly tier: ApprovalTier }[] | undefined;

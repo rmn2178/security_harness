@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Proactive CSML Escalation Engine.
+ * NOSIH Protocol — Proactive CSML Escalation Engine.
  *
  * Monitors the Evidence Ledger for CSML score drift and emits
  * operator notifications when an agent's safety score exceeds the
@@ -12,10 +12,10 @@
  * This class implements CsmlEscalationPlugin so it can be plugged
  * directly into PolicyGateway.
  *
- * @module @sint/gate-policy-gateway/proactive-escalation
+ * @module @nosih/gate-policy-gateway/proactive-escalation
  */
 
-import type { ApprovalTier, SintLedgerEvent } from "@pshkv/core";
+import type { ApprovalTier, NosihLedgerEvent } from "@pshkv/core";
 import { computeCsml } from "@pshkv/gate-evidence-ledger";
 
 export interface EscalationAlert {
@@ -33,7 +33,7 @@ export interface EscalationAlert {
 
 export interface EventSource {
   /** Return all events for a given agentId. */
-  getEventsForAgent(agentId: string): readonly SintLedgerEvent[];
+  getEventsForAgent(agentId: string): readonly NosihLedgerEvent[];
 }
 
 export interface ProactiveEscalationEngineOptions {

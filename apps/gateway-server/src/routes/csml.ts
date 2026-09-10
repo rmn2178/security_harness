@@ -1,7 +1,7 @@
 /**
- * SINT Gateway — CSML Score API routes.
+ * NOSIH Gateway — CSML Score API routes.
  *
- * Exposes per-agent CSML scores for SINT Console Intelligence module.
+ * Exposes per-agent CSML scores for NOSIH Console Intelligence module.
  *
  * GET /v1/csml            — get CSML scores for all known agents
  * GET /v1/csml/:agentId   — get current CSML score for an agent

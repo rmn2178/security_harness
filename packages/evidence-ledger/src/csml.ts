@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — CSML (Composite Safety-Model Latency) Metric.
+ * NOSIH Protocol — CSML (Composite Safety-Model Latency) Metric.
  *
  * Computes the CSML score from a window of Evidence Ledger events.
  * This metric fuses behavioral, physical, and ledger-integrity dimensions
@@ -11,13 +11,13 @@
  * Lower is better. Above threshold θ → automatic tier escalation for
  * all subsequent requests from that model backend.
  *
- * Ref: SINT Protocol formal specification (arXiv preprint, 2026)
+ * Ref: NOSIH Protocol formal specification (arXiv preprint, 2026)
  *      ROSClaw empirical study (arXiv:2603.26997, IROS 2026)
  *
- * @module @sint/gate-evidence-ledger/csml
+ * @module @nosih/gate-evidence-ledger/csml
  */
 
-import type { CsmlCoefficients, SintLedgerEvent } from "@pshkv/core";
+import type { CsmlCoefficients, NosihLedgerEvent } from "@pshkv/core";
 import { DEFAULT_CSML_COEFFICIENTS, canonicalJsonStringify } from "@pshkv/core";
 
 /**
@@ -64,7 +64,7 @@ export interface CsmlResult {
 import { sha256 } from "@noble/hashes/sha2";
 import { bytesToHex } from "@noble/hashes/utils";
 
-function canonicalHash(event: SintLedgerEvent): string {
+function canonicalHash(event: NosihLedgerEvent): string {
   const canonical = canonicalJsonStringify({
     eventId: event.eventId,
     sequenceNumber: event.sequenceNumber.toString(),
@@ -78,7 +78,7 @@ function canonicalHash(event: SintLedgerEvent): string {
   return bytesToHex(sha256(new TextEncoder().encode(canonical)));
 }
 
-function verifyChainWindow(events: readonly SintLedgerEvent[]): boolean {
+function verifyChainWindow(events: readonly NosihLedgerEvent[]): boolean {
   if (events.length === 0) return true;
   const sorted = [...events].sort((a, b) =>
     a.sequenceNumber < b.sequenceNumber ? -1 : 1
@@ -122,7 +122,7 @@ function median(values: number[]): number {
  * ```
  */
 export function computeCsml(
-  events: readonly SintLedgerEvent[],
+  events: readonly NosihLedgerEvent[],
   coefficients: CsmlCoefficients = DEFAULT_CSML_COEFFICIENTS,
 ): CsmlResult {
   if (events.length === 0) {
@@ -248,10 +248,10 @@ export function computeCsml(
  * @returns Map from model ID to CsmlResult
  */
 export function computeCsmlPerModel(
-  events: readonly SintLedgerEvent[],
+  events: readonly NosihLedgerEvent[],
   coefficients: CsmlCoefficients = DEFAULT_CSML_COEFFICIENTS,
 ): Map<string, CsmlResult> {
-  const byModel = new Map<string, SintLedgerEvent[]>();
+  const byModel = new Map<string, NosihLedgerEvent[]>();
 
   for (const event of events) {
     const modelId = event.foundation_model_id ?? "__unknown__";

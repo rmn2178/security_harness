@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — In-Memory Trust Adapter.
+ * NOSIH Protocol — In-Memory Trust Adapter.
  *
  * Testing implementation of ITrustPort with configurable
  * trust levels per agent/user.
  *
- * @module @sint/bridge-economy/adapters/in-memory-trust-adapter
+ * @module @nosih/bridge-economy/adapters/in-memory-trust-adapter
  */
 
 import { ok, type Result } from "@pshkv/core";

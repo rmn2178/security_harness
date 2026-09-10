@@ -1,21 +1,21 @@
 /**
- * SINT Bridge A2A — Resource Mapper.
+ * NOSIH Bridge A2A — Resource Mapper.
  *
- * Maps Google A2A tasks to SINT resource URIs and action strings
+ * Maps Google A2A tasks to NOSIH resource URIs and action strings
  * so they can flow through the PolicyGateway.
  *
- * SINT resource URI format for A2A:
+ * NOSIH resource URI format for A2A:
  *   `a2a://<agent-hostname>/<skillId>`
  *
  * where <agent-hostname> is derived from the target agent's URL and
  * <skillId> is the skill being invoked (or "task" for generic calls).
  *
- * @module @sint/bridge-a2a/resource-mapper
+ * @module @nosih/bridge-a2a/resource-mapper
  */
 
 import type { A2AAgentCard, A2ASendTaskParams, A2ASkill } from "./types.js";
 
-/** SINT action string constants for A2A operations. */
+/** NOSIH action string constants for A2A operations. */
 export const A2A_ACTIONS = {
   /** Dispatch a task to another agent (blocking). */
   SEND: "a2a.send",
@@ -30,7 +30,7 @@ export const A2A_ACTIONS = {
 export type A2AAction = (typeof A2A_ACTIONS)[keyof typeof A2A_ACTIONS];
 
 /**
- * Build the SINT resource URI for an A2A task.
+ * Build the NOSIH resource URI for an A2A task.
  *
  * Format: `a2a://<hostname>/<skillId>`
  *
@@ -93,7 +93,7 @@ export function extractA2APhysicalContext(params: A2ASendTaskParams): {
 }
 
 /**
- * Determine the SINT action string for an A2A method.
+ * Determine the NOSIH action string for an A2A method.
  */
 export function mapMethodToAction(method: string): A2AAction {
   switch (method) {

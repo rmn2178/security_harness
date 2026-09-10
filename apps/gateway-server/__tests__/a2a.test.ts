@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — A2A route tests.
+ * NOSIH Gateway Server — A2A route tests.
  *
  * Tests the A2A JSON-RPC 2.0 HTTP endpoints using Hono's built-in test client.
  */
@@ -13,7 +13,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 
 const WEATHER_AGENT_CARD = {
   url: "https://agents.example.com/weather",
@@ -34,14 +34,14 @@ describe("Gateway Server — A2A Routes", () => {
   let ctx: ServerContext;
   let app: Hono;
   let registry: AgentCardRegistry;
-  let token: SintCapabilityToken;
+  let token: NosihCapabilityToken;
 
   beforeEach(async () => {
     ctx = createContext();
     registry = new AgentCardRegistry();
     registry.register(WEATHER_AGENT_CARD as any);
 
-    const tokenReq: SintCapabilityTokenRequest = {
+    const tokenReq: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "a2a://agents.example.com/report",
@@ -129,7 +129,7 @@ describe("Gateway Server — A2A Routes", () => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-SINT-Agent-Id": agent.publicKey,
+        "X-NOSIH-Agent-Id": agent.publicKey,
       },
     });
     const body = await res.json();
@@ -151,7 +151,7 @@ describe("Gateway Server — A2A Routes", () => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-SINT-Agent-Id": agent.publicKey,
+        "X-NOSIH-Agent-Id": agent.publicKey,
       },
     });
     const body = await res.json();
@@ -175,7 +175,7 @@ describe("Gateway Server — A2A Routes", () => {
       headers: { "Content-Type": "application/json" },
     });
     const body = await res.json();
-    expect(body.error.code).toBe(-33001); // SINT_POLICY_DENY
+    expect(body.error.code).toBe(-33001); // NOSIH_POLICY_DENY
   });
 
   it("POST /v1/a2a tasks/send returns forward result when approved", async () => {
@@ -194,13 +194,13 @@ describe("Gateway Server — A2A Routes", () => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-SINT-Agent-Id": agent.publicKey,
+        "X-NOSIH-Agent-Id": agent.publicKey,
       },
     });
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.result).toBeDefined();
-    expect(body.result.sint.approved).toBe(true);
+    expect(body.result.nosih.approved).toBe(true);
     expect(body.result.task.id).toBe("task-report-001");
   });
 
@@ -218,7 +218,7 @@ describe("Gateway Server — A2A Routes", () => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-SINT-Agent-Id": agent.publicKey,
+        "X-NOSIH-Agent-Id": agent.publicKey,
       },
     });
     const body = await res.json();

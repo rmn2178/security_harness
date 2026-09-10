@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — API Types.
+ * NOSIH Dashboard — API Types.
  *
  * Mirrors the Gateway Server response shapes.
  */

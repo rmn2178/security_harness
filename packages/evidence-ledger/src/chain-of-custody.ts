@@ -1,17 +1,17 @@
 /**
- * SINT Protocol — NIST-style Chain-of-Custody Proofs.
+ * NOSIH Protocol — NIST-style Chain-of-Custody Proofs.
  *
  * Proves that event E occurred at position N in the hash chain and
  * that the chain is unbroken from genesis to E.
  *
  * This is analogous to a Merkle proof but for a linear hash chain.
  *
- * @module @sint/gate-evidence-ledger/chain-of-custody
+ * @module @nosih/gate-evidence-ledger/chain-of-custody
  */
 
 import { sha256 } from "@noble/hashes/sha2";
 import { bytesToHex } from "@noble/hashes/utils";
-import { canonicalJsonStringify, type SintLedgerEvent } from "@pshkv/core";
+import { canonicalJsonStringify, type NosihLedgerEvent } from "@pshkv/core";
 
 export interface ChainOfCustodyProof {
   readonly eventId: string;
@@ -40,7 +40,7 @@ const GENESIS_HASH =
  * Recompute the SHA-256 hash of a ledger event (excluding its hash field).
  * Must match the logic in writer.ts for consistency.
  */
-function recomputeHash(event: SintLedgerEvent): string {
+function recomputeHash(event: NosihLedgerEvent): string {
   const canonical = canonicalJsonStringify({
     eventId: event.eventId,
     sequenceNumber: event.sequenceNumber.toString(),
@@ -62,7 +62,7 @@ function recomputeHash(event: SintLedgerEvent): string {
  * Returns undefined if the targetEventId is not found in the chain.
  */
 export function generateProof(
-  events: SintLedgerEvent[],
+  events: NosihLedgerEvent[],
   targetEventId: string,
 ): ChainOfCustodyProof | undefined {
   // Sort by sequence number to ensure correct ordering
@@ -124,7 +124,7 @@ export function generateProof(
  */
 export function verifyProof(
   proof: ChainOfCustodyProof,
-  event: SintLedgerEvent,
+  event: NosihLedgerEvent,
 ): boolean {
   // The proof must reference this event
   if (proof.eventId !== event.eventId) return false;

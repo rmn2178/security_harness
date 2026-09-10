@@ -1,19 +1,19 @@
 /**
- * SINT Protocol — Hardware detection.
+ * NOSIH Protocol — Hardware detection.
  *
  * Auto-detects the host hardware capabilities including CPU architecture,
  * platform, memory, GPU presence, and Jetson platform identification.
- * Returns a fully populated {@link SintHardwareProfile} with an
+ * Returns a fully populated {@link NosihHardwareProfile} with an
  * auto-selected deployment profile.
  *
- * @module @sint/engine-hal/detector
+ * @module @nosih/engine-hal/detector
  */
 
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import os from "node:os";
 
-import type { SintHardwareProfile } from "@pshkv/core";
+import type { NosihHardwareProfile } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 import type { Result } from "@pshkv/core";
 
@@ -103,7 +103,7 @@ function detectNvidiaGpu(): GpuInfo | null {
  * }
  * ```
  */
-export async function detectHardware(): Promise<Result<SintHardwareProfile, Error>> {
+export async function detectHardware(): Promise<Result<NosihHardwareProfile, Error>> {
   try {
     const arch = os.arch();
     const platform = os.platform();
@@ -116,7 +116,7 @@ export async function detectHardware(): Promise<Result<SintHardwareProfile, Erro
     // Detect NVIDIA GPU
     const gpuDetection = detectNvidiaGpu();
 
-    const gpuInfo: SintHardwareProfile["gpuInfo"] = gpuDetection
+    const gpuInfo: NosihHardwareProfile["gpuInfo"] = gpuDetection
       ? {
           name: gpuDetection.name,
           computeCapability: gpuDetection.computeCapability,
@@ -132,7 +132,7 @@ export async function detectHardware(): Promise<Result<SintHardwareProfile, Erro
       hasGpu: gpuInfo !== null,
     });
 
-    const profile: SintHardwareProfile = {
+    const profile: NosihHardwareProfile = {
       arch,
       platform,
       cpuCores,

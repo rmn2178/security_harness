@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — PolicyGateway unit tests.
+ * NOSIH Protocol — PolicyGateway unit tests.
  *
  * Tests the single choke point through which every agent action flows.
  */
@@ -12,7 +12,7 @@ import {
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
@@ -21,8 +21,8 @@ function futureISO(hoursFromNow: number): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -37,7 +37,7 @@ describe("PolicyGateway", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
   let emitSpy: ReturnType<typeof vi.fn>;
@@ -63,8 +63,8 @@ describe("PolicyGateway", () => {
     });
   });
 
-  function issueAndStore(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",

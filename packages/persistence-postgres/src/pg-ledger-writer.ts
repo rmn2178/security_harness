@@ -1,10 +1,10 @@
 /**
- * SINT Persistence Postgres — PostgreSQL Ledger Writer.
+ * NOSIH Persistence Postgres — PostgreSQL Ledger Writer.
  *
- * Implements the LedgerStore interface from @sint/persistence using a real
+ * Implements the LedgerStore interface from @nosih/persistence using a real
  * PostgreSQL backend. Events are INSERT-only and hash-chained.
  *
- * Table: sint_ledger_events
+ * Table: nosih_ledger_events
  *   id          SERIAL PRIMARY KEY
  *   event_id    UUID NOT NULL UNIQUE
  *   agent_id    TEXT NOT NULL
@@ -15,21 +15,21 @@
  *   hash        TEXT NOT NULL
  *   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
  *
- * @module @sint/persistence-postgres/pg-ledger-writer
+ * @module @nosih/persistence-postgres/pg-ledger-writer
  */
 
-import type { LedgerQuery, SintLedgerEvent, UUIDv7 } from "@pshkv/core";
+import type { LedgerQuery, NosihLedgerEvent, UUIDv7 } from "@pshkv/core";
 import type { LedgerStore } from "@pshkv/persistence";
 import type { PgPool } from "./pg-pool.js";
 
-/** Map a raw database row to a SintLedgerEvent. */
-function rowToEvent(row: Record<string, unknown>): SintLedgerEvent {
+/** Map a raw database row to a NosihLedgerEvent. */
+function rowToEvent(row: Record<string, unknown>): NosihLedgerEvent {
   return {
     eventId: row["event_id"] as UUIDv7,
     // sequence_number is stored as a BIGINT string in PG
     sequenceNumber: BigInt(String(row["sequence_number"] ?? row["id"] ?? 0)),
     timestamp: String(row["created_at"] ?? row["timestamp"] ?? new Date().toISOString()),
-    eventType: row["event_type"] as SintLedgerEvent["eventType"],
+    eventType: row["event_type"] as NosihLedgerEvent["eventType"],
     agentId: String(row["agent_id"]),
     tokenId: row["token_id"] != null ? String(row["token_id"]) : undefined,
     payload: (row["payload"] ?? {}) as Record<string, unknown>,
@@ -48,9 +48,9 @@ export class PgLedgerWriter implements LedgerStore {
   constructor(private readonly pool: PgPool) {}
 
   /** Append an event (INSERT-only). */
-  async append(event: SintLedgerEvent): Promise<void> {
+  async append(event: NosihLedgerEvent): Promise<void> {
     await this.pool.query(
-      `INSERT INTO sint_ledger_events
+      `INSERT INTO nosih_ledger_events
          (event_id, sequence_number, agent_id, token_id, event_type, payload, prev_hash, hash, created_at)
        VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9)`,
       [
@@ -68,7 +68,7 @@ export class PgLedgerWriter implements LedgerStore {
   }
 
   /** Query events with optional filters (agentId, eventType, sequence range, limit, offset). */
-  async query(query: LedgerQuery): Promise<readonly SintLedgerEvent[]> {
+  async query(query: LedgerQuery): Promise<readonly NosihLedgerEvent[]> {
     const conditions: string[] = [];
     const params: unknown[] = [];
     let p = 1;
@@ -90,7 +90,7 @@ export class PgLedgerWriter implements LedgerStore {
       params.push(query.toSequence.toString());
     }
 
-    let sql = "SELECT * FROM sint_ledger_events";
+    let sql = "SELECT * FROM nosih_ledger_events";
     if (conditions.length > 0) sql += " WHERE " + conditions.join(" AND ");
     sql += " ORDER BY sequence_number ASC";
 
@@ -108,9 +108,9 @@ export class PgLedgerWriter implements LedgerStore {
   }
 
   /** Look up an event by its UUID. */
-  async getById(eventId: UUIDv7): Promise<SintLedgerEvent | undefined> {
+  async getById(eventId: UUIDv7): Promise<NosihLedgerEvent | undefined> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events WHERE event_id = $1",
+      "SELECT * FROM nosih_ledger_events WHERE event_id = $1",
       [eventId],
     );
     if (result.rows.length === 0) return undefined;
@@ -118,9 +118,9 @@ export class PgLedgerWriter implements LedgerStore {
   }
 
   /** Return the most recently inserted event (head of chain). */
-  async getHead(): Promise<SintLedgerEvent | undefined> {
+  async getHead(): Promise<NosihLedgerEvent | undefined> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events ORDER BY sequence_number DESC LIMIT 1",
+      "SELECT * FROM nosih_ledger_events ORDER BY sequence_number DESC LIMIT 1",
     );
     if (result.rows.length === 0) return undefined;
     return rowToEvent(result.rows[0] as Record<string, unknown>);
@@ -129,7 +129,7 @@ export class PgLedgerWriter implements LedgerStore {
   /** Total number of stored events. */
   async count(): Promise<number> {
     const result = await this.pool.query(
-      "SELECT COUNT(*) AS cnt FROM sint_ledger_events",
+      "SELECT COUNT(*) AS cnt FROM nosih_ledger_events",
     );
     const row = result.rows[0] as Record<string, unknown> | undefined;
     return parseInt(String(row?.["cnt"] ?? "0"), 10);
@@ -143,7 +143,7 @@ export class PgLedgerWriter implements LedgerStore {
    */
   async verifyChain(): Promise<boolean> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events ORDER BY sequence_number ASC",
+      "SELECT * FROM nosih_ledger_events ORDER BY sequence_number ASC",
     );
     const events = result.rows.map((r) => rowToEvent(r as Record<string, unknown>));
 

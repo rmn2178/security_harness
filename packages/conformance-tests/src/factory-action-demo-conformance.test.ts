@@ -46,7 +46,7 @@ function evaluateFactoryAction(inputs: FactoryDemoInputs): PolicyDecision {
       assignedTier: ApprovalTier.T3_COMMIT,
       denial: {
         reason: "SAFETY_ZONE_NOT_CLEAR",
-        policyViolated: "sint.factory.robot.motion.v1",
+        policyViolated: "nosih.factory.robot.motion.v1",
       },
     };
   }
@@ -57,7 +57,7 @@ function evaluateFactoryAction(inputs: FactoryDemoInputs): PolicyDecision {
       assignedTier: ApprovalTier.T3_COMMIT,
       denial: {
         reason: "SIMULATION_RECEIPT_MISSING",
-        policyViolated: "sint.factory.robot.motion.v1",
+        policyViolated: "nosih.factory.robot.motion.v1",
       },
     };
   }
@@ -146,7 +146,7 @@ describe("Factory Action Pack demo fixture v1", () => {
     expect(fixture.successCriteria.atLeastFourVendorStubs).toBe(true);
 
     for (const stub of fixture.adapterStubs) {
-      expect(stub.adapterId).toMatch(/^sint-adapter-/);
+      expect(stub.adapterId).toMatch(/^nosih-adapter-/);
       expect(stub.generatedProgramHash).toMatch(SHA256_REF);
       expect(stub.mapsActionFields).toEqual(
         expect.arrayContaining([

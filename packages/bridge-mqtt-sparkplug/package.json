@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-mqtt-sparkplug",
   "version": "0.1.0",
-  "description": "SINT Bridge — MQTT Sparkplug profile adapter for industrial IoT command and telemetry governance",
+  "description": "NOSIH Bridge — MQTT Sparkplug profile adapter for industrial IoT command and telemetry governance",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,7 +1,7 @@
 /**
- * SINT Dashboard — Tier Legend Component.
+ * NOSIH Dashboard — Tier Legend Component.
  *
- * Shows the four SINT approval tiers with explanations.
+ * Shows the four NOSIH approval tiers with explanations.
  */
 
 interface TierInfo {

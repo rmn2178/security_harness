@@ -1,7 +1,7 @@
 /**
- * SINT Persistence — In-Memory Revocation Bus.
+ * NOSIH Persistence — In-Memory Revocation Bus.
  *
- * @module @sint/persistence/in-memory-revocation-bus
+ * @module @nosih/persistence/in-memory-revocation-bus
  */
 
 import type { UUIDv7 } from "@pshkv/core";

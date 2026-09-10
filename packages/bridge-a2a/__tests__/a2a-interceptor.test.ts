@@ -1,7 +1,7 @@
 /**
- * @sint/bridge-a2a — A2AInterceptor tests.
+ * @nosih/bridge-a2a — A2AInterceptor tests.
  *
- * Verifies that A2A tasks flow correctly through the SINT PolicyGateway:
+ * Verifies that A2A tasks flow correctly through the NOSIH PolicyGateway:
  * allow → "forward", deny → "deny", escalate → "escalate".
  */
 
@@ -12,7 +12,7 @@ import {
   issueCapabilityToken,
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import {
   A2AInterceptor,
   AgentCardRegistry,
@@ -53,8 +53,8 @@ const CARD_WITH_EXTERNAL_EVIDENCE: A2AAgentCard = {
     {
       type: "tool-surface-scan",
       subject: "skill:navigate",
-      issuer: "sint:mcp-scanner",
-      uri: "sint://evidence/tool-surface/navigate",
+      issuer: "nosih:mcp-scanner",
+      uri: "nosih://evidence/tool-surface/navigate",
       hash: {
         alg: "sha256",
         digest: "a".repeat(64),
@@ -66,7 +66,7 @@ const CARD_WITH_EXTERNAL_EVIDENCE: A2AAgentCard = {
     {
       type: "authority-receipt",
       subject: FLEET_MANAGER_CARD.url,
-      issuer: "sint:policy-gateway",
+      issuer: "nosih:policy-gateway",
       hash: {
         alg: "sha256",
         digest: "b".repeat(64),
@@ -111,11 +111,11 @@ describe("A2AInterceptor", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
-  function issueToken(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueToken(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "a2a://agents.example.com/*",
@@ -131,7 +131,7 @@ describe("A2AInterceptor", () => {
     return result.value;
   }
 
-  function makeInterceptor(token: SintCapabilityToken): A2AInterceptor {
+  function makeInterceptor(token: NosihCapabilityToken): A2AInterceptor {
     return new A2AInterceptor(gateway, agent.publicKey, token.tokenId, {
       agentCard: FLEET_MANAGER_CARD,
     });
@@ -168,16 +168,16 @@ describe("A2AInterceptor", () => {
     expect(result.task.id).toBe("task-report-001");
   });
 
-  it("task metadata includes SINT requestId and tier", async () => {
+  it("task metadata includes NOSIH requestId and tier", async () => {
     const token = issueToken({ resource: "a2a://agents.example.com/report" });
     tokenStore.set(token.tokenId, token);
     const interceptor = makeInterceptor(token);
 
     const result = await interceptor.interceptSend(makeReportTask());
     if (result.action !== "forward") throw new Error("Expected forward");
-    const sintMeta = result.task.metadata?.["sint"] as any;
-    expect(sintMeta).toBeDefined();
-    expect(sintMeta.assignedTier).toBeDefined();
+    const nosihMeta = result.task.metadata?.["nosih"] as any;
+    expect(nosihMeta).toBeDefined();
+    expect(nosihMeta.assignedTier).toBeDefined();
   });
 
   // ── Deny ───────────────────────────────────────────────────────────────────
@@ -356,7 +356,7 @@ describe("AgentCardRegistry", () => {
     });
 
     expect(evidence).toHaveLength(1);
-    expect(evidence[0]?.issuer).toBe("sint:mcp-scanner");
+    expect(evidence[0]?.issuer).toBe("nosih:mcp-scanner");
   });
 
   it("excludes stale external evidence unless explicitly requested", () => {

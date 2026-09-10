@@ -1,17 +1,17 @@
 /**
- * SINT Protocol — Capsule API factory.
+ * NOSIH Protocol — Capsule API factory.
  *
  * Creates a restricted API surface for capsule execution. Capsules
  * may only read sensors they declared in their manifest and must
  * route all actions through the provided action gateway.
  *
- * @module @sint/engine-capsule-sandbox/capsule-api
+ * @module @nosih/engine-capsule-sandbox/capsule-api
  */
 
 import type {
-  SintCapsuleManifest,
-  SintSensorModality,
-  SintSensorReading,
+  NosihCapsuleManifest,
+  NosihSensorModality,
+  NosihSensorReading,
 } from "@pshkv/core";
 import type { CapsuleApi } from "./types.js";
 
@@ -67,8 +67,8 @@ function redactSecrets(message: string): string {
  * ```
  */
 export function createCapsuleImports(
-  manifest: SintCapsuleManifest,
-  sensorProvider: (id: string) => Promise<SintSensorReading | null>,
+  manifest: NosihCapsuleManifest,
+  sensorProvider: (id: string) => Promise<NosihSensorReading | null>,
   actionGateway: (
     action: string,
     resource: string,
@@ -76,14 +76,14 @@ export function createCapsuleImports(
   ) => Promise<{ allowed: boolean; reason?: string }>,
 ): CapsuleApi {
   // Build a Set of allowed sensor modalities from the manifest
-  const allowedSensors = new Set<SintSensorModality>(manifest.sensors);
+  const allowedSensors = new Set<NosihSensorModality>(manifest.sensors);
 
   return {
     /**
      * Read a sensor value. Only sensors declared in the manifest are allowed.
      * Returns `null` if the sensor modality is not in the manifest's sensor list.
      */
-    async readSensor(sensorId: string): Promise<SintSensorReading | null> {
+    async readSensor(sensorId: string): Promise<NosihSensorReading | null> {
       // Fetch the reading first to determine its modality
       const reading = await sensorProvider(sensorId);
       if (!reading) {

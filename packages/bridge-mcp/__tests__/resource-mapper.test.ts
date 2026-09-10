@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-MCP — Resource Mapper unit tests.
+ * NOSIH Bridge-MCP — Resource Mapper unit tests.
  */
 
 import { describe, it, expect } from "vitest";
@@ -8,7 +8,7 @@ import {
   toResourceUri,
   toToolId,
   getRiskHint,
-  toSintAction,
+  toNosihAction,
   isReadOnly,
   isDangerous,
   isShellExecTool,
@@ -80,13 +80,13 @@ describe("getRiskHint", () => {
   });
 });
 
-describe("toSintAction", () => {
+describe("toNosihAction", () => {
   it("returns 'call' for standard tools", () => {
-    expect(toSintAction(makeToolCall("filesystem", "readFile"))).toBe("call");
+    expect(toNosihAction(makeToolCall("filesystem", "readFile"))).toBe("call");
   });
 
   it("returns 'exec.run' for exec tools", () => {
-    expect(toSintAction(makeToolCall("exec", "run"))).toBe("exec.run");
+    expect(toNosihAction(makeToolCall("exec", "run"))).toBe("exec.run");
   });
 });
 

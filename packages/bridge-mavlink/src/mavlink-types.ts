@@ -1,5 +1,5 @@
 /**
- * MAVLink message types relevant to SINT safety interception.
+ * MAVLink message types relevant to NOSIH safety interception.
  *
  * Covers MAVLink v2 (MAVLINK20) protocol as used by ArduPilot, PX4, MAVSDK.
  * Only commands that have physical side effects are defined here — pure
@@ -7,14 +7,14 @@
  *
  * Reference: https://mavlink.io/en/messages/common.html
  *
- * @module @sint/bridge-mavlink/mavlink-types
+ * @module @nosih/bridge-mavlink/mavlink-types
  */
 
 // ─── MAV_CMD (COMMAND_LONG / COMMAND_INT) ───────────────��────────────────────
 
 /**
  * MAVLink command identifiers.
- * Each maps to a SINT approval tier in MAVLinkResourceMapper.
+ * Each maps to a NOSIH approval tier in MAVLinkResourceMapper.
  */
 export const MAV_CMD = {
   // Navigation — ACT tier
@@ -160,9 +160,9 @@ export interface MavCommandInt {
   readonly z: number;  // altitude (m)
 }
 
-// ─── SINT-specific ──────────────���──────────────────────────��───────────────────
+// ─── NOSIH-specific ──────────────���──────────────────────────��───────────────────
 
-/** A MAVLink command intercepted by SINT before forwarding to the autopilot. */
+/** A MAVLink command intercepted by NOSIH before forwarding to the autopilot. */
 export interface MavlinkIntercept {
   /** MAVLink message type. */
   readonly messageType:

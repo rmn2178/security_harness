@@ -1,5 +1,5 @@
 /**
- * @sint/persistence-postgres — Canonical certification fixture tests.
+ * @nosih/persistence-postgres — Canonical certification fixture tests.
  *
  * Aligns adapter behavior with shared protocol fixture artifacts.
  */
@@ -103,7 +103,7 @@ describe("Postgres adapter certification fixtures", () => {
     }));
 
     const store = new PgRateLimitStore(pool);
-    const next = await store.increment("sint:rate:fixture", 60_000);
+    const next = await store.increment("nosih:rate:fixture", 60_000);
     expect(next).toBe(fixture.expected.incrementCount);
   });
 });

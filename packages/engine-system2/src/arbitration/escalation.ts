@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Escalation Manager.
+ * NOSIH Protocol — Escalation Manager.
  *
  * Tracks persistent disagreements between System 1 and System 2
  * and escalates to human oversight when a threshold is exceeded.
  *
- * @module @sint/engine-system2/arbitration/escalation
+ * @module @nosih/engine-system2/arbitration/escalation
  */
 
-import type { SintArbitrationDecision } from "@pshkv/core";
+import type { NosihArbitrationDecision } from "@pshkv/core";
 
 /** Event emitted by the escalation manager. */
 export interface EscalationEvent {
@@ -54,7 +54,7 @@ export class EscalationManager {
    * manager.recordDisagreement(decision);
    * ```
    */
-  recordDisagreement(decision: SintArbitrationDecision): void {
+  recordDisagreement(decision: NosihArbitrationDecision): void {
     if (!decision.isSafetyOverride) {
       return;
     }

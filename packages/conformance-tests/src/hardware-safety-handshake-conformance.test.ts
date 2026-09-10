@@ -12,9 +12,9 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -64,12 +64,12 @@ describe("Hardware Safety Phase A — Conformance", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let events: Array<{ eventType: string; payload: Record<string, unknown> }>;
 
-  function issueAndStore(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "*",
@@ -392,7 +392,7 @@ describe("Hardware Safety Phase A — Conformance", () => {
           resource: request.resource,
           action: request.action,
           params: request.params ?? {},
-          executionContext: request.executionContext as SintRequest["executionContext"],
+          executionContext: request.executionContext as NosihRequest["executionContext"],
         });
 
         expect(decision.action, `scenario: ${scenario.name}`).toBe(
@@ -718,7 +718,7 @@ describe("Hardware Safety Phase A — Conformance", () => {
       expect(estopEvent).toBeDefined();
     });
 
-    it("hardwareSafetyContextFromPayload maps MQTT payload fields to SintHardwareSafetyContext correctly", () => {
+    it("hardwareSafetyContextFromPayload maps MQTT payload fields to NosihHardwareSafetyContext correctly", () => {
       const payload = {
         estop: "triggered" as const,
         permit: "denied" as const,

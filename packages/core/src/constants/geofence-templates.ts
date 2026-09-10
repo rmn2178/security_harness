@@ -27,7 +27,7 @@ function circlePolygon(
 /**
  * Library of reusable geofence polygons for common physical-AI deployments.
  * Each entry is a `{ coordinates }` shape that can be dropped straight into
- * a `SintPhysicalConstraints.geofence` field.
+ * a `NosihPhysicalConstraints.geofence` field.
  *
  * Coordinates are `[x, y]` pairs in metres relative to the local frame origin.
  * For GPS-based deployments, supply your own GeoJSON-convention polygon instead.

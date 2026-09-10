@@ -1,7 +1,7 @@
 /**
- * SINT Bridge-ROS2 — Types for ROS 2 interception.
+ * NOSIH Bridge-ROS2 — Types for ROS 2 interception.
  *
- * @module @sint/bridge-ros2/types
+ * @module @nosih/bridge-ros2/types
  */
 
 import type {
@@ -12,7 +12,7 @@ import type {
 import type { QoSProfile } from "./ros2-qos.js";
 
 /**
- * A ROS 2 topic message entering the SINT bridge.
+ * A ROS 2 topic message entering the NOSIH bridge.
  */
 export interface ROS2TopicMessage {
   /** Topic name (e.g. "/cmd_vel", "/camera/front"). */
@@ -28,7 +28,7 @@ export interface ROS2TopicMessage {
 }
 
 /**
- * A ROS 2 service call entering the SINT bridge.
+ * A ROS 2 service call entering the NOSIH bridge.
  */
 export interface ROS2ServiceCall {
   /** Service name (e.g. "/set_mode"). */
@@ -42,7 +42,7 @@ export interface ROS2ServiceCall {
 }
 
 /**
- * A ROS 2 action goal entering the SINT bridge.
+ * A ROS 2 action goal entering the NOSIH bridge.
  */
 export interface ROS2ActionGoal {
   /** Action name (e.g. "/navigate_to_pose"). */
@@ -56,10 +56,10 @@ export interface ROS2ActionGoal {
 }
 
 /**
- * Result of SINT intercepting a ROS 2 operation.
+ * Result of NOSIH intercepting a ROS 2 operation.
  */
 export interface ROS2InterceptResult {
-  /** What action SINT decided. */
+  /** What action NOSIH decided. */
   readonly action: "forward" | "deny" | "escalate";
   /** The full policy decision. */
   readonly decision: PolicyDecision;

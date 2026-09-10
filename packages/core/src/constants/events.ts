@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Event type constants.
+ * NOSIH Protocol — Event type constants.
  *
- * @module @sint/core/constants/events
+ * @module @nosih/core/constants/events
  */
 
-/** All SINT event types as string constants for switch/case usage. */
-export const SINT_EVENTS = {
+/** All NOSIH event types as string constants for switch/case usage. */
+export const NOSIH_EVENTS = {
   // Lifecycle
   AGENT_REGISTERED: "agent.registered",
   CAPABILITY_GRANTED: "agent.capability.granted",

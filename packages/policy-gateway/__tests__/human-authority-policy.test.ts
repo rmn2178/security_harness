@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { type SintCapabilityToken, type SintRequest } from "@pshkv/core";
+import { type NosihCapabilityToken, type NosihRequest } from "@pshkv/core";
 import {
   generateKeypair,
   issueCapabilityToken,
@@ -27,7 +27,7 @@ function pastISO(hours = 1): string {
 
 function makeToken(
   overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {},
-): SintCapabilityToken {
+): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -66,9 +66,9 @@ function makeToken(
 
 let seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   const suffix = String(++seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${suffix}` as any,

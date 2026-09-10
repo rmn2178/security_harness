@@ -1,5 +1,5 @@
 [workspace]
-members = ["sint-client", "sint-edge-authority"]
+members = ["nosih-client", "nosih-edge-authority"]
 resolver = "2"
 
 [workspace.dependencies]

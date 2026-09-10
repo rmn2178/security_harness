@@ -1,13 +1,13 @@
 /**
- * SINT Evidence Ledger — SIEM/SOC Export
+ * NOSIH Evidence Ledger — SIEM/SOC Export
  *
  * Exports ledger events in RFC 5424 syslog format for SIEM ingestion.
  * Supports: syslog (RFC 5424), JSON Lines, CEF (Common Event Format).
  *
- * @module @sint/gate-evidence-ledger/siem-exporter
+ * @module @nosih/gate-evidence-ledger/siem-exporter
  */
 
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 export type SiemFormat = "syslog-rfc5424" | "json-lines" | "cef";
 
@@ -17,12 +17,12 @@ export interface SiemExportOptions {
   readonly facility?: number;
   /** Syslog hostname field. */
   readonly hostname?: string;
-  /** Syslog APP-NAME (default "sint-gateway"). */
+  /** Syslog APP-NAME (default "nosih-gateway"). */
   readonly appName?: string;
 }
 
 /**
- * Map a SINT event type to a RFC 5424 syslog severity number.
+ * Map a NOSIH event type to a RFC 5424 syslog severity number.
  *
  * Severity mapping:
  *   - policy.denied          → 4 (Warning)
@@ -54,17 +54,17 @@ function escapeSdParam(value: string): string {
  * Format a single ledger event as RFC 5424 syslog.
  *
  * Example output:
- *   <14>1 2026-04-04T12:00:00.000000Z hostname sint-gateway - eventId [sint@32473 eventId="..." agentId="..."] eventType
+ *   <14>1 2026-04-04T12:00:00.000000Z hostname nosih-gateway - eventId [nosih@32473 eventId="..." agentId="..."] eventType
  */
-export function formatSyslog(event: SintLedgerEvent, opts?: SiemExportOptions): string {
+export function formatSyslog(event: NosihLedgerEvent, opts?: SiemExportOptions): string {
   const facility = opts?.facility ?? 1;
   const hostname = opts?.hostname ?? "-";
-  const appName = opts?.appName ?? "sint-gateway";
+  const appName = opts?.appName ?? "nosih-gateway";
   const severity = eventSeverity(event.eventType);
   const priVal = pri(facility, severity);
 
   // RFC 5424 STRUCTURED-DATA
-  const sd = `[sint@32473 eventId="${escapeSdParam(event.eventId)}" agentId="${escapeSdParam(event.agentId)}" eventType="${escapeSdParam(event.eventType)}"]`;
+  const sd = `[nosih@32473 eventId="${escapeSdParam(event.eventId)}" agentId="${escapeSdParam(event.agentId)}" eventType="${escapeSdParam(event.eventType)}"]`;
 
   // RFC 5424: <PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID SD MSG
   return `<${priVal}>1 ${event.timestamp} ${hostname} ${appName} - ${event.eventId} ${sd} ${event.eventType}`;
@@ -75,7 +75,7 @@ export function formatSyslog(event: SintLedgerEvent, opts?: SiemExportOptions): 
  *
  * sequenceNumber is serialized as a string to avoid JSON BigInt issues.
  */
-export function formatJsonLine(event: SintLedgerEvent): string {
+export function formatJsonLine(event: NosihLedgerEvent): string {
   const obj = {
     ...event,
     sequenceNumber: event.sequenceNumber.toString(),
@@ -105,14 +105,14 @@ function escapeCefExtension(value: string): string {
 /**
  * Format as ArcSight CEF (Common Event Format).
  *
- * CEF:0|SINT|PhysicalAIGateway|0.2|<eventType>|<description>|<severity>|...
+ * CEF:0|NOSIH|PhysicalAIGateway|0.2|<eventType>|<description>|<severity>|...
  */
-export function formatCef(event: SintLedgerEvent, opts?: SiemExportOptions): string {
+export function formatCef(event: NosihLedgerEvent, opts?: SiemExportOptions): string {
   const severity = cefSeverity(event.eventType);
-  const appName = opts?.appName ?? "sint-gateway";
+  const appName = opts?.appName ?? "nosih-gateway";
 
   // CEF header: Version|Device Vendor|Device Product|Device Version|Signature ID|Name|Severity
-  const header = `CEF:0|SINT|PhysicalAIGateway|0.2|${event.eventType}|SINT Evidence Ledger Event|${severity}`;
+  const header = `CEF:0|NOSIH|PhysicalAIGateway|0.2|${event.eventType}|NOSIH Evidence Ledger Event|${severity}`;
 
   // CEF extension key=value pairs
   const ext = [
@@ -130,7 +130,7 @@ export function formatCef(event: SintLedgerEvent, opts?: SiemExportOptions): str
 /**
  * Export a batch of events in the specified format (one line per event).
  */
-export function exportBatch(events: SintLedgerEvent[], opts: SiemExportOptions): string {
+export function exportBatch(events: NosihLedgerEvent[], opts: SiemExportOptions): string {
   const lines = events.map((event) => {
     switch (opts.format) {
       case "syslog-rfc5424":

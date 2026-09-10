@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ROS2 + Agent Multi-Agent Scenarios.
+ * NOSIH Protocol — ROS2 + Agent Multi-Agent Scenarios.
  *
  * Validates multi-agent coordination safety properties:
  *   S1 — Two agents on /cmd_vel: both within constraints → both escalated (T2)
@@ -16,7 +16,7 @@
  *   "escalate" — T2/T3 requires review (not a denial)
  *   "deny"     — explicitly blocked (constraint or resource violation)
  *
- * @module @sint/conformance-tests/ros2-agent-scenarios
+ * @module @nosih/conformance-tests/ros2-agent-scenarios
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -36,7 +36,7 @@ import type {
   ROS2ServiceCall,
   ROS2ActionGoal,
 } from "@pshkv/bridge-ros2";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ describe("ROS2 + Agent Multi-Agent Scenarios", () => {
   const fleetManager = generateKeypair();
   const robot1 = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
   let approvalQueue: ApprovalQueue;
@@ -86,9 +86,9 @@ describe("ROS2 + Agent Multi-Agent Scenarios", () => {
 
   function issueAndStore(
     subject: string,
-    overrides?: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides?: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject,
       resource: "ros2:///cmd_vel",
@@ -110,7 +110,7 @@ describe("ROS2 + Agent Multi-Agent Scenarios", () => {
 
   function createInterceptor(
     subject: string,
-    token: SintCapabilityToken,
+    token: NosihCapabilityToken,
     robotMassKg?: number,
   ): ROS2Interceptor {
     return new ROS2Interceptor({
@@ -301,7 +301,7 @@ describe("ROS2 + Agent Multi-Agent Scenarios", () => {
 
   // ──────────────────────────────────────────────────────────────────────────
   // Scenario 7 — Human-in-loop: gripper/* service call escalates; ledger intact
-  // Use ros2:///gripper/* which has explicit T2_ACT tier rule in SINT
+  // Use ros2:///gripper/* which has explicit T2_ACT tier rule in NOSIH
   // ──────────────────────────────────────────────────────────────────────────
   it("S7. Gripper service call escalates to T2_ACT and ledger records event with intact chain", async () => {
     const token = issueAndStore(agentA.publicKey, {

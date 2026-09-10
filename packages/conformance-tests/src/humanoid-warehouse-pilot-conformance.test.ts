@@ -8,14 +8,14 @@
 
 import { describe, expect, it } from "vitest";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
-import type { SintEventType, SintLedgerEvent } from "@pshkv/core";
+import type { NosihEventType, NosihLedgerEvent } from "@pshkv/core";
 import { generateKeypair } from "@pshkv/gate-capability-tokens";
 import { loadHumanoidWarehousePilotFixture } from "./fixture-loader.js";
 
 type ExportRow = Record<string, unknown>;
 
 function rowFromEvent(
-  event: SintLedgerEvent,
+  event: NosihLedgerEvent,
   context: {
     readonly siteId: string;
     readonly shiftId: string;
@@ -73,7 +73,7 @@ describe("Humanoid warehouse pilot fixture v1", () => {
 
     const events = fixture.sampleEvents.map((sample) =>
       ledger.append({
-        eventType: sample.eventType as SintEventType,
+        eventType: sample.eventType as NosihEventType,
         agentId: agent.publicKey,
         tokenId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
         payload: {

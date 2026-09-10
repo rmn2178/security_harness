@@ -32,13 +32,13 @@ function encodeNode(value: string): string {
   return encodeURIComponent(value.trim());
 }
 
-/** Convert an OPC UA node identifier to canonical SINT URI. */
+/** Convert an OPC UA node identifier to canonical NOSIH URI. */
 export function opcUaNodeToResourceUri(nodeId: string, endpoint?: string): string {
   const host = normalizeEndpointHost(endpoint);
   return `opcua://${host}/${encodeNode(nodeId)}`;
 }
 
-/** Convert OPC UA method invocation target to canonical SINT URI. */
+/** Convert OPC UA method invocation target to canonical NOSIH URI. */
 export function opcUaMethodToResourceUri(
   objectNodeId: string,
   methodNodeId: string,
@@ -48,7 +48,7 @@ export function opcUaMethodToResourceUri(
   return `opcua://${host}/${encodeNode(objectNodeId)}/method/${encodeNode(methodNodeId)}`;
 }
 
-/** Map OPC UA operation to canonical SINT action string. */
+/** Map OPC UA operation to canonical NOSIH action string. */
 export function opcUaOperationToAction(operation: OpcUaOperation): "observe" | "read" | "write" | "call" {
   switch (operation) {
     case "read":

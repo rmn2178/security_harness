@@ -1,7 +1,7 @@
 /**
- * SINT Bridge-ROS2 — Interceptor unit tests.
+ * NOSIH Bridge-ROS2 — Interceptor unit tests.
  *
- * Tests the full ROS 2 → SINT security gate pipeline.
+ * Tests the full ROS 2 → NOSIH security gate pipeline.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -12,7 +12,7 @@ import {
   issueCapabilityToken,
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
@@ -24,7 +24,7 @@ describe("ROS2Interceptor", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
   beforeEach(() => {
@@ -37,8 +37,8 @@ describe("ROS2Interceptor", () => {
     });
   });
 
-  function issueToken(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+  function issueToken(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///camera/front",

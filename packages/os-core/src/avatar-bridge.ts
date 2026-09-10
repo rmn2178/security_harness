@@ -1,13 +1,13 @@
 /**
- * Avatar Bridge — connects SINT OS to the SINT Face (3D avatar).
+ * Avatar Bridge — connects NOSIH OS to the NOSIH Face (3D avatar).
  *
- * Bridges the SINT Protocol governance layer to the avatar's
+ * Bridges the NOSIH Protocol governance layer to the avatar's
  * Conversation Compiler + Widget HUD. Governance events generate
  * avatar reactions (expressions, animations, widgets).
  */
 
 import type { AvatarConfig } from "./types.js";
-import type { GovernanceResult, SintTier } from "@pshkv/openclaw-adapter";
+import type { GovernanceResult, NosihTier } from "@pshkv/openclaw-adapter";
 
 /** Widget command sent to the avatar. */
 export interface AvatarWidget {
@@ -27,7 +27,7 @@ export interface AvatarMessage {
 }
 
 /** Map governance tiers to avatar expressions. */
-const TIER_EXPRESSIONS: Record<SintTier, string> = {
+const TIER_EXPRESSIONS: Record<NosihTier, string> = {
   T0: "default",
   T1: "default",
   T2: "thinking",
@@ -42,7 +42,7 @@ const OUTCOME_ANIMATIONS: Record<string, string> = {
 };
 
 /**
- * Bridge between SINT governance events and the Avatar face.
+ * Bridge between NOSIH governance events and the Avatar face.
  */
 export class AvatarBridge {
   private readonly config: AvatarConfig;
@@ -93,7 +93,7 @@ export class AvatarBridge {
   /**
    * Convert a governance result into an avatar reaction.
    *
-   * Used to make the avatar visually react to SINT governance events:
+   * Used to make the avatar visually react to NOSIH governance events:
    * - T0 approve → nod, default face
    * - T2 deny → head shake, thinking face
    * - T3 escalate → surprised, spawn approval widget

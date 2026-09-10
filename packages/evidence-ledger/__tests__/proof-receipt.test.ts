@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Proof Receipt unit tests.
+ * NOSIH Protocol — Proof Receipt unit tests.
  *
  * Tests cryptographic attestation generation and verification.
  */

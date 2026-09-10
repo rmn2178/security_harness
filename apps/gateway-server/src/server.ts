@@ -1,11 +1,11 @@
 /**
- * SINT Gateway Server — Server factory.
+ * NOSIH Gateway Server — Server factory.
  *
  * Creates a testable Hono app instance with all routes
  * and middleware configured. Supports in-memory and
  * persistent (PostgreSQL/Redis) storage backends.
  *
- * @module @sint/gateway-server/server
+ * @module @nosih/gateway-server/server
  */
 
 import { Hono } from "hono";
@@ -34,7 +34,7 @@ import {
   RedisCache,
   RedisRevocationBus,
 } from "@pshkv/persistence";
-import type { SintCapabilityToken, SintEventType } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihEventType } from "@pshkv/core";
 import { createRedisClient } from "./redis-factory.js";
 import { applyMiddleware } from "./middleware.js";
 import { ed25519Auth, apiKeyAuth, rateLimit } from "./middleware/auth.js";
@@ -55,7 +55,7 @@ import { csmlRoutes, type CsmlRouteContext } from "./routes/csml.js";
 import { registryRoutes, type RegistryRouteContext } from "./routes/registry.js";
 import { missionAuthorityRoutes } from "./routes/mission-authority.js";
 import { InMemoryRegistryStore } from "@pshkv/token-registry";
-import type { SintConfig } from "./config.js";
+import type { NosihConfig } from "./config.js";
 
 /** Shared server state — injectable for testing. */
 export interface ServerContext {
@@ -109,14 +109,14 @@ export function createContext(): ServerContext {
     csmlEscalation: createDefaultCsmlEscalator(ledger),
     emitLedgerEvent: (event) => {
       const written = ledger.append({
-        eventType: event.eventType as SintEventType,
+        eventType: event.eventType as NosihEventType,
         agentId: event.agentId,
         tokenId: event.tokenId,
         payload: event.payload,
       });
       // Also persist to backing store
       ledgerStore.append(written).catch((err) => {
-        console.error("[SINT] Failed to persist ledger event:", err);
+        console.error("[NOSIH] Failed to persist ledger event:", err);
       });
     },
   });
@@ -156,7 +156,7 @@ export function createContext(): ServerContext {
  * - RedisCache: Distributed TTL cache for hot token lookups
  * - RedisRevocationBus: Pub/sub for <1s revocation propagation across nodes
  */
-export async function createPersistentContext(config: SintConfig): Promise<ServerContext> {
+export async function createPersistentContext(config: NosihConfig): Promise<ServerContext> {
   let tokenStore: TokenStore;
   let ledgerStore: LedgerStore;
   let cache: CacheStore;
@@ -187,7 +187,7 @@ export async function createPersistentContext(config: SintConfig): Promise<Serve
         return { ok: false, detail: `postgres probe failed: ${message}` };
       }
     };
-    console.log("[SINT] PostgreSQL schema verified");
+    console.log("[NOSIH] PostgreSQL schema verified");
   } else {
     tokenStore = new InMemoryTokenStore();
     ledgerStore = new InMemoryLedgerStore();
@@ -216,7 +216,7 @@ export async function createPersistentContext(config: SintConfig): Promise<Serve
         return { ok: false, detail: `redis probe failed: ${message}` };
       }
     };
-    console.log("[SINT] Redis cache + revocation bus connected");
+    console.log("[NOSIH] Redis cache + revocation bus connected");
   } else {
     cache = new InMemoryCache();
     revocationBus = new InMemoryRevocationBus();
@@ -229,7 +229,7 @@ export async function createPersistentContext(config: SintConfig): Promise<Serve
   const gateway = new PolicyGateway({
     resolveToken: async (id) => {
       // Check cache first for hot token lookups
-      const cached = await cache.get<SintCapabilityToken>(`token:${id}`);
+      const cached = await cache.get<NosihCapabilityToken>(`token:${id}`);
       if (cached) return cached;
       const token = await tokenStore.get(id);
       if (token) {
@@ -242,14 +242,14 @@ export async function createPersistentContext(config: SintConfig): Promise<Serve
     csmlEscalation: createDefaultCsmlEscalator(ledger),
     emitLedgerEvent: (event) => {
       const written = ledger.append({
-        eventType: event.eventType as SintEventType,
+        eventType: event.eventType as NosihEventType,
         agentId: event.agentId,
         tokenId: event.tokenId,
         payload: event.payload,
       });
       // Persist to backing store (fire-and-forget for non-blocking operation)
       ledgerStore.append(written).catch((err) => {
-        console.error("[SINT] Failed to persist ledger event:", err);
+        console.error("[NOSIH] Failed to persist ledger event:", err);
       });
     },
   });

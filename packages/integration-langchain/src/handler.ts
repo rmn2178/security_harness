@@ -1,8 +1,8 @@
 /**
- * SintGovernanceHandler — LangChain callback handler for SINT Protocol.
+ * NosihGovernanceHandler — LangChain callback handler for NOSIH Protocol.
  *
  * Intercepts tool calls before execution, validates against the
- * Policy Gateway, and logs evidence. Denied actions throw SintDeniedError
+ * Policy Gateway, and logs evidence. Denied actions throw NosihDeniedError
  * (configurable).
  *
  * Compatible with LangChain JS/TS callback handler interface.
@@ -10,12 +10,12 @@
  */
 
 import type {
-  SintGovernanceConfig,
-  SintInterceptResult,
-  SintToolCallContext,
+  NosihGovernanceConfig,
+  NosihInterceptResult,
+  NosihToolCallContext,
 } from "./types.js";
 import { intercept } from "./gateway-client.js";
-import { SintDeniedError } from "./errors.js";
+import { NosihDeniedError } from "./errors.js";
 
 /**
  * Default resource mapper: tool name → "tool:{toolName}".
@@ -32,16 +32,16 @@ function defaultActionMapper(_toolName: string): string {
 }
 
 /**
- * SINT Governance Handler for LangChain.
+ * NOSIH Governance Handler for LangChain.
  *
  * Implements the LangChain callback handler interface (handleToolStart).
- * Every tool invocation is intercepted by the SINT Policy Gateway.
+ * Every tool invocation is intercepted by the NOSIH Policy Gateway.
  *
  * @example
  * ```typescript
- * import { SintGovernanceHandler } from "@pshkv/integration-langchain";
+ * import { NosihGovernanceHandler } from "@pshkv/integration-langchain";
  *
- * const handler = new SintGovernanceHandler({
+ * const handler = new NosihGovernanceHandler({
  *   gatewayUrl: "http://localhost:4100",
  *   agentId: "my-agent-pubkey-hex",
  * });
@@ -50,15 +50,15 @@ function defaultActionMapper(_toolName: string): string {
  * const result = await chain.invoke(input, { callbacks: [handler] });
  * ```
  */
-export class SintGovernanceHandler {
-  readonly name = "SintGovernanceHandler";
+export class NosihGovernanceHandler {
+  readonly name = "NosihGovernanceHandler";
 
-  private config: SintGovernanceConfig;
+  private config: NosihGovernanceConfig;
   private resourceMapper: (toolName: string) => string;
   private actionMapper: (toolName: string) => string;
-  private interceptLog: SintToolCallContext[] = [];
+  private interceptLog: NosihToolCallContext[] = [];
 
-  constructor(config: SintGovernanceConfig) {
+  constructor(config: NosihGovernanceConfig) {
     this.config = {
       throwOnDeny: true,
       logEvidence: true,
@@ -73,8 +73,8 @@ export class SintGovernanceHandler {
   /**
    * Called by LangChain before a tool is executed.
    *
-   * Sends an intercept request to the SINT Policy Gateway.
-   * If denied and throwOnDeny is true, throws SintDeniedError.
+   * Sends an intercept request to the NOSIH Policy Gateway.
+   * If denied and throwOnDeny is true, throws NosihDeniedError.
    */
   async handleToolStart(
     tool: { name: string },
@@ -85,7 +85,7 @@ export class SintGovernanceHandler {
     const resource = this.resourceMapper(tool.name);
     const action = this.actionMapper(tool.name);
 
-    const context: SintToolCallContext = {
+    const context: NosihToolCallContext = {
       toolName: tool.name,
       toolInput: input,
       runId,
@@ -97,7 +97,7 @@ export class SintGovernanceHandler {
     const result = await this.intercept(context);
 
     if (!result.approved && this.config.throwOnDeny) {
-      throw new SintDeniedError({
+      throw new NosihDeniedError({
         toolName: tool.name,
         resource,
         reason: result.reason ?? "Policy gateway denied the action",
@@ -132,11 +132,11 @@ export class SintGovernanceHandler {
   }
 
   /**
-   * Send an intercept request to the SINT gateway.
+   * Send an intercept request to the NOSIH gateway.
    */
   private async intercept(
-    context: SintToolCallContext
-  ): Promise<SintInterceptResult> {
+    context: NosihToolCallContext
+  ): Promise<NosihInterceptResult> {
     this.interceptLog.push(context);
 
     return intercept(this.config, {
@@ -156,7 +156,7 @@ export class SintGovernanceHandler {
   /**
    * Get the log of all intercepted tool calls in this handler's lifetime.
    */
-  getInterceptLog(): ReadonlyArray<SintToolCallContext> {
+  getInterceptLog(): ReadonlyArray<NosihToolCallContext> {
     return this.interceptLog;
   }
 

@@ -1,12 +1,12 @@
 /**
- * SINT Protocol — Bridge-MCP Regression Test Suite.
+ * NOSIH Protocol — Bridge-MCP Regression Test Suite.
  *
- * Tests that MCP tool calls correctly flow through the SINT
+ * Tests that MCP tool calls correctly flow through the NOSIH
  * security gate with proper tier assignment, denial, forbidden
  * combo detection, and escalation.
  *
- * These tests MUST pass on every PR that touches @sint/bridge-mcp
- * or @sint/gate-policy-gateway.
+ * These tests MUST pass on every PR that touches @nosih/bridge-mcp
+ * or @nosih/gate-policy-gateway.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -19,7 +19,7 @@ import { PolicyGateway, checkForbiddenCombos } from "@pshkv/gate-policy-gateway"
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
 import { MCPInterceptor } from "@pshkv/bridge-mcp";
 import type { MCPToolCall } from "@pshkv/bridge-mcp";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
@@ -31,7 +31,7 @@ describe("Bridge-MCP Regression Tests", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
   let interceptor: MCPInterceptor;
@@ -58,9 +58,9 @@ describe("Bridge-MCP Regression Tests", () => {
   });
 
   function issueAndStore(
-    overrides?: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides?: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://*",

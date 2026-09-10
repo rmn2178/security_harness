@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Metrics tests.
+ * NOSIH Gateway Server — Metrics tests.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -24,10 +24,10 @@ describe("Metrics", () => {
     expect(res.status).toBe(200);
 
     const body = await res.text();
-    expect(body).toContain("sint_requests_total");
-    expect(body).toContain("# TYPE sint_requests_total counter");
-    expect(body).toContain("sint_approval_queue_size");
-    expect(body).toContain("sint_token_operations_total");
+    expect(body).toContain("nosih_requests_total");
+    expect(body).toContain("# TYPE nosih_requests_total counter");
+    expect(body).toContain("nosih_approval_queue_size");
+    expect(body).toContain("nosih_token_operations_total");
   });
 
   it("metrics track request counts", async () => {
@@ -44,8 +44,8 @@ describe("Metrics", () => {
   it("metrics include histogram for approvals", async () => {
     const res = await app.request("/v1/metrics");
     const body = await res.text();
-    expect(body).toContain("sint_approval_resolution_ms");
-    expect(body).toContain("# TYPE sint_approval_resolution_ms histogram");
+    expect(body).toContain("nosih_approval_resolution_ms");
+    expect(body).toContain("# TYPE nosih_approval_resolution_ms histogram");
     expect(body).toContain('le="+Inf"');
   });
 

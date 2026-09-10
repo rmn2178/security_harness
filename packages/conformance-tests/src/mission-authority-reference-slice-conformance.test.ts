@@ -23,8 +23,8 @@ import { InMemoryMissionManifestStore } from "@pshkv/persistence";
 import {
   createSignedDispatchEnvelope,
   createSignedEffectPack,
-  SintEdgeRunner,
-} from "@pshkv/sint-edge-agent";
+  NosihEdgeRunner,
+} from "@pshkv/nosih-edge-agent";
 
 function isoFromNow(milliseconds: number): string {
   return new Date(Date.now() + milliseconds)
@@ -197,7 +197,7 @@ describe("Mission Authority reference slice conformance", () => {
     if (!token.ok) return;
 
     const pack = createSignedEffectPack({
-      schemaVersion: "sint-effect-pack/1",
+      schemaVersion: "nosih-effect-pack/1",
       packId: "reference.motion",
       version: "1.0.0",
       issuedAt: nowISO8601(),
@@ -221,7 +221,7 @@ describe("Mission Authority reference slice conformance", () => {
     if (!pack.ok) return;
 
     const dispatch = createSignedDispatchEnvelope({
-      schemaVersion: "sint-dispatch/1",
+      schemaVersion: "nosih-dispatch/1",
       dispatchId: generateUUIDv7(),
       requestId: generateUUIDv7(),
       actionRef,
@@ -251,7 +251,7 @@ describe("Mission Authority reference slice conformance", () => {
       output: "synthetic actuator accepted velocity command",
       metrics: { commandedVelocityMps: 0.3 },
     }));
-    const runner = new SintEdgeRunner({
+    const runner = new NosihEdgeRunner({
       runnerId: "edge-reference-runner",
       admission: {
         trustedPackIssuers: [packIssuer.publicKey],

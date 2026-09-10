@@ -1,5 +1,5 @@
 /**
- * SINT bridge-iot — IotInterceptor tests.
+ * NOSIH bridge-iot — IotInterceptor tests.
  *
  * 20 test cases covering:
  * 1. Temperature sensor publish → T0_OBSERVE allowed → action: "forward"
@@ -28,7 +28,7 @@ import { describe, it, expect, vi } from "vitest";
 import { IotInterceptor } from "../src/iot-interceptor.js";
 import type { IotGatewayLike } from "../src/iot-interceptor.js";
 import { createDeviceProfile } from "../src/device-profiles.js";
-import type { PolicyDecision, SintRequest } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest } from "@pshkv/core";
 
 const AGENT_ID = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2";
 const TOKEN_ID = "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7";
@@ -71,10 +71,10 @@ function makeEscalateDecision(): PolicyDecision {
   };
 }
 
-function makeMockGateway(decision: PolicyDecision): IotGatewayLike & { lastRequest: SintRequest | null } {
+function makeMockGateway(decision: PolicyDecision): IotGatewayLike & { lastRequest: NosihRequest | null } {
   const gateway = {
-    lastRequest: null as SintRequest | null,
-    async intercept(req: SintRequest): Promise<PolicyDecision> {
+    lastRequest: null as NosihRequest | null,
+    async intercept(req: NosihRequest): Promise<PolicyDecision> {
       gateway.lastRequest = req;
       return decision;
     },
@@ -406,7 +406,7 @@ describe("IotInterceptor", () => {
 
   it("20. gateway throw → error propagates (no silent swallow)", async () => {
     const gateway: IotGatewayLike = {
-      async intercept(_req: SintRequest): Promise<PolicyDecision> {
+      async intercept(_req: NosihRequest): Promise<PolicyDecision> {
         throw new Error("Gateway connection error");
       },
     };

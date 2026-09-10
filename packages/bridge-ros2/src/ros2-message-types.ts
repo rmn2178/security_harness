@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-ROS2 — Message Types.
+ * NOSIH Bridge-ROS2 — Message Types.
  *
  * TypeScript representations of common ROS 2 message types
  * with Zod schemas for runtime validation.
@@ -7,7 +7,7 @@
  * These are protocol-compatible with standard ROS 2 message definitions
  * (geometry_msgs, sensor_msgs, etc.) but don't require rclnodejs.
  *
- * @module @sint/bridge-ros2/ros2-message-types
+ * @module @nosih/bridge-ros2/ros2-message-types
  */
 
 import { z } from "zod";

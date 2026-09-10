@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sint.gg/schemas/approval-request.schema.json",
-  "title": "SINT Approval Request Message",
+  "$id": "https://nosih.gg/schemas/approval-request.schema.json",
+  "title": "NOSIH Approval Request Message",
   "description": "Emitted on the approvals WebSocket / SSE stream when a T2_ACT or T3_COMMIT request has been escalated and awaits human review. Corresponds to the APPROVAL_REQUIRED event in apps/gateway-server/src/ws/ws-approval-stream.ts.",
   "type": "object",
   "additionalProperties": false,
@@ -15,7 +15,7 @@
       "type": "string",
       "format": "uuid",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-      "description": "UUID v7 identifier of the intercepted SINT request."
+      "description": "UUID v7 identifier of the intercepted NOSIH request."
     },
     "agentId": {
       "type": "string",

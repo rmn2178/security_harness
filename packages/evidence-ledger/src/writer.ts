@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Evidence Ledger Writer.
+ * NOSIH Protocol — Evidence Ledger Writer.
  *
  * Appends events to the immutable audit log with hash chaining.
  * NO UPDATE or DELETE operations are permitted.
@@ -8,7 +8,7 @@
  * forming a tamper-evident chain. Any modification to a past
  * event breaks the chain and is detectable.
  *
- * @module @sint/gate-evidence-ledger/writer
+ * @module @nosih/gate-evidence-ledger/writer
  */
 
 import { sha256 } from "@noble/hashes/sha2";
@@ -18,8 +18,8 @@ import type {
   ISO8601,
   Result,
   SHA256,
-  SintEventType,
-  SintLedgerEvent,
+  NosihEventType,
+  NosihLedgerEvent,
   UUIDv7,
 } from "@pshkv/core";
 import { ok, err, canonicalJsonStringify } from "@pshkv/core";
@@ -33,7 +33,7 @@ const GENESIS_HASH: SHA256 =
  * Compute SHA-256 hash of an event (excluding the hash field itself).
  * Pure function — deterministic.
  */
-function computeEventHash(event: Omit<SintLedgerEvent, "hash">): SHA256 {
+function computeEventHash(event: Omit<NosihLedgerEvent, "hash">): SHA256 {
   const canonical = canonicalJsonStringify({
     eventId: event.eventId,
     sequenceNumber: event.sequenceNumber.toString(),
@@ -93,7 +93,7 @@ function nowISO8601(): ISO8601 {
  * ```
  */
 export class LedgerWriter {
-  private events: SintLedgerEvent[] = [];
+  private events: NosihLedgerEvent[] = [];
   private sequenceCounter = 0n;
   private lastHash: SHA256 = GENESIS_HASH;
 
@@ -104,14 +104,14 @@ export class LedgerWriter {
    * @returns The complete event with computed hash and sequence number
    */
   append(input: {
-    eventType: SintEventType;
+    eventType: NosihEventType;
     agentId: Ed25519PublicKey;
     tokenId?: UUIDv7;
     payload: Record<string, unknown>;
-  }): SintLedgerEvent {
+  }): NosihLedgerEvent {
     this.sequenceCounter += 1n;
 
-    const partialEvent: Omit<SintLedgerEvent, "hash"> = {
+    const partialEvent: Omit<NosihLedgerEvent, "hash"> = {
       eventId: generateUUIDv7(),
       sequenceNumber: this.sequenceCounter,
       timestamp: nowISO8601(),
@@ -123,7 +123,7 @@ export class LedgerWriter {
     };
 
     const hash = computeEventHash(partialEvent);
-    const event: SintLedgerEvent = { ...partialEvent, hash };
+    const event: NosihLedgerEvent = { ...partialEvent, hash };
 
     this.events.push(event);
     this.lastHash = hash;
@@ -182,12 +182,12 @@ export class LedgerWriter {
   }
 
   /** Get all events (read-only copy). */
-  getAll(): readonly SintLedgerEvent[] {
+  getAll(): readonly NosihLedgerEvent[] {
     return [...this.events];
   }
 
   /** Get a specific event by sequence number. */
-  getBySequence(seq: bigint): SintLedgerEvent | undefined {
+  getBySequence(seq: bigint): NosihLedgerEvent | undefined {
     return this.events.find((e) => e.sequenceNumber === seq);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI06 MemoryIntegrityPlugin tests.
+ * NOSIH Protocol — ASI06 MemoryIntegrityPlugin tests.
  *
  * 10 test cases covering:
  * 1. No recentActions → clean (no anomaly)
@@ -22,7 +22,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 function futureISO(h = 1): string {
   return new Date(Date.now() + h * 3_600_000)
@@ -33,7 +33,7 @@ function futureISO(h = 1): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-function makeToken(): SintCapabilityToken {
+function makeToken(): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -53,9 +53,9 @@ function makeToken(): SintCapabilityToken {
 
 let _seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   recentActions?: readonly string[],
-): SintRequest {
+): NosihRequest {
   const seq = String(++_seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${seq}` as any,

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Economy Plugin for PolicyGateway.
+ * NOSIH Protocol — Economy Plugin for PolicyGateway.
  *
  * The EconomyPlugin provides pre/post intercept hooks that wire
  * budget enforcement, balance checking, trust evaluation, and
@@ -17,16 +17,16 @@
  *
  *   postIntercept(request, decision):
  *     1. Only runs when decision.action === "allow"
- *     2. IBalancePort.withdraw(userId, tokens, description, "sint_protocol")
+ *     2. IBalancePort.withdraw(userId, tokens, description, "nosih_protocol")
  *     3. Emit "economy.action.billed" to ledger
  *
  * Error handling: fail-open. If any economy service is unreachable,
  * the request proceeds through normal PolicyGateway logic.
  *
- * @module @sint/bridge-economy/economy-plugin
+ * @module @nosih/bridge-economy/economy-plugin
  */
 
-import type { PolicyDecision, SintRequest, ApprovalTier, RiskTier } from "@pshkv/core";
+import type { PolicyDecision, NosihRequest, ApprovalTier, RiskTier } from "@pshkv/core";
 import type { LedgerEmitter } from "@pshkv/gate-policy-gateway";
 import type {
   IBalancePort,
@@ -124,7 +124,7 @@ export class EconomyPlugin {
    *
    * On any port error, returns undefined (fail-open).
    */
-  async preIntercept(request: SintRequest): Promise<PolicyDecision | undefined> {
+  async preIntercept(request: NosihRequest): Promise<PolicyDecision | undefined> {
     try {
       const userId = await this.resolveUserId(request.agentId);
 
@@ -279,7 +279,7 @@ export class EconomyPlugin {
    * On any error, silently fails (the allow decision stands).
    */
   async postIntercept(
-    request: SintRequest,
+    request: NosihRequest,
     decision: PolicyDecision,
   ): Promise<void> {
     // Only bill on allow
@@ -298,13 +298,13 @@ export class EconomyPlugin {
 
     try {
       const { userId, computedCost } = cached;
-      const description = `SINT action: ${request.action} on ${request.resource}`;
+      const description = `NOSIH action: ${request.action} on ${request.resource}`;
 
       const withdrawResult = await this.config.balancePort.withdraw(
         userId,
         computedCost,
         description,
-        "sint_protocol",
+        "nosih_protocol",
       );
 
       if (withdrawResult.ok) {
@@ -348,7 +348,7 @@ export class EconomyPlugin {
   }
 
   private denyDecision(
-    request: SintRequest,
+    request: NosihRequest,
     policyViolated: string,
     reason: string,
   ): PolicyDecision {

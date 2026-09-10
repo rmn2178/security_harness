@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/os-core",
   "version": "0.1.0",
-  "description": "SINT OS Core — unified entrypoint for the SINT Operating System. Combines OpenClaw runtime, SINT Protocol governance, avatar face, and multimodal bridge.",
+  "description": "NOSIH OS Core — unified entrypoint for the NOSIH Operating System. Combines OpenClaw runtime, NOSIH Protocol governance, avatar face, and multimodal bridge.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,8 +18,8 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "sint",
-    "sint-os",
+    "nosih",
+    "nosih-os",
     "ai-os",
     "jarvis",
     "governance",
@@ -31,7 +31,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sint-ai/sint-protocol.git",
+    "url": "https://github.com/nosih-ai/nosih-protocol.git",
     "directory": "packages/os-core"
   },
   "publishConfig": {

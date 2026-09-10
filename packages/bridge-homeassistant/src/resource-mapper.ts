@@ -1,7 +1,7 @@
 /**
- * SINT bridge-homeassistant — Resource Mapper
+ * NOSIH bridge-homeassistant — Resource Mapper
  *
- * Maps Home Assistant MCP tool calls to SINT resource URIs and actions.
+ * Maps Home Assistant MCP tool calls to NOSIH resource URIs and actions.
  * Integrates with Policy Gateway for tier-based authorization.
  *
  * @module @pshkv/bridge-homeassistant/resource-mapper
@@ -22,10 +22,10 @@ export interface HAServiceCall {
   serviceData?: Record<string, unknown>;
 }
 
-export interface SintResourceMapping {
-  /** SINT resource URI (e.g., ha://homeassistant.local/entity/light.living_room) */
+export interface NosihResourceMapping {
+  /** NOSIH resource URI (e.g., ha://homeassistant.local/entity/light.living_room) */
   resource: string;
-  /** SINT action (e.g., 'turn_on', 'unlock') */
+  /** NOSIH action (e.g., 'turn_on', 'unlock') */
   action: string;
   /** Minimum required approval tier */
   tier: ApprovalTier;
@@ -58,16 +58,16 @@ export function parseEntityId(entityId: string): HAEntity {
 }
 
 /**
- * Map a Home Assistant service call to a SINT resource URI and action.
+ * Map a Home Assistant service call to a NOSIH resource URI and action.
  * This is the core mapping function used by HAInterceptor.
  *
  * @param call - Home Assistant service call details
  * @param homeAssistantHost - HA instance hostname (default: 'homeassistant.local')
- * @returns SINT resource mapping with tier and context
+ * @returns NOSIH resource mapping with tier and context
  *
  * @example
  * ```ts
- * const mapping = mapServiceCallToSint({
+ * const mapping = mapServiceCallToNosih({
  *   entity: parseEntityId('lock.front_door'),
  *   service: 'unlock',
  * });
@@ -80,10 +80,10 @@ export function parseEntityId(entityId: string): HAEntity {
  * // }
  * ```
  */
-export function mapServiceCallToSint(
+export function mapServiceCallToNosih(
   call: HAServiceCall,
   homeAssistantHost = "homeassistant.local"
-): SintResourceMapping {
+): NosihResourceMapping {
   const { entity, service, serviceData } = call;
   
   // Get tier from consumer profile

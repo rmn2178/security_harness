@@ -1,5 +1,5 @@
 /**
- * @sint/persistence-postgres — Adapter unit tests.
+ * @nosih/persistence-postgres — Adapter unit tests.
  *
  * All PostgreSQL I/O is replaced with a mock pool (vi.fn()).
  * No real database connection is required.
@@ -11,7 +11,7 @@ import { PgRevocationStore } from "../pg-revocation-store.js";
 import { PgRateLimitStore } from "../pg-rate-limit-store.js";
 import { runMigrations } from "../migrations.js";
 import type { PgPool, PgQueryResult } from "../pg-pool.js";
-import type { SintLedgerEvent, UUIDv7 } from "@pshkv/core";
+import type { NosihLedgerEvent, UUIDv7 } from "@pshkv/core";
 
 // ---------------------------------------------------------------------------
 // Mock pool factory
@@ -44,7 +44,7 @@ function makeLedgerRow(overrides: Record<string, unknown> = {}): Record<string, 
   };
 }
 
-function makeLedgerEvent(overrides: Partial<SintLedgerEvent> = {}): SintLedgerEvent {
+function makeLedgerEvent(overrides: Partial<NosihLedgerEvent> = {}): NosihLedgerEvent {
   return {
     eventId: "01950000-0000-7000-8000-000000000001" as UUIDv7,
     sequenceNumber: 1n,
@@ -79,7 +79,7 @@ describe("PgLedgerWriter", () => {
 
     expect(pool.query).toHaveBeenCalledOnce();
     const [sql, params] = (pool.query as ReturnType<typeof vi.fn>).mock.calls[0] as [string, unknown[]];
-    expect(sql).toContain("INSERT INTO sint_ledger_events");
+    expect(sql).toContain("INSERT INTO nosih_ledger_events");
     expect(sql).toContain("event_id");
     expect(sql).toContain("agent_id");
     expect(sql).toContain("prev_hash");
@@ -142,12 +142,12 @@ describe("PgRevocationStore", () => {
   });
 
   // 4. revoke() calls INSERT correctly
-  it("revoke() calls INSERT INTO sint_revocations with correct params", async () => {
+  it("revoke() calls INSERT INTO nosih_revocations with correct params", async () => {
     await store.revoke("tok-1" as UUIDv7, "compromised", "operator-alice");
 
     expect(pool.query).toHaveBeenCalledOnce();
     const [sql, params] = (pool.query as ReturnType<typeof vi.fn>).mock.calls[0] as [string, unknown[]];
-    expect(sql).toContain("INSERT INTO sint_revocations");
+    expect(sql).toContain("INSERT INTO nosih_revocations");
     expect(sql).toContain("ON CONFLICT");
     expect(params).toContain("tok-1");
     expect(params).toContain("compromised");
@@ -208,14 +208,14 @@ describe("PgRateLimitStore", () => {
 
   // 7. increment() uses UPSERT correctly
   it("increment() calls UPSERT and returns count from db", async () => {
-    const count = await store.increment("sint:rate:tok-1:bucket-0", 60_000);
+    const count = await store.increment("nosih:rate:tok-1:bucket-0", 60_000);
 
     expect(pool.query).toHaveBeenCalledOnce();
     const [sql, params] = (pool.query as ReturnType<typeof vi.fn>).mock.calls[0] as [string, unknown[]];
-    expect(sql).toContain("INSERT INTO sint_rate_limit_counters");
+    expect(sql).toContain("INSERT INTO nosih_rate_limit_counters");
     expect(sql).toContain("ON CONFLICT");
     expect(sql).toContain("RETURNING count");
-    expect(params[0]).toBe("sint:rate:tok-1:bucket-0");
+    expect(params[0]).toBe("nosih:rate:tok-1:bucket-0");
     expect(count).toBe(3);
   });
 });
@@ -232,9 +232,9 @@ describe("runMigrations()", () => {
     const createStatements = sqls.filter((s) => s.includes("CREATE TABLE IF NOT EXISTS"));
     expect(createStatements.length).toBeGreaterThanOrEqual(3);
 
-    expect(createStatements.some((s) => s.includes("sint_ledger_events"))).toBe(true);
-    expect(createStatements.some((s) => s.includes("sint_revocations"))).toBe(true);
-    expect(createStatements.some((s) => s.includes("sint_rate_limit_counters"))).toBe(true);
+    expect(createStatements.some((s) => s.includes("nosih_ledger_events"))).toBe(true);
+    expect(createStatements.some((s) => s.includes("nosih_revocations"))).toBe(true);
+    expect(createStatements.some((s) => s.includes("nosih_rate_limit_counters"))).toBe(true);
   });
 });
 
@@ -249,10 +249,10 @@ describe("createPgPool()", () => {
     // Directly test the error message format by building the error ourselves
     // (the same string the implementation throws)
     const helpfulError = new Error(
-      "[sint/persistence-postgres] pg is not installed. " +
+      "[nosih/persistence-postgres] pg is not installed. " +
       "Run: npm install pg  (or pnpm add pg / yarn add pg)",
     );
     expect(helpfulError.message).toContain("npm install pg");
-    expect(helpfulError.message).toContain("[sint/persistence-postgres]");
+    expect(helpfulError.message).toContain("[nosih/persistence-postgres]");
   });
 });

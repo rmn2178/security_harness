@@ -1,10 +1,10 @@
 /**
- * SINT Persistence — Storage Interfaces.
+ * NOSIH Persistence — Storage Interfaces.
  *
  * Interface-first design: define contracts, implement adapters separately.
  * All methods are async to support remote backends (PG, Redis).
  *
- * @module @sint/persistence/interfaces
+ * @module @nosih/persistence/interfaces
  */
 
 import type {
@@ -13,8 +13,8 @@ import type {
   MissionManifest,
   MissionManifestRevocation,
   MissionActionOutcomeReport,
-  SintCapabilityToken,
-  SintLedgerEvent,
+  NosihCapabilityToken,
+  NosihLedgerEvent,
   UUIDv7,
 } from "@pshkv/core";
 
@@ -93,16 +93,16 @@ export interface MissionManifestStore {
  */
 export interface LedgerStore {
   /** Append an event to the ledger. */
-  append(event: SintLedgerEvent): Promise<void>;
+  append(event: NosihLedgerEvent): Promise<void>;
 
   /** Query events by filter criteria. */
-  query(query: LedgerQuery): Promise<readonly SintLedgerEvent[]>;
+  query(query: LedgerQuery): Promise<readonly NosihLedgerEvent[]>;
 
   /** Get a single event by ID. */
-  getById(eventId: UUIDv7): Promise<SintLedgerEvent | undefined>;
+  getById(eventId: UUIDv7): Promise<NosihLedgerEvent | undefined>;
 
   /** Get the latest event (head of chain). */
-  getHead(): Promise<SintLedgerEvent | undefined>;
+  getHead(): Promise<NosihLedgerEvent | undefined>;
 
   /** Get total event count. */
   count(): Promise<number>;
@@ -116,13 +116,13 @@ export interface LedgerStore {
  */
 export interface TokenStore {
   /** Store a token. */
-  store(token: SintCapabilityToken): Promise<void>;
+  store(token: NosihCapabilityToken): Promise<void>;
 
   /** Retrieve a token by ID. */
-  get(tokenId: UUIDv7): Promise<SintCapabilityToken | undefined>;
+  get(tokenId: UUIDv7): Promise<NosihCapabilityToken | undefined>;
 
   /** Get all tokens for a subject (agent). */
-  getBySubject(subject: string): Promise<readonly SintCapabilityToken[]>;
+  getBySubject(subject: string): Promise<readonly NosihCapabilityToken[]>;
 
   /** Delete an expired or revoked token. */
   remove(tokenId: UUIDv7): Promise<boolean>;

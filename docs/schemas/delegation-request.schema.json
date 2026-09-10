@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sint.gg/schemas/delegation-request.schema.json",
-  "title": "SINT Delegation Request",
+  "$id": "https://nosih.gg/schemas/delegation-request.schema.json",
+  "title": "NOSIH Delegation Request",
   "description": "Body for POST /v1/tokens/delegate. Delegates a parent capability token to a new subject with attenuated (strictly narrower) authority. Depth is bounded at 10; attenuation is enforced by delegateCapabilityToken in @pshkv/gate-capability-tokens.",
   "type": "object",
   "additionalProperties": false,

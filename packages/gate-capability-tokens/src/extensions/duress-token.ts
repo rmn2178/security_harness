@@ -1,5 +1,5 @@
 /**
- * SINT Duress Token — Domestic Violence Protection Mechanism
+ * NOSIH Duress Token — Domestic Violence Protection Mechanism
  *
  * Provides survivor-controlled access to smart home devices with cryptographic
  * protections against coercion and unauthorized revocation.

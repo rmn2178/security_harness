@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { SensorBus } from "../src/sensor-bus.js";
-import type { SintSensorReading } from "@pshkv/core";
+import type { NosihSensorReading } from "@pshkv/core";
 import type { SensorSource } from "../src/types.js";
 
 function makeReading(
   sensorId: string,
   confidence: number,
   timestamp?: string,
-): SintSensorReading {
+): NosihSensorReading {
   return {
     sensorId,
     modality: "camera_rgb",
@@ -122,7 +122,7 @@ describe("SensorBus", () => {
     }
   });
 
-  it("fuseWorldState returns valid SintWorldState", () => {
+  it("fuseWorldState returns valid NosihWorldState", () => {
     const bus = new SensorBus();
     bus.registerSensor(makeSource("cam0"));
     bus.pushReading({

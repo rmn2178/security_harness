@@ -1,10 +1,10 @@
-export { SintClient } from "./sint-client.js";
+export { NosihClient } from "./nosih-client.js";
 export type {
-  SintClientOptions,
+  NosihClientOptions,
   InterceptRequest,
   InterceptResult,
   TokenResult,
   LedgerResult,
   MissionManifestRecord,
   MissionAuthorityResult,
-} from "./sint-client.js";
+} from "./nosih-client.js";

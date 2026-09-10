@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-MCP — Tool Registry (Definition Signing) tests.
+ * NOSIH Bridge-MCP — Tool Registry (Definition Signing) tests.
  * Tests cryptographic registration and drift detection.
  */
 

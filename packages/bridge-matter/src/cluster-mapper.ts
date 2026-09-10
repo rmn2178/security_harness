@@ -1,7 +1,7 @@
 /**
- * SINT bridge-matter — Matter Cluster Mapper
+ * NOSIH bridge-matter — Matter Cluster Mapper
  *
- * Maps Matter 1.3+ device clusters to SINT resource URIs and actions.
+ * Maps Matter 1.3+ device clusters to NOSIH resource URIs and actions.
  * Implements Phase 2 Matter protocol support per Physical AI Governance
  * Roadmap 2026-2029.
  *
@@ -79,12 +79,12 @@ export interface MatterAccessContext {
 }
 
 /**
- * SINT resource mapping for Matter access.
+ * NOSIH resource mapping for Matter access.
  */
 export interface MatterResourceMapping {
-  /** SINT resource URI (e.g., matter://fabric-01/node/123/ep/1/DoorLock/commands/UnlockDoor) */
+  /** NOSIH resource URI (e.g., matter://fabric-01/node/123/ep/1/DoorLock/commands/UnlockDoor) */
   resource: string;
-  /** SINT action (invoke, read, write, subscribe) */
+  /** NOSIH action (invoke, read, write, subscribe) */
   action: string;
   /** Minimum required approval tier */
   tier: ApprovalTier;
@@ -185,14 +185,14 @@ export function getClusterName(clusterId: MatterClusterId): string {
 }
 
 /**
- * Map a Matter cluster access to a SINT resource URI and action.
+ * Map a Matter cluster access to a NOSIH resource URI and action.
  *
  * @param context - Matter access context
- * @returns SINT resource mapping with tier and physical actuator flag
+ * @returns NOSIH resource mapping with tier and physical actuator flag
  *
  * @example
  * ```ts
- * const mapping = mapMatterToSint({
+ * const mapping = mapMatterToNosih({
  *   fabricId: 'fabric-01',
  *   nodeId: 'node-123',
  *   endpointId: 1,
@@ -210,12 +210,12 @@ export function getClusterName(clusterId: MatterClusterId): string {
  * // }
  * ```
  */
-export function mapMatterToSint(context: MatterAccessContext): MatterResourceMapping {
+export function mapMatterToNosih(context: MatterAccessContext): MatterResourceMapping {
   const { fabricId, nodeId, endpointId, clusterId, commandOrAttribute, commandType, commandArgs } = context;
   
   const clusterName = getClusterName(clusterId);
   
-  // Construct SINT resource URI
+  // Construct NOSIH resource URI
   // Format: matter://fabric-id/node/node-id/ep/endpoint/ClusterName/type/commandOrAttribute
   const resourceType = commandType === "invoke" ? "commands" : "attributes";
   const resource = `matter://${fabricId}/node/${nodeId}/ep/${endpointId}/${clusterName}/${resourceType}/${commandOrAttribute}`;

@@ -73,7 +73,7 @@ const md = `# ROS2 Control-Loop Benchmark Report
 
 ## Objective
 
-Validate that SINT gateway interception overhead for ROS2 control-loop commands meets the industrial deployment target:
+Validate that NOSIH gateway interception overhead for ROS2 control-loop commands meets the industrial deployment target:
 
 - \`p99 < 10ms\` for \`ros2:///cmd_vel\` publish path.
 

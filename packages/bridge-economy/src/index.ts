@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Economy Bridge.
+ * NOSIH Protocol — Economy Bridge.
  *
- * Port/adapter integration between sint-protocol's PolicyGateway
+ * Port/adapter integration between nosih-protocol's PolicyGateway
  * and external economy services (balance, budget, trust, pricing).
  *
- * @module @sint/bridge-economy
+ * @module @nosih/bridge-economy
  */
 
 // ─── Interfaces (Ports) ──────────────────────────────────────

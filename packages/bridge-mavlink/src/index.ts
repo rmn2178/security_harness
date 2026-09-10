@@ -1,16 +1,16 @@
 /**
- * @sint/bridge-mavlink — SINT Protocol MAVLink bridge
+ * @nosih/bridge-mavlink — NOSIH Protocol MAVLink bridge
  *
  * Intercepts MAVLink v2 commands before reaching the autopilot (ArduPilot, PX4).
  * Enforces capability token constraints, tier-based approval gates, and physical
  * constraints (velocity limits, geofence, altitude limits) on drone operations.
  *
- * Covers the MAVLink → SINT security gap identified in arXiv:2603.26997 (ROSClaw)
+ * Covers the MAVLink → NOSIH security gap identified in arXiv:2603.26997 (ROSClaw)
  * for aerial robotics: unprotected ARM, MISSION_START, and velocity commands.
  *
  * @example
  * ```ts
- * import { MAVLinkInterceptor, MAV_CMD, mapMavlinkToSint } from "@pshkv/bridge-mavlink";
+ * import { MAVLinkInterceptor, MAV_CMD, mapMavlinkToNosih } from "@pshkv/bridge-mavlink";
  *
  * const interceptor = new MAVLinkInterceptor({
  *   gateway, agentId, tokenId, humanPresent: false,
@@ -28,7 +28,7 @@
  */
 
 export { MAVLinkInterceptor } from "./mavlink-interceptor.js";
-export { mapMavlinkToSint, extractMavPhysicalContext } from "./mavlink-resource-mapper.js";
+export { mapMavlinkToNosih, extractMavPhysicalContext } from "./mavlink-resource-mapper.js";
 export { MAV_CMD } from "./mavlink-types.js";
 export type {
   MavlinkIntercept,

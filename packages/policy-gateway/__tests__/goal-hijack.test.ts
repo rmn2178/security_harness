@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI01 GoalHijackPlugin tests.
+ * NOSIH Protocol — ASI01 GoalHijackPlugin tests.
  *
  * 12 test cases covering:
  * 1. Clean params → no hijack detected
@@ -24,7 +24,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 function futureISO(h = 1): string {
   return new Date(Date.now() + h * 3_600_000)
@@ -35,7 +35,7 @@ function futureISO(h = 1): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-function makeToken(): SintCapabilityToken {
+function makeToken(): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -55,9 +55,9 @@ function makeToken(): SintCapabilityToken {
 
 let _seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   params: Record<string, unknown> = {},
-): SintRequest {
+): NosihRequest {
   const seq = String(++_seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${seq}` as any,
@@ -167,9 +167,9 @@ describe("DefaultGoalHijackDetector", () => {
 describe("GoalHijackPlugin — Gateway integration", () => {
   it("9. hijack → GOAL_HIJACK deny without token lookup", async () => {
     const token = makeToken();
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     // Intentionally NOT storing the token — if token lookup happens, it would fail
-    const resolveToken = vi.fn(() => undefined as SintCapabilityToken | undefined);
+    const resolveToken = vi.fn(() => undefined as NosihCapabilityToken | undefined);
 
     const gateway = new PolicyGateway({
       resolveToken,
@@ -227,7 +227,7 @@ describe("GoalHijackPlugin — Gateway integration", () => {
 
   it("12. 'agent.goal.hijack_detected' event emitted on detection", async () => {
     const token = makeToken();
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     const emitSpy = vi.fn();
 
     const gateway = new PolicyGateway({

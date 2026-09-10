@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — Primitive types used across all layers.
+ * NOSIH Protocol — Primitive types used across all layers.
  *
- * @module @sint/core/types/primitives
+ * @module @nosih/core/types/primitives
  */
 
 /** ISO 8601 timestamp string with microsecond precision in UTC. */

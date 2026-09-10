@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/sdk",
   "version": "0.2.0",
-  "description": "SINT Protocol TypeScript/Node.js SDK",
+  "description": "NOSIH Protocol TypeScript/Node.js SDK",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

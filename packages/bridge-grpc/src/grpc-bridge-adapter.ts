@@ -21,7 +21,7 @@ export interface GrpcAdapterDecisionHint {
 /**
  * Executable gRPC adapter surface.
  *
- * Converts gRPC invocation metadata into canonical SINT request fields
+ * Converts gRPC invocation metadata into canonical NOSIH request fields
  * and provides deterministic tier hints for policy enforcement.
  */
 export class GrpcBridgeAdapter {

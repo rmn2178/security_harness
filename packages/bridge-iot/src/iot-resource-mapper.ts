@@ -1,7 +1,7 @@
 /**
- * SINT Protocol — IoT Resource Mapper.
+ * NOSIH Protocol — IoT Resource Mapper.
  *
- * Maps MQTT topics and CoAP URIs to canonical SINT resource URIs.
+ * Maps MQTT topics and CoAP URIs to canonical NOSIH resource URIs.
  * Targets constrained edge devices: industrial sensors, actuators, gateways.
  *
  * MQTT resource URI: mqtt://broker/topic/path
@@ -94,7 +94,7 @@ function topicMatchesAny(topic: string, keywords: readonly string[]): boolean {
 }
 
 /**
- * Convert an MQTT broker+topic to a canonical SINT resource URI.
+ * Convert an MQTT broker+topic to a canonical NOSIH resource URI.
  * Format: mqtt://broker/topic/path
  */
 export function mqttTopicToResourceUri(broker: string, topic: string): string {
@@ -105,7 +105,7 @@ export function mqttTopicToResourceUri(broker: string, topic: string): string {
 }
 
 /**
- * Convert a CoAP host+port+path to a canonical SINT resource URI.
+ * Convert a CoAP host+port+path to a canonical NOSIH resource URI.
  * Format: coap://host:port/path
  */
 export function coapToResourceUri(host: string, port: number, path: string): string {

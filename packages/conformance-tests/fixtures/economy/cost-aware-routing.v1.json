@@ -1,5 +1,5 @@
 {
-  "fixtureId": "sint.economy.cost-aware-routing.v1",
+  "fixtureId": "nosih.economy.cost-aware-routing.v1",
   "schemaVersion": "1.0.0",
   "description": "Canonical deterministic route selection for Economic Layer v1, including optional x402 quoting.",
   "cases": [

@@ -1,11 +1,11 @@
 /**
- * SINT Bridge-MCP — Tool Definition Signing & Registry.
+ * NOSIH Bridge-MCP — Tool Definition Signing & Registry.
  *
  * Provides cryptographic signing of MCP tool definitions to detect
  * tool poisoning attacks (ASI-class supply-chain threat) where a server
  * changes a tool's behavior after initial registration.
  *
- * @module @sint/bridge-mcp/tool-registry
+ * @module @nosih/bridge-mcp/tool-registry
  */
 
 import { hashSha256, sign, verify } from "@pshkv/gate-capability-tokens";

@@ -1,34 +1,34 @@
 /**
- * SINT Bridge-MCP — Interceptor.
+ * NOSIH Bridge-MCP — Interceptor.
  *
  * The core integration layer that intercepts MCP tool calls,
- * maps them to SINT requests, and routes them through the
+ * maps them to NOSIH requests, and routes them through the
  * Policy Gateway for authorization.
  *
- * @module @sint/bridge-mcp/mcp-interceptor
+ * @module @nosih/bridge-mcp/mcp-interceptor
  */
 
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { generateUUIDv7, nowISO8601 } from "@pshkv/gate-capability-tokens";
 import type { MCPInterceptResult, MCPToolCall } from "./types.js";
-import { toResourceUri, toSintAction, toToolId } from "./mcp-resource-mapper.js";
+import { toResourceUri, toNosihAction, toToolId } from "./mcp-resource-mapper.js";
 import { MCPSessionManager } from "./mcp-session.js";
 
 /** Configuration for the MCP interceptor. */
 export interface MCPInterceptorConfig {
-  /** The SINT Policy Gateway instance. */
+  /** The NOSIH Policy Gateway instance. */
   readonly gateway: PolicyGateway;
   /** Maximum recent actions to track per session. */
   readonly maxRecentActions?: number;
 }
 
 /**
- * MCP Interceptor — bridges MCP tool calls to the SINT security gate.
+ * MCP Interceptor — bridges MCP tool calls to the NOSIH security gate.
  *
  * Flow:
  * 1. Agent makes an MCP tool call
- * 2. Interceptor maps it to a SintRequest
+ * 2. Interceptor maps it to a NosihRequest
  * 3. PolicyGateway evaluates and returns a decision
  * 4. Interceptor maps the decision to forward/deny/escalate
  * 5. Recent actions are tracked for forbidden combo detection
@@ -79,9 +79,9 @@ export class MCPInterceptor {
   }
 
   /**
-   * Intercept an MCP tool call through the SINT security gate.
+   * Intercept an MCP tool call through the NOSIH security gate.
    *
-   * Maps the tool call to a SintRequest, routes it through the
+   * Maps the tool call to a NosihRequest, routes it through the
    * PolicyGateway, and returns a forward/deny/escalate decision.
    */
   async interceptToolCall(
@@ -109,20 +109,20 @@ export class MCPInterceptor {
       };
     }
 
-    // Map MCP tool call → SINT request
-    const sintRequest: SintRequest = {
+    // Map MCP tool call → NOSIH request
+    const nosihRequest: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: session.agentId,
       tokenId: session.tokenId,
       resource: toResourceUri(toolCall),
-      action: toSintAction(toolCall),
+      action: toNosihAction(toolCall),
       params: toolCall.arguments,
       recentActions: [...session.recentActions],
     };
 
     // Route through Policy Gateway
-    const decision = await this.gateway.intercept(sintRequest);
+    const decision = await this.gateway.intercept(nosihRequest);
 
     // Record the action for future combo detection
     const toolId = toToolId(toolCall.serverName, toolCall.toolName);

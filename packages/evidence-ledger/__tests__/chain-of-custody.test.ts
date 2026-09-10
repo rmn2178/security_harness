@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Chain-of-Custody Proof unit tests.
+ * NOSIH Protocol — Chain-of-Custody Proof unit tests.
  *
  * Tests NIST-style hash-chain proofs for ledger events.
  */
@@ -7,14 +7,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { LedgerWriter } from "../src/writer.js";
 import { generateProof, verifyProof } from "../src/chain-of-custody.js";
-import type { SintLedgerEvent } from "@pshkv/core";
+import type { NosihLedgerEvent } from "@pshkv/core";
 
 const AGENT_ID = "b".repeat(64);
 
 /** Build a 5-event chain and return [writer, events]. */
-function buildChain(): [LedgerWriter, SintLedgerEvent[]] {
+function buildChain(): [LedgerWriter, NosihLedgerEvent[]] {
   const writer = new LedgerWriter();
-  const events: SintLedgerEvent[] = [
+  const events: NosihLedgerEvent[] = [
     writer.append({ eventType: "agent.registered",   agentId: AGENT_ID, payload: {} }),
     writer.append({ eventType: "request.received",   agentId: AGENT_ID, payload: {} }),
     writer.append({ eventType: "policy.evaluated",   agentId: AGENT_ID, payload: {} }),
@@ -26,7 +26,7 @@ function buildChain(): [LedgerWriter, SintLedgerEvent[]] {
 
 describe("Chain-of-Custody Proofs", () => {
   let writer: LedgerWriter;
-  let events: SintLedgerEvent[];
+  let events: NosihLedgerEvent[];
 
   beforeEach(() => {
     [writer, events] = buildChain();
@@ -55,7 +55,7 @@ describe("Chain-of-Custody Proofs", () => {
     // Tamper with event at index 1 by changing its hash
     const tampered = events.map((e, i) =>
       i === 1 ? ({ ...e, hash: "deadbeef" + "0".repeat(56) }) : e,
-    ) as SintLedgerEvent[];
+    ) as NosihLedgerEvent[];
 
     const target = tampered[4]!;
     const proof = generateProof(tampered, target.eventId);
@@ -77,7 +77,7 @@ describe("Chain-of-Custody Proofs", () => {
     expect(proof).toBeDefined();
 
     // Tamper the event — alter its hash so it no longer matches the proof
-    const tamperedEvent: SintLedgerEvent = {
+    const tamperedEvent: NosihLedgerEvent = {
       ...target,
       hash: "cafebabe" + "0".repeat(56),
     };

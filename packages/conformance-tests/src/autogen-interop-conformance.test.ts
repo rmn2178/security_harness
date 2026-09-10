@@ -13,9 +13,9 @@ import type {
   AgentTrustLevel,
   ApprovalTier,
   PolicyDecision,
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -63,7 +63,7 @@ function escalateDecision(decision: PolicyDecision, nextTier: ApprovalTier): Pol
   };
 }
 
-function blockedDecision(request: SintRequest): PolicyDecision {
+function blockedDecision(request: NosihRequest): PolicyDecision {
   return {
     requestId: request.requestId,
     timestamp: nowISO8601(),
@@ -83,10 +83,10 @@ describe("AutoGen Interop Conformance", () => {
   const agent = generateKeypair();
 
   function issueToken(
-    tokenStore: Map<string, SintCapabilityToken>,
-    overrides: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+    tokenStore: Map<string, NosihCapabilityToken>,
+    overrides: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: fixture.token.resource,
@@ -110,7 +110,7 @@ describe("AutoGen Interop Conformance", () => {
     resource: string,
     action: string,
     params?: Record<string, unknown>,
-  ): SintRequest {
+  ): NosihRequest {
     return {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
@@ -123,7 +123,7 @@ describe("AutoGen Interop Conformance", () => {
   }
 
   function createHarness(options?: { centralOnline?: boolean; trustSignal?: TrustSignal }) {
-    const tokenStore = new Map<string, SintCapabilityToken>();
+    const tokenStore = new Map<string, NosihCapabilityToken>();
     const events: Array<{ eventType: string; payload: Record<string, unknown> }> = [];
     const centralOnline = options?.centralOnline ?? true;
     const trustSignal = options?.trustSignal ?? "unrestricted";
@@ -149,7 +149,7 @@ describe("AutoGen Interop Conformance", () => {
 
   async function evaluateWithAutogenHooks(
     gateway: PolicyGateway,
-    request: SintRequest,
+    request: NosihRequest,
     trustSignal: TrustSignal,
     events: Array<{ eventType: string; payload: Record<string, unknown> }>,
   ): Promise<PolicyDecision> {

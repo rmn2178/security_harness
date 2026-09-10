@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI05 Argument Injection Detection.
+ * NOSIH Protocol — ASI05 Argument Injection Detection.
  *
  * Detects shell injection, path traversal, environment variable injection,
  * and code patterns in agent request parameters. Closes the ASI05 gap:

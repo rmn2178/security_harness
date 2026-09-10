@@ -1,5 +1,5 @@
 /**
- * Cross-verification: SINT Protocol × motebit/motebit
+ * Cross-verification: NOSIH Protocol × motebit/motebit
  *
  * motebit/motebit (https://github.com/motebit/motebit) independently converged on:
  *   - Ed25519 + @noble/ed25519 (same library)
@@ -8,7 +8,7 @@
  *   - Monotonic scope narrowing in verifyDelegationChain()
  *   - base64url encoding for delegation token public key fields
  *
- * These tests prove that SINT and motebit produce identical DID outputs from
+ * These tests prove that NOSIH and motebit produce identical DID outputs from
  * the same Ed25519 public keys — zero code changes on either side.
  *
  * motebit's publicKeyToDidKey() (packages/crypto/src/signing.ts):
@@ -17,7 +17,7 @@
  *   prefixed.set(publicKey, 2);
  *   return `did:key:z${base58btcEncode(prefixed)}`;
  *
- * SINT's keyToDid() (src/did.ts): identical algorithm, same multicodec prefix.
+ * NOSIH's keyToDid() (src/did.ts): identical algorithm, same multicodec prefix.
  */
 
 import { describe, it, expect } from "vitest";
@@ -99,35 +99,35 @@ const TEST_VECTORS = [
 // Test 1–3: DID derivation parity (the core cross-verification)
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: DID derivation parity", () => {
+describe("NOSIH × motebit: DID derivation parity", () => {
   for (const { label, pubkeyHex } of TEST_VECTORS) {
     it(`${label}: keyToDid() === motebitPublicKeyToDidKey()`, () => {
       const pubkeyBytes = hexToBytes(pubkeyHex);
 
-      const sintDid = keyToDid(pubkeyHex);
+      const nosihDid = keyToDid(pubkeyHex);
       const motebitDid = motebitPublicKeyToDidKey(pubkeyBytes);
 
       // Both must produce did:key:z6Mk... prefix (Ed25519 multicodec fingerprint)
-      expect(sintDid).toMatch(/^did:key:z6Mk/);
+      expect(nosihDid).toMatch(/^did:key:z6Mk/);
       expect(motebitDid).toMatch(/^did:key:z6Mk/);
 
       // Must be identical
-      expect(sintDid).toBe(motebitDid);
+      expect(nosihDid).toBe(motebitDid);
     });
   }
 });
 
 // ---------------------------------------------------------------------------
-// Test 4: Round-trip SINT key → motebit DID → SINT key
+// Test 4: Round-trip NOSIH key → motebit DID → NOSIH key
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: key round-trip via DID", () => {
-  it("SINT-generated keypair round-trips through motebit DID format and back", async () => {
+describe("NOSIH × motebit: key round-trip via DID", () => {
+  it("NOSIH-generated keypair round-trips through motebit DID format and back", async () => {
     const keypair = await generateKeypair();
-    const sintDid = keyToDid(keypair.publicKey);
+    const nosihDid = keyToDid(keypair.publicKey);
 
     // motebit's didKeyToPublicKey(): strip did:key:z, base58 decode, remove [0xed, 0x01]
-    const withoutPrefix = sintDid.slice("did:key:z".length);
+    const withoutPrefix = nosihDid.slice("did:key:z".length);
 
     // Decode base58btc back to bytes
     let num = BigInt(0);
@@ -152,27 +152,27 @@ describe("SINT × motebit: key round-trip via DID", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test 5: motebit base64url public key encoding → SINT DID
+// Test 5: motebit base64url public key encoding → NOSIH DID
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: base64url key encoding compatibility", () => {
-  it("motebit DelegationToken.delegator_public_key (base64url) → SINT did:key", async () => {
+describe("NOSIH × motebit: base64url key encoding compatibility", () => {
+  it("motebit DelegationToken.delegator_public_key (base64url) → NOSIH did:key", async () => {
     const keypair = await generateKeypair();
     const pubkeyBytes = hexToBytes(keypair.publicKey);
 
     // motebit stores public keys as base64url in DelegationToken
     const motebitBase64url = bytesToBase64url(pubkeyBytes);
 
-    // SINT path: base64url → bytes → hex → keyToDid()
+    // NOSIH path: base64url → bytes → hex → keyToDid()
     const recoveredBytes = base64urlToBytes(motebitBase64url);
     const recoveredHex = bytesToHex(recoveredBytes);
-    const sintDid = keyToDid(recoveredHex);
+    const nosihDid = keyToDid(recoveredHex);
 
     // motebit path: base64url → bytes → motebitPublicKeyToDidKey()
     const motebitDid = motebitPublicKeyToDidKey(recoveredBytes);
 
-    expect(sintDid).toBe(motebitDid);
-    expect(sintDid).toMatch(/^did:key:z6Mk/);
+    expect(nosihDid).toBe(motebitDid);
+    expect(nosihDid).toMatch(/^did:key:z6Mk/);
   });
 });
 
@@ -180,13 +180,13 @@ describe("SINT × motebit: base64url key encoding compatibility", () => {
 // Test 6: Scope attenuation semantics cross-compatibility
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: scope attenuation semantics", () => {
-  it("SINT tighten-only maps to motebit isScopeNarrowed() invariant", async () => {
+describe("NOSIH × motebit: scope attenuation semantics", () => {
+  it("NOSIH tighten-only maps to motebit isScopeNarrowed() invariant", async () => {
     // motebit scope model: comma-separated list, "*" = wildcard
     //   isScopeNarrowed("*", "deploy.staging") → true (narrower)
     //   isScopeNarrowed("deploy.staging", "*") → false (widening, REJECT)
     //
-    // SINT scope model: resource URI pattern + actions[]
+    // NOSIH scope model: resource URI pattern + actions[]
     //   "mcp://filesystem/*" → "mcp://filesystem/readFile" → narrower (OK)
     //   "mcp://filesystem/readFile" → "mcp://filesystem/*" → widening (REJECT)
 
@@ -240,11 +240,11 @@ describe("SINT × motebit: scope attenuation semantics", () => {
 // Test 7: Ed25519 signature byte compatibility
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: Ed25519 signature bytes", () => {
+describe("NOSIH × motebit: Ed25519 signature bytes", () => {
   it("@noble/ed25519 produces 64-byte signatures verified by both systems", async () => {
     const privateKey = ed.utils.randomPrivateKey();
     const publicKey = await ed.getPublicKeyAsync(privateKey);
-    const message = new TextEncoder().encode("sint:motebit:cross-verification");
+    const message = new TextEncoder().encode("nosih:motebit:cross-verification");
 
     const signature = await ed.signAsync(message, privateKey);
     expect(signature).toHaveLength(64);
@@ -253,7 +253,7 @@ describe("SINT × motebit: Ed25519 signature bytes", () => {
     const valid = await ed.verifyAsync(signature, message, publicKey);
     expect(valid).toBe(true);
 
-    // SINT encoding: hex
+    // NOSIH encoding: hex
     const hexSig = bytesToHex(signature);
     expect(hexToBytes(hexSig)).toEqual(signature);
 
@@ -270,11 +270,11 @@ describe("SINT × motebit: Ed25519 signature bytes", () => {
 // Test 8: JCS canonicalization parity
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: JCS canonicalization", () => {
+describe("NOSIH × motebit: JCS canonicalization", () => {
   it("sorted-key JSON produces identical bytes for shared payload shapes", () => {
     // Both systems use JCS (RFC 8785): recursive sorted-key JSON, no array sorting
     // motebit: custom implementation in packages/crypto/src/signing.ts canonicalJson()
-    // SINT: JSON.stringify() — deterministic in Node.js for flat objects
+    // NOSIH: JSON.stringify() — deterministic in Node.js for flat objects
 
     function jcs(obj: unknown): string {
       if (typeof obj !== "object" || obj === null) return JSON.stringify(obj);
@@ -285,7 +285,7 @@ describe("SINT × motebit: JCS canonicalization", () => {
       return "{" + sorted.join(",") + "}";
     }
 
-    // A payload shaped like a SINT/motebit delegation token
+    // A payload shaped like a NOSIH/motebit delegation token
     const payload = {
       z_expires_at: "2027-01-01T00:00:00Z",
       a_delegator_id: "did:key:z6Mk...",
@@ -311,26 +311,26 @@ describe("SINT × motebit: JCS canonicalization", () => {
 // Test 9: Convergence proof summary
 // ---------------------------------------------------------------------------
 
-describe("SINT × motebit: convergence proof", () => {
+describe("NOSIH × motebit: convergence proof", () => {
   it("same Ed25519 pubkey produces identical did:key in both systems", async () => {
-    // Generate a fresh keypair using SINT's generateKeypair()
+    // Generate a fresh keypair using NOSIH's generateKeypair()
     const keypair = await generateKeypair();
 
-    // SINT derivation
-    const sintDid = keyToDid(keypair.publicKey);
+    // NOSIH derivation
+    const nosihDid = keyToDid(keypair.publicKey);
 
     // motebit derivation (replicated)
     const pubkeyBytes = hexToBytes(keypair.publicKey);
     const motebitDid = motebitPublicKeyToDidKey(pubkeyBytes);
 
     // The proof: independent implementations, same result
-    expect(sintDid).toBe(motebitDid);
+    expect(nosihDid).toBe(motebitDid);
 
     // Both in did:key:z6Mk format (Ed25519 multicodec fingerprint)
-    expect(sintDid.startsWith("did:key:z6Mk")).toBe(true);
+    expect(nosihDid.startsWith("did:key:z6Mk")).toBe(true);
 
-    // DID round-trips back to original key via SINT's didToKey()
-    const recovered = didToKey(sintDid);
+    // DID round-trips back to original key via NOSIH's didToKey()
+    const recovered = didToKey(nosihDid);
     expect(recovered).toBe(keypair.publicKey);
   });
 });

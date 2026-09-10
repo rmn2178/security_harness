@@ -4,7 +4,7 @@ import {
   issueCapabilityToken,
   RevocationStore,
 } from "../src/index.js";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -17,7 +17,7 @@ describe("Revocation Store", () => {
   const subject = generateKeypair();
 
   function issueTestToken() {
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: issuer.publicKey,
       subject: subject.publicKey,
       resource: "ros2:///cmd_vel",

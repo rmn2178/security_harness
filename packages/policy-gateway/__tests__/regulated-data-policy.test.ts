@@ -1,9 +1,9 @@
 /**
- * SINT regulated-data policy tests.
+ * NOSIH regulated-data policy tests.
  */
 
 import { describe, expect, it } from "vitest";
-import { ApprovalTier, type SintCapabilityToken, type SintRequest } from "@pshkv/core";
+import { ApprovalTier, type NosihCapabilityToken, type NosihRequest } from "@pshkv/core";
 import {
   generateKeypair,
   issueCapabilityToken,
@@ -23,7 +23,7 @@ function futureISO(h = 1): string {
     .replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): SintCapabilityToken {
+function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]> = {}): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -44,9 +44,9 @@ function makeToken(overrides: Partial<Parameters<typeof issueCapabilityToken>[0]
 
 let seq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
-  overrides: Partial<SintRequest> = {},
-): SintRequest {
+  token: NosihCapabilityToken,
+  overrides: Partial<NosihRequest> = {},
+): NosihRequest {
   const suffix = String(++seq).padStart(4, "0");
   return {
     requestId: `01905f7c-4e8a-7b3d-9a1e-f2c3d4e5${suffix}` as any,

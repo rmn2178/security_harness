@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Engine configuration loader.
+ * NOSIH Protocol — Engine configuration loader.
  *
  * Loads, validates, and merges engine configuration from a JSON file.
  * Falls back to sensible defaults when no configuration file is found.
  *
- * @module @sint/engine-hal/config
+ * @module @nosih/engine-hal/config
  */
 
 import { readFile } from "node:fs/promises";
@@ -17,7 +17,7 @@ import type { EngineConfig } from "./types.js";
 import { DEFAULT_THRESHOLDS } from "./types.js";
 
 /** Default configuration file path. */
-const DEFAULT_CONFIG_PATH = "./sint-engine.config.json";
+const DEFAULT_CONFIG_PATH = "./nosih-engine.config.json";
 
 /** Zod schema for validating engine configuration. */
 const engineConfigSchema = z.object({
@@ -44,7 +44,7 @@ const engineConfigSchema = z.object({
  * with defaults. If the file does not exist, returns an empty
  * configuration with default thresholds applied.
  *
- * @param configPath - Path to the configuration JSON file (default: `./sint-engine.config.json`)
+ * @param configPath - Path to the configuration JSON file (default: `./nosih-engine.config.json`)
  * @returns A Result containing the validated and merged engine configuration
  *
  * @example
@@ -57,7 +57,7 @@ const engineConfigSchema = z.object({
  *
  * @example
  * ```ts
- * const result = await loadEngineConfig("/etc/sint/engine.json");
+ * const result = await loadEngineConfig("/etc/nosih/engine.json");
  * if (!result.ok) {
  *   console.error(result.error.message);
  * }

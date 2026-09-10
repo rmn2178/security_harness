@@ -32,7 +32,7 @@ for (const file of files) {
     filesAnalyzed: false,
     licenseConcluded: manifest.license ?? "NOASSERTION",
     licenseDeclared: manifest.license ?? "NOASSERTION",
-    supplier: "Organization: SINT AI",
+    supplier: "Organization: NOSIH AI",
     externalRefs: [{
       referenceCategory: "PACKAGE-MANAGER",
       referenceType: "purl",
@@ -53,8 +53,8 @@ const document = {
   spdxVersion: "SPDX-2.3",
   dataLicense: "CC0-1.0",
   SPDXID: "SPDXRef-DOCUMENT",
-  name: "sint-protocol-workspace",
-  documentNamespace: `https://sint.ai/sbom/${namespaceSeed}`,
+  name: "nosih-protocol-workspace",
+  documentNamespace: `https://nosih.ai/sbom/${namespaceSeed}`,
   creationInfo: {
     created: new Date().toISOString(),
     creators: ["Tool: scripts/generate-spdx-sbom.mjs"],

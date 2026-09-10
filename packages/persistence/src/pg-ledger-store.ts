@@ -1,21 +1,21 @@
 /**
- * SINT Persistence — PostgreSQL Ledger Store.
+ * NOSIH Persistence — PostgreSQL Ledger Store.
  *
  * INSERT-only ledger with SHA-256 hash chain verification.
  *
- * @module @sint/persistence/pg-ledger-store
+ * @module @nosih/persistence/pg-ledger-store
  */
 
 import type pg from "pg";
 import type {
   LedgerQuery,
-  SintLedgerEvent,
+  NosihLedgerEvent,
   UUIDv7,
 } from "@pshkv/core";
 import type { LedgerStore } from "./interfaces.js";
 
-/** Map a database row to a SintLedgerEvent. */
-function rowToEvent(row: any): SintLedgerEvent {
+/** Map a database row to a NosihLedgerEvent. */
+function rowToEvent(row: any): NosihLedgerEvent {
   return {
     eventId: row.event_id,
     sequenceNumber: BigInt(row.sequence_number),
@@ -32,9 +32,9 @@ function rowToEvent(row: any): SintLedgerEvent {
 export class PgLedgerStore implements LedgerStore {
   constructor(private readonly pool: pg.Pool) {}
 
-  async append(event: SintLedgerEvent): Promise<void> {
+  async append(event: NosihLedgerEvent): Promise<void> {
     await this.pool.query(
-      `INSERT INTO sint_ledger_events
+      `INSERT INTO nosih_ledger_events
         (event_id, sequence_number, timestamp, event_type, agent_id, token_id, payload, previous_hash, hash)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
@@ -51,7 +51,7 @@ export class PgLedgerStore implements LedgerStore {
     );
   }
 
-  async query(query: LedgerQuery): Promise<readonly SintLedgerEvent[]> {
+  async query(query: LedgerQuery): Promise<readonly NosihLedgerEvent[]> {
     const conditions: string[] = [];
     const params: unknown[] = [];
     let paramIndex = 1;
@@ -81,7 +81,7 @@ export class PgLedgerStore implements LedgerStore {
       params.push(query.toTimestamp);
     }
 
-    let sql = "SELECT * FROM sint_ledger_events";
+    let sql = "SELECT * FROM nosih_ledger_events";
     if (conditions.length > 0) {
       sql += " WHERE " + conditions.join(" AND ");
     }
@@ -100,31 +100,31 @@ export class PgLedgerStore implements LedgerStore {
     return result.rows.map(rowToEvent);
   }
 
-  async getById(eventId: UUIDv7): Promise<SintLedgerEvent | undefined> {
+  async getById(eventId: UUIDv7): Promise<NosihLedgerEvent | undefined> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events WHERE event_id = $1",
+      "SELECT * FROM nosih_ledger_events WHERE event_id = $1",
       [eventId],
     );
     return result.rows.length > 0 ? rowToEvent(result.rows[0]) : undefined;
   }
 
-  async getHead(): Promise<SintLedgerEvent | undefined> {
+  async getHead(): Promise<NosihLedgerEvent | undefined> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events ORDER BY sequence_number DESC LIMIT 1",
+      "SELECT * FROM nosih_ledger_events ORDER BY sequence_number DESC LIMIT 1",
     );
     return result.rows.length > 0 ? rowToEvent(result.rows[0]) : undefined;
   }
 
   async count(): Promise<number> {
     const result = await this.pool.query(
-      "SELECT COUNT(*) AS cnt FROM sint_ledger_events",
+      "SELECT COUNT(*) AS cnt FROM nosih_ledger_events",
     );
     return parseInt(result.rows[0].cnt, 10);
   }
 
   async verifyChain(): Promise<boolean> {
     const result = await this.pool.query(
-      "SELECT * FROM sint_ledger_events ORDER BY sequence_number ASC",
+      "SELECT * FROM nosih_ledger_events ORDER BY sequence_number ASC",
     );
     const events = result.rows.map(rowToEvent);
 

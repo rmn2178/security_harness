@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { ApprovalTier, type SintCapabilityToken } from "@pshkv/core";
+import { ApprovalTier, type NosihCapabilityToken } from "@pshkv/core";
 import {
   generateKeypair,
   generateUUIDv7,
@@ -60,7 +60,7 @@ describe("Gateway production slice", () => {
       }),
     });
     expect(issueRes.status).toBe(201);
-    const token = (await issueRes.json()) as SintCapabilityToken;
+    const token = (await issueRes.json()) as NosihCapabilityToken;
 
     const storedToken = await ctx.tokenStore.get(token.tokenId);
     expect(storedToken?.tokenId).toBe(token.tokenId);
@@ -76,7 +76,7 @@ describe("Gateway production slice", () => {
         tokenId: token.tokenId,
         resource: "mcp://filesystem/readFile",
         action: "call",
-        params: { path: "/var/sint/readiness.json" },
+        params: { path: "/var/nosih/readiness.json" },
       }),
     });
     expect(interceptRes.status).toBe(200);
@@ -126,7 +126,7 @@ describe("Gateway production slice", () => {
         tokenId: token.tokenId,
         resource: "mcp://filesystem/readFile",
         action: "call",
-        params: { path: "/var/sint/readiness.json" },
+        params: { path: "/var/nosih/readiness.json" },
       }),
     });
     expect(revokedInterceptRes.status).toBe(200);

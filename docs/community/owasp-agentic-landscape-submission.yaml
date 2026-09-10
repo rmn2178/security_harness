@@ -1,6 +1,6 @@
-schema: sint-owasp-agentic-landscape-submission-v0.1
+schema: nosih-owasp-agentic-landscape-submission-v0.1
 status: submission_ready
-tracking_issue: https://github.com/sint-ai/sint-protocol/issues/125
+tracking_issue: https://github.com/nosih-ai/nosih-protocol/issues/125
 source_pages:
   landscape: https://genai.owasp.org/ai-security-solutions-landscape/
   q2_2026_agentic: https://genai.owasp.org/resource/ai-security-solutions-landscape-for-agentic-ai-q2-2026/
@@ -8,9 +8,9 @@ submission_path:
   label: Submit - Agentic AI Solution
   page: https://genai.owasp.org/ai-security-solutions-landscape/
 solution:
-  name: SINT Protocol
+  name: NOSIH Protocol
   type: open_source
-  repository: https://github.com/sint-ai/sint-protocol
+  repository: https://github.com/nosih-ai/nosih-protocol
   category_stages:
     - Deploy
     - Operate
@@ -19,7 +19,7 @@ solution:
     - Test & Evaluate
   short_description: >
     Open-source runtime security and governance layer for agentic and physical
-    AI. SINT places a PolicyGateway before tool calls, ROS2 actions, MCP tools,
+    AI. NOSIH places a PolicyGateway before tool calls, ROS2 actions, MCP tools,
     A2A tasks, IoT/industrial bridges, and payment-like actions.
   differentiator: >
     Physical-AI and industrial safety enforcement: velocity/force/geofence

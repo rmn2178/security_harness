@@ -1,5 +1,5 @@
 {
-  "fixtureId": "sint.economy.agent-commerce-governance.v1",
+  "fixtureId": "nosih.economy.agent-commerce-governance.v1",
   "schemaVersion": "2026-05-29",
   "description": "Executable governance fixture for agent-to-agent task markets and x402-style machine payments: identity, scoped market actions, task-mode transitions, reputation gates, auction rules, benchmark proofs, x402 spend caps, and settlement receipts.",
   "profile": {

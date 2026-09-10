@@ -1,7 +1,7 @@
 /**
- * MAVLink → SINT resource URI and tier mapping.
+ * MAVLink → NOSIH resource URI and tier mapping.
  *
- * Maps MAVLink message types and commands to SINT resource URIs and extracts
+ * Maps MAVLink message types and commands to NOSIH resource URIs and extracts
  * physical context (velocity, altitude limits) from message payloads.
  *
  * URI scheme: `mavlink://<target_system>/<message_or_command>`
@@ -13,11 +13,11 @@
  *   mavlink://1/cmd/fence       — DO_FENCE_ENABLE
  *   mavlink://1/cmd/nav         — navigation waypoint
  *
- * @module @sint/bridge-mavlink/mavlink-resource-mapper
+ * @module @nosih/bridge-mavlink/mavlink-resource-mapper
  */
 
 import { ApprovalTier } from "@pshkv/core";
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 import { MAV_CMD } from "./mavlink-types.js";
 import type {
   MavlinkIntercept,
@@ -28,7 +28,7 @@ import type {
 
 // ─── Tier mapping ─────────────────────────────────────────────────────────────
 
-/** SINT approval tier for each MAV_CMD. */
+/** NOSIH approval tier for each MAV_CMD. */
 const COMMAND_TIERS: Partial<Record<number, ApprovalTier>> = {
   // ARM/DISARM — COMMIT (irreversible arming change)
   [MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM]: ApprovalTier.T3_COMMIT,
@@ -109,7 +109,7 @@ function commandToPath(cmd: number): string {
 
 /**
  * Extract physical context (velocity, altitude) from MAVLink message payloads.
- * Used to populate SintRequest.physicalContext for constraint checking.
+ * Used to populate NosihRequest.physicalContext for constraint checking.
  */
 export function extractMavPhysicalContext(intercept: MavlinkIntercept): {
   currentVelocityMps?: number;
@@ -164,16 +164,16 @@ export interface MavlinkMappedRequest {
   readonly resource: string;
   readonly action: string;
   readonly baseTier: ApprovalTier;
-  readonly physicalContext?: SintRequest["physicalContext"];
+  readonly physicalContext?: NosihRequest["physicalContext"];
 }
 
 /**
- * Map a MAVLink intercept to a SINT request specification.
+ * Map a MAVLink intercept to a NOSIH request specification.
  *
  * @param intercept - The intercepted MAVLink message
  * @param humanPresent - Whether a human operator is in the vicinity (BVLOS = false)
  */
-export function mapMavlinkToSint(
+export function mapMavlinkToNosih(
   intercept: MavlinkIntercept,
   humanPresent = false,
 ): MavlinkMappedRequest {

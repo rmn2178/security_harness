@@ -1,16 +1,16 @@
 /**
- * SINT Persistence Postgres — PostgreSQL Revocation Store.
+ * NOSIH Persistence Postgres — PostgreSQL Revocation Store.
  *
  * Stores token revocations in PostgreSQL so that revocations persist across
  * process restarts and are shared across distributed gateway nodes.
  *
- * Table: sint_revocations
+ * Table: nosih_revocations
  *   token_id    TEXT PRIMARY KEY
  *   reason      TEXT NOT NULL
  *   revoked_by  TEXT NOT NULL
  *   revoked_at  TIMESTAMPTZ NOT NULL DEFAULT now()
  *
- * @module @sint/persistence-postgres/pg-revocation-store
+ * @module @nosih/persistence-postgres/pg-revocation-store
  */
 
 import type { UUIDv7 } from "@pshkv/core";
@@ -47,7 +47,7 @@ export class PgRevocationStore {
    */
   async revoke(tokenId: UUIDv7, reason: string, revokedBy: string): Promise<void> {
     await this.pool.query(
-      `INSERT INTO sint_revocations (token_id, reason, revoked_by, revoked_at)
+      `INSERT INTO nosih_revocations (token_id, reason, revoked_by, revoked_at)
        VALUES ($1, $2, $3, now()::timestamptz)
        ON CONFLICT (token_id) DO NOTHING`,
       [tokenId, reason, revokedBy],
@@ -62,7 +62,7 @@ export class PgRevocationStore {
    */
   async checkRevocation(tokenId: UUIDv7): Promise<RevocationCheckResult> {
     const result = await this.pool.query(
-      "SELECT reason, revoked_by, revoked_at FROM sint_revocations WHERE token_id = $1",
+      "SELECT reason, revoked_by, revoked_at FROM nosih_revocations WHERE token_id = $1",
       [tokenId],
     );
 
@@ -86,7 +86,7 @@ export class PgRevocationStore {
    */
   async getRevocationRecord(tokenId: UUIDv7): Promise<RevocationRecord | undefined> {
     const result = await this.pool.query(
-      "SELECT token_id, reason, revoked_by, revoked_at FROM sint_revocations WHERE token_id = $1",
+      "SELECT token_id, reason, revoked_by, revoked_at FROM nosih_revocations WHERE token_id = $1",
       [tokenId],
     );
 

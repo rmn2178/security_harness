@@ -1,9 +1,9 @@
 /**
- * SINT Protocol — Economy Regression Test Suite.
+ * NOSIH Protocol — Economy Regression Test Suite.
  *
  * End-to-end tests verifying the bridge-economy integration with
  * PolicyGateway using in-memory adapters. These tests encode the
- * economic invariants that SINT must enforce:
+ * economic invariants that NOSIH must enforce:
  *
  * 1. Allowed actions are billed (tokens deducted)
  * 2. Budget/balance checks block before security checks
@@ -22,10 +22,10 @@ import {
 import { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
-  SintEventType,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
+  NosihEventType,
 } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 import {
@@ -45,8 +45,8 @@ function futureISO(hoursFromNow: number): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -57,11 +57,11 @@ function makeRequest(
   };
 }
 
-describe("SINT Economy Regression Tests", () => {
+describe("NOSIH Economy Regression Tests", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let ledger: LedgerWriter;
   let emitSpy: ReturnType<typeof vi.fn>;
 
@@ -76,7 +76,7 @@ describe("SINT Economy Regression Tests", () => {
 
     emitSpy = vi.fn((event: { eventType: string; agentId: string; tokenId?: string; payload: Record<string, unknown> }) => {
       ledger.append({
-        eventType: event.eventType as SintEventType,
+        eventType: event.eventType as NosihEventType,
         agentId: event.agentId,
         tokenId: event.tokenId,
         payload: event.payload,
@@ -88,8 +88,8 @@ describe("SINT Economy Regression Tests", () => {
     trustAdapter = new InMemoryTrustAdapter("unrestricted");
   });
 
-  function issueAndStore(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///camera/front",
@@ -310,7 +310,7 @@ describe("SINT Economy Regression Tests", () => {
   // ── 9. Billing formula matches API constants (9 tokens default) ──
 
   it("default MCP tool call costs 9 tokens (6 × 1.0 × 1.5)", () => {
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: "test",
       timestamp: new Date().toISOString(),
       agentId: "test",

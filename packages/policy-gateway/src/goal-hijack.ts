@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI01 Goal Hijack Detection.
+ * NOSIH Protocol — ASI01 Goal Hijack Detection.
  *
  * Detects prompt injection and semantic goal manipulation in agent
  * request parameters. Covers OWASP Agentic Top 10 ASI01.

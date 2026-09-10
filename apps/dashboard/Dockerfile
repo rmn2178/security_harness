@@ -1,4 +1,4 @@
-# SINT Dashboard — Multi-stage Docker build.
+# NOSIH Dashboard — Multi-stage Docker build.
 # Builds the React/Vite SPA and serves it with nginx.
 # Build context must be the repo root (docker-compose sets this automatically).
 
@@ -25,7 +25,7 @@ COPY packages/bridge-economy/package.json     packages/bridge-economy/
 COPY apps/gateway-server/package.json         apps/gateway-server/
 
 # Install only dependencies needed for the dashboard
-RUN pnpm install --frozen-lockfile --filter @sint/dashboard...
+RUN pnpm install --frozen-lockfile --filter @pshkv/dashboard...
 
 # Copy dashboard source
 COPY apps/dashboard/ apps/dashboard/
@@ -49,6 +49,6 @@ COPY apps/dashboard/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3201
 
 HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
-  CMD wget -q --spider http://localhost:3201/ || exit 1
+  CMD wget -q --spider http://127.0.0.1:3201/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

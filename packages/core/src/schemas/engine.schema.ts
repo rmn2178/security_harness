@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Zod validation schemas for Engine Layer types.
+ * NOSIH Protocol — Zod validation schemas for Engine Layer types.
  *
  * These schemas validate capsule manifests, hardware profiles,
  * world state, and plans before processing.
  *
- * @module @sint/core/schemas/engine
+ * @module @nosih/core/schemas/engine
  */
 
 import { z } from "zod";

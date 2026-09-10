@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — OWASP ASI01–ASI10 Conformance Tests.
+ * NOSIH Protocol — OWASP ASI01–ASI10 Conformance Tests.
  *
  * Runs the fixture pack at:
  *   packages/conformance-tests/fixtures/security/owasp-asi-conformance.v1.json
@@ -20,7 +20,7 @@
  *   ASI09 — Human Oversight Bypass (T3 forced escalate, revoked token)
  *   ASI10 — Rogue/Autonomous Agent (auto-trip, manual stop button)
  *
- * @module @sint/conformance-tests/owasp-asi-conformance
+ * @module @nosih/conformance-tests/owasp-asi-conformance
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -40,7 +40,7 @@ import {
   checkForbiddenCombos,
 } from "@pshkv/gate-policy-gateway";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 import { InMemoryRateLimitStore } from "@pshkv/persistence";
 
@@ -52,8 +52,8 @@ function futureISO(hoursFromNow: number): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: generateUUIDv7(),
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -71,7 +71,7 @@ describe("OWASP ASI01–ASI10 Conformance — owasp-asi-conformance.v1.json", ()
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
 
@@ -95,9 +95,9 @@ describe("OWASP ASI01–ASI10 Conformance — owasp-asi-conformance.v1.json", ()
   });
 
   function issueAndStore(
-    overrides?: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+    overrides?: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://*",
@@ -251,7 +251,7 @@ describe("OWASP ASI01–ASI10 Conformance — owasp-asi-conformance.v1.json", ()
       const validToken = issueAndStore({ expiresAt: futureISO(12) });
 
       // Craft an expired copy — directly inject into store with a past expiresAt
-      const expiredToken: SintCapabilityToken = {
+      const expiredToken: NosihCapabilityToken = {
         ...validToken,
         tokenId: generateUUIDv7(),
         expiresAt: new Date(Date.now() - 3_600_000).toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

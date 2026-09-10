@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — Capability Token types.
+ * NOSIH Protocol — Capability Token types.
  *
- * Capability tokens are the atomic unit of permission in SINT.
+ * Capability tokens are the atomic unit of permission in NOSIH.
  * They are unforgeable, delegatable, revocable tokens that grant
  * specific permissions on specific resources for specific durations.
  *
  * There is NO ambient authority — no admin roles, no superuser.
  * An agent can only do what its tokens explicitly permit.
  *
- * @module @sint/core/types/capability-token
+ * @module @nosih/core/types/capability-token
  */
 
 import type {
@@ -31,7 +31,7 @@ import type { ApprovalTier } from "./policy.js";
  *
  * @example
  * ```ts
- * const constraints: SintPhysicalConstraints = {
+ * const constraints: NosihPhysicalConstraints = {
  *   maxForceNewtons: 50,        // Collaborative robot limit
  *   maxVelocityMps: 0.5,       // Human-shared workspace
  *   geofence: { coordinates: [[-122.4, 37.7], ...] },
@@ -39,7 +39,7 @@ import type { ApprovalTier } from "./policy.js";
  * };
  * ```
  */
-export interface SintPhysicalConstraints {
+export interface NosihPhysicalConstraints {
   /** Maximum force the agent may command, in Newtons. */
   readonly maxForceNewtons?: Newtons;
 
@@ -116,7 +116,7 @@ export interface SintPhysicalConstraints {
  *
  * @example
  * ```ts
- * const bc: SintBehavioralConstraints = {
+ * const bc: NosihBehavioralConstraints = {
  *   maxCallsPerMinute: 30,
  *   allowedPatterns: ["^/safe/.*", "^read:"],
  *   deniedPatterns: ["rm\\s+-rf", "DROP\\s+TABLE"],
@@ -124,7 +124,7 @@ export interface SintPhysicalConstraints {
  * };
  * ```
  */
-export interface SintBehavioralConstraints {
+export interface NosihBehavioralConstraints {
   /**
    * Maximum number of tool calls permitted within any 60-second rolling window.
    * Enforcement is sliding-window, checked per token by the Policy Gateway.
@@ -156,7 +156,7 @@ export interface SintBehavioralConstraints {
  * Constraints that bind a capability token to specific model identities.
  * Used to prevent silent model swaps in high-risk physical deployments.
  */
-export interface SintModelConstraints {
+export interface NosihModelConstraints {
   /** Allowlist of model IDs (e.g. "gpt-5.4", "gemini-robotics"). */
   readonly allowedModelIds?: readonly string[];
   /** Optional semver ceiling for model version (inclusive). */
@@ -166,7 +166,7 @@ export interface SintModelConstraints {
 }
 
 /** Token-bound policy for regulated data runtime paths. */
-export interface SintRegulatedDataPolicy {
+export interface NosihRegulatedDataPolicy {
   /** Data classes this token may carry or process. */
   readonly allowedDataClasses?: readonly string[];
   /** Purposes of use this token authorizes. */
@@ -183,16 +183,16 @@ export interface SintRegulatedDataPolicy {
   readonly allowFallback?: boolean;
 }
 
-/** Attestation backends supported by SINT enforcement and evidence flows. */
-export type SintAttestationBackend =
+/** Attestation backends supported by NOSIH enforcement and evidence flows. */
+export type NosihAttestationBackend =
   | "intel-sgx"
   | "arm-trustzone"
   | "amd-sev"
   | "tpm2"
   | "none";
 
-/** Verifiable compute proof families supported by SINT metadata contracts. */
-export type SintVerifiableComputeProofType =
+/** Verifiable compute proof families supported by NOSIH metadata contracts. */
+export type NosihVerifiableComputeProofType =
   | "risc0-groth16"
   | "sp1-groth16"
   | "snark"
@@ -203,11 +203,11 @@ export type SintVerifiableComputeProofType =
  * Requirements for runtime attestation attached to token usage.
  * Enforcement is optional and controlled by gateway policy.
  */
-export interface SintAttestationRequirements {
+export interface NosihAttestationRequirements {
   /** Minimum attestation grade (0..3). */
   readonly minAttestationGrade?: 0 | 1 | 2 | 3;
   /** Allowlist of accepted TEE/attestation backends. */
-  readonly allowedTeeBackends?: readonly SintAttestationBackend[];
+  readonly allowedTeeBackends?: readonly NosihAttestationBackend[];
   /** Tiers for which attestation is required. */
   readonly requireForTiers?: readonly ApprovalTier[];
 }
@@ -216,11 +216,11 @@ export interface SintAttestationRequirements {
  * Requirements for verifiable-compute proofs attached to token usage.
  * Enables provable execution metadata checks for high-consequence actions.
  */
-export interface SintVerifiableComputeRequirements {
+export interface NosihVerifiableComputeRequirements {
   /** Tiers that require proof material to be attached at request time. */
   readonly requireForTiers?: readonly ApprovalTier[];
   /** Optional allowlist of proof families accepted for this token. */
-  readonly allowedProofTypes?: readonly SintVerifiableComputeProofType[];
+  readonly allowedProofTypes?: readonly NosihVerifiableComputeProofType[];
   /** Optional allowlist of verifier IDs/URIs trusted for this token. */
   readonly verifierRefs?: readonly string[];
   /** Optional max age (ms) for proof freshness checks. */
@@ -233,7 +233,7 @@ export interface SintVerifiableComputeRequirements {
  * Optional pre-approved execution corridor for low-latency physical control loops.
  * Requests inside the corridor can proceed without per-step reapproval.
  */
-export interface SintExecutionEnvelope {
+export interface NosihExecutionEnvelope {
   /** Logical corridor identifier for traceability. */
   readonly corridorId?: string;
   /**
@@ -267,18 +267,18 @@ export interface SintExecutionEnvelope {
 /**
  * Cryptographic profile used to bind a capability token.
  *
- * SINT starts in `classic-ed25519` for compatibility. Post-quantum profiles are
+ * NOSIH starts in `classic-ed25519` for compatibility. Post-quantum profiles are
  * explicit so validators can fail closed until a deployment has wired a real
  * ML-DSA/SLH-DSA implementation and key-management path.
  */
-export type SintCryptoProfile =
+export type NosihCryptoProfile =
   | "classic-ed25519"
   | "hybrid-ed25519-mldsa65"
   | "pq-mldsa65"
   | "pq-slh-dsa";
 
 /** Post-quantum signature metadata attached to hybrid/PQ token profiles. */
-export interface SintPostQuantumSignature {
+export interface NosihPostQuantumSignature {
   /** Signature algorithm identifier, aligned with NIST PQC names. */
   readonly algorithm: "ML-DSA-65" | "SLH-DSA-SHA2-128s";
   /** Public-key reference or registry URI used by external verifiers. */
@@ -293,7 +293,7 @@ export interface SintPostQuantumSignature {
  * Delegation chain tracking — who authorized this token, all the way up.
  * Maximum delegation depth is enforced by policy (default: 3 hops).
  */
-export interface SintDelegationChain {
+export interface NosihDelegationChain {
   /** Token ID of the parent capability that authorized this one. */
   readonly parentTokenId: UUIDv7 | null;
 
@@ -305,7 +305,7 @@ export interface SintDelegationChain {
 }
 
 /** Optional managed-autonomy authority policy carried by a capability token. */
-export interface SintAutonomyPolicy {
+export interface NosihAutonomyPolicy {
   /** External output is only valid when the managed-autonomy state is stable. */
   readonly requiredState: "stable";
   /** Deployment/bridge guard profile used to derive autonomy guards externally. */
@@ -326,14 +326,14 @@ export interface SintAutonomyPolicy {
 }
 
 /**
- * The SINT Capability Token — the atomic unit of permission.
+ * The NOSIH Capability Token — the atomic unit of permission.
  *
  * Every field is immutable after issuance. The token is cryptographically
  * bound to a specific issuer and subject via Ed25519 signatures.
  *
  * @example
  * ```ts
- * const token: SintCapabilityToken = {
+ * const token: NosihCapabilityToken = {
  *   tokenId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
  *   issuer: "a1b2c3...",  // Ed25519 pubkey of issuing authority
  *   subject: "d4e5f6...", // Ed25519 pubkey of receiving agent
@@ -348,7 +348,7 @@ export interface SintAutonomyPolicy {
  * };
  * ```
  */
-export interface SintCapabilityToken {
+export interface NosihCapabilityToken {
   // --- Identity ---
   /** Unique, time-ordered token identifier. Sortable by issuance time. */
   readonly tokenId: UUIDv7;
@@ -363,32 +363,32 @@ export interface SintCapabilityToken {
   /** Permitted actions on the resource (e.g. ["publish"], ["call", "cancel"]). */
   readonly actions: readonly string[];
   /** Physical safety constraints — enforced, not advisory. */
-  readonly constraints: SintPhysicalConstraints;
+  readonly constraints: NosihPhysicalConstraints;
   /** Optional model identity restrictions for runtime use of this token. */
-  readonly modelConstraints?: SintModelConstraints;
+  readonly modelConstraints?: NosihModelConstraints;
   /** Optional token-bound regulated data policy. */
-  readonly regulatedDataPolicy?: SintRegulatedDataPolicy;
+  readonly regulatedDataPolicy?: NosihRegulatedDataPolicy;
   /** Optional attestation requirements for this token. */
-  readonly attestationRequirements?: SintAttestationRequirements;
+  readonly attestationRequirements?: NosihAttestationRequirements;
   /** Optional verifiable-compute proof requirements for this token. */
-  readonly verifiableComputeRequirements?: SintVerifiableComputeRequirements;
+  readonly verifiableComputeRequirements?: NosihVerifiableComputeRequirements;
   /** Optional pre-approved execution envelope for low-latency control. */
-  readonly executionEnvelope?: SintExecutionEnvelope;
+  readonly executionEnvelope?: NosihExecutionEnvelope;
   /**
    * Optional runtime behavioral constraints enforced against tool-call inputs.
    * Supplements physical constraints with pattern-based input validation and
    * per-minute rate limiting at the tool-call level.
    */
-  readonly behavioralConstraints?: SintBehavioralConstraints;
+  readonly behavioralConstraints?: NosihBehavioralConstraints;
   /** Optional managed-autonomy authority policy. */
-  readonly autonomyPolicy?: SintAutonomyPolicy;
+  readonly autonomyPolicy?: NosihAutonomyPolicy;
   /** Optional human authority requirements. */
   readonly humanAuthorityRequirements?: HumanAuthorityEnvelope;
 
   // --- Cross-protocol identity (Agent Passport System interop) ---
   /**
    * Agent Passport System (APS) passport identifier.
-   * Links this SINT token to an external APS Ed25519 passport for
+   * Links this NOSIH token to an external APS Ed25519 passport for
    * cross-protocol identity verification.
    * @see https://github.com/aeoess/agent-passport-system
    */
@@ -402,7 +402,7 @@ export interface SintCapabilityToken {
 
   // --- Delegation ---
   /** Verifiable lineage of this token from its root issuer. */
-  readonly delegationChain: SintDelegationChain;
+  readonly delegationChain: NosihDelegationChain;
 
   // --- Lifecycle ---
   /** When the token was issued (ISO 8601 with microsecond precision). */
@@ -420,9 +420,9 @@ export interface SintCapabilityToken {
    * backward compatibility. Non-classic profiles are mandatory and fail closed
    * until the corresponding PQ verifier is available.
    */
-  readonly cryptoProfile?: SintCryptoProfile;
+  readonly cryptoProfile?: NosihCryptoProfile;
   /** Optional PQ signature material for hybrid or PQ-only profiles. */
-  readonly postQuantumSignatures?: readonly SintPostQuantumSignature[];
+  readonly postQuantumSignatures?: readonly NosihPostQuantumSignature[];
   /**
    * Ed25519 signature over the canonical signing payload (every field above
    * except `signature` itself, serialized via RFC-8785-style recursive key sort).
@@ -434,9 +434,9 @@ export interface SintCapabilityToken {
 /**
  * Fields required to issue a new capability token. `tokenId`, `issuedAt`,
  * and `signature` are filled in by the issuer; every other field mirrors
- * `SintCapabilityToken`. Pass this shape to `issueCapabilityToken()`.
+ * `NosihCapabilityToken`. Pass this shape to `issueCapabilityToken()`.
  */
-export interface SintCapabilityTokenRequest {
+export interface NosihCapabilityTokenRequest {
   /** Ed25519 public key of the issuing authority. */
   readonly issuer: Ed25519PublicKey;
   /** Ed25519 public key of the receiving agent. */
@@ -446,21 +446,21 @@ export interface SintCapabilityTokenRequest {
   /** Permitted actions on the resource. */
   readonly actions: readonly string[];
   /** Physical safety constraints enforced at runtime. */
-  readonly constraints: SintPhysicalConstraints;
+  readonly constraints: NosihPhysicalConstraints;
   /** Optional model identity restrictions. */
-  readonly modelConstraints?: SintModelConstraints;
+  readonly modelConstraints?: NosihModelConstraints;
   /** Optional token-bound regulated data policy. */
-  readonly regulatedDataPolicy?: SintRegulatedDataPolicy;
+  readonly regulatedDataPolicy?: NosihRegulatedDataPolicy;
   /** Optional TEE attestation requirements. */
-  readonly attestationRequirements?: SintAttestationRequirements;
+  readonly attestationRequirements?: NosihAttestationRequirements;
   /** Optional ZK/TEE verifiable-compute proof requirements. */
-  readonly verifiableComputeRequirements?: SintVerifiableComputeRequirements;
+  readonly verifiableComputeRequirements?: NosihVerifiableComputeRequirements;
   /** Optional pre-approved trajectory envelope for low-latency control. */
-  readonly executionEnvelope?: SintExecutionEnvelope;
+  readonly executionEnvelope?: NosihExecutionEnvelope;
   /** Optional runtime behavioral constraints for this token. */
-  readonly behavioralConstraints?: SintBehavioralConstraints;
+  readonly behavioralConstraints?: NosihBehavioralConstraints;
   /** Optional managed-autonomy authority policy. */
-  readonly autonomyPolicy?: SintAutonomyPolicy;
+  readonly autonomyPolicy?: NosihAutonomyPolicy;
   /** Optional human authority requirements. */
   readonly humanAuthorityRequirements?: HumanAuthorityEnvelope;
   /** APS passport identifier for cross-protocol identity linkage. */
@@ -468,7 +468,7 @@ export interface SintCapabilityTokenRequest {
   /** Delegation depth in the APS chain (0 = root). */
   readonly delegationDepth?: number;
   /** Delegation lineage; supply `{ parentTokenId: null, depth: 0, attenuated: false }` for a root issuance. */
-  readonly delegationChain: SintDelegationChain;
+  readonly delegationChain: NosihDelegationChain;
   /** Absolute expiry timestamp (ISO 8601, microsecond precision). */
   readonly expiresAt: ISO8601;
   /** Whether the issuer retains revocation authority. */
@@ -476,9 +476,9 @@ export interface SintCapabilityTokenRequest {
   /** Optional revocation propagation endpoint. */
   readonly revocationEndpoint?: string;
   /** Optional signature policy. Defaults to `classic-ed25519`. */
-  readonly cryptoProfile?: SintCryptoProfile;
+  readonly cryptoProfile?: NosihCryptoProfile;
   /** Optional PQ signature material for hybrid or PQ-only profiles. */
-  readonly postQuantumSignatures?: readonly SintPostQuantumSignature[];
+  readonly postQuantumSignatures?: readonly NosihPostQuantumSignature[];
 }
 
 /** Validation error codes for capability tokens. */

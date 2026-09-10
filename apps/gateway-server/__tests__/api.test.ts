@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — API end-to-end tests.
+ * NOSIH Gateway Server — API end-to-end tests.
  *
  * Tests HTTP endpoints using Hono's built-in test client.
  */
@@ -11,7 +11,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityTokenRequest } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
   const d = new Date(Date.now() + hoursFromNow * 3600_000);
@@ -30,9 +30,9 @@ describe("Gateway Server API", () => {
   });
 
   async function issueAndStoreToken(
-    overrides?: Partial<SintCapabilityTokenRequest>,
+    overrides?: Partial<NosihCapabilityTokenRequest>,
   ) {
-    const request: SintCapabilityTokenRequest = {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///camera/front",
@@ -57,7 +57,7 @@ describe("Gateway Server API", () => {
 
     const body = await res.json();
     expect(body.status).toBe("ok");
-    expect(body.protocol).toBe("SINT Gate");
+    expect(body.protocol).toBe("NOSIH Gate");
     expect(body.backend.store).toBeDefined();
     expect(body.backend.cache).toBeDefined();
   });
@@ -71,11 +71,11 @@ describe("Gateway Server API", () => {
     expect(body.checks.cache.ok).toBe(true);
   });
 
-  it("GET /.well-known/sint.json returns discovery metadata", async () => {
-    const res = await app.request("/.well-known/sint.json");
+  it("GET /.well-known/nosih.json returns discovery metadata", async () => {
+    const res = await app.request("/.well-known/nosih.json");
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body.name).toBe("SINT Protocol");
+    expect(body.name).toBe("NOSIH Protocol");
     expect(body.version).toBeDefined();
     expect(Array.isArray(body.supportedBridges)).toBe(true);
     expect(Array.isArray(body.deploymentProfiles)).toBe(true);
@@ -97,7 +97,7 @@ describe("Gateway Server API", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.openapi).toBe("3.1.0");
-    expect(body.paths["/.well-known/sint.json"]).toBeDefined();
+    expect(body.paths["/.well-known/nosih.json"]).toBeDefined();
     expect(body.paths["/v1/approvals/events"]).toBeDefined();
     expect(body.paths["/v1/approvals/ws"]).toBeDefined();
     expect(body.paths["/v1/compliance/tier-crosswalk"]).toBeDefined();
@@ -110,7 +110,7 @@ describe("Gateway Server API", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("content-type")).toContain("text/html");
     const body = await res.text();
-    expect(body).toContain("SINT Gateway API Documentation");
+    expect(body).toContain("NOSIH Gateway API Documentation");
     expect(body).toContain("/v1/openapi.json");
   });
 

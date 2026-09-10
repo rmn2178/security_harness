@@ -1,7 +1,7 @@
 /**
  * Public Mission Authority protocol types.
  *
- * SINT evaluates externally proposed actions. It does not select targets,
+ * NOSIH evaluates externally proposed actions. It does not select targets,
  * generate effects, or recommend engagements.
  */
 
@@ -33,7 +33,7 @@ export type MissionEffectType =
 export interface EffectConstraint {
   /** Stable identifier referenced by an externally proposed action. */
   readonly effectId: string;
-  /** Classification only; SINT does not generate or select the effect. */
+  /** Classification only; NOSIH does not generate or select the effect. */
   readonly effectType: MissionEffectType;
   /** Resource URI on which this effect may be requested. */
   readonly resource: string;

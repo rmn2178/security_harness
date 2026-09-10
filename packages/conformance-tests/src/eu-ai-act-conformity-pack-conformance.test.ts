@@ -2,7 +2,7 @@
  * EU AI Act conformity pack conformance.
  *
  * The pack intentionally generates reviewer-facing material from existing
- * fixture data. That keeps compliance claims tied to executable SINT evidence.
+ * fixture data. That keeps compliance claims tied to executable NOSIH evidence.
  */
 
 import { describe, expect, it } from "vitest";
@@ -134,13 +134,13 @@ describe("EU AI Act conformity pack fixture v1", () => {
     );
   });
 
-  it("requires every Annex IV checklist item to point at SINT artifacts", () => {
+  it("requires every Annex IV checklist item to point at NOSIH artifacts", () => {
     expect(fixture.annexIVChecklist.length).toBeGreaterThanOrEqual(6);
     for (const item of fixture.annexIVChecklist) {
       expect(item.id).toMatch(/^annex-iv-/);
       expect(item.title.length).toBeGreaterThan(0);
-      expect(item.sintArtifactRefs.length, item.id).toBeGreaterThan(0);
-      for (const artifact of item.sintArtifactRefs) {
+      expect(item.nosihArtifactRefs.length, item.id).toBeGreaterThan(0);
+      for (const artifact of item.nosihArtifactRefs) {
         expect(artifact, item.id).toMatch(/^(docs|packages)\//);
       }
     }
@@ -157,7 +157,7 @@ describe("EU AI Act conformity pack fixture v1", () => {
     );
 
     for (const item of fixture.iso13482Crosswalk) {
-      expect(item.sintControl.length, item.topic).toBeGreaterThan(0);
+      expect(item.nosihControl.length, item.topic).toBeGreaterThan(0);
       expect(item.evidenceSource.length, item.topic).toBeGreaterThan(0);
     }
   });

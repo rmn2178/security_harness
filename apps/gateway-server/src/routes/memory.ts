@@ -1,8 +1,8 @@
 /**
- * SINT Gateway — Memory API routes.
+ * NOSIH Gateway — Memory API routes.
  *
- * Exposes @sint/memory MemoryBank operations as REST endpoints
- * for SINT Console Operator module integration.
+ * Exposes @nosih/memory MemoryBank operations as REST endpoints
+ * for NOSIH Console Operator module integration.
  *
  * GET  /v1/memory/recall?q=<query>&limit=<n>  — search memory
  * POST /v1/memory/store                        — store entry

@@ -1,7 +1,7 @@
 /**
- * SINT bridge-homeassistant — Consumer Device Profiles
+ * NOSIH bridge-homeassistant — Consumer Device Profiles
  *
- * Maps Home Assistant entity domains to SINT approval tiers and safety topics.
+ * Maps Home Assistant entity domains to NOSIH approval tiers and safety topics.
  * Implements Phase 1 consumer smart home governance per Physical AI Governance
  * Roadmap 2026-2029.
  *

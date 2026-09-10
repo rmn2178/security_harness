@@ -1,25 +1,25 @@
 /**
- * SINT Protocol — Capsule Registry unit tests.
+ * NOSIH Protocol — Capsule Registry unit tests.
  *
  * Tests in-memory capsule registration, lookup, listing, and filtering.
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { CapsuleRegistry } from "../src/registry.js";
-import type { SintCapsuleManifest } from "@pshkv/core";
+import type { NosihCapsuleManifest } from "@pshkv/core";
 
 const CAPSULE_ID_1 = "01905f7c-0000-7000-8000-000000000001";
 const CAPSULE_ID_2 = "01905f7c-0000-7000-8000-000000000002";
 const VALID_HASH = "a".repeat(64);
 
 function makeManifest(
-  overrides: Partial<SintCapsuleManifest> = {},
-): SintCapsuleManifest {
+  overrides: Partial<NosihCapsuleManifest> = {},
+): NosihCapsuleManifest {
   return {
     capsuleId: CAPSULE_ID_1,
     version: "1.0.0",
     name: "test-capsule",
-    author: "sint-labs",
+    author: "nosih-labs",
     sensors: ["camera_rgb"],
     actuators: [],
     safetyDeclarations: {},

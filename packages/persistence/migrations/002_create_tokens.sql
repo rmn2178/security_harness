@@ -1,6 +1,6 @@
--- SINT Persistence: Capability tokens table.
+-- NOSIH Persistence: Capability tokens table.
 
-CREATE TABLE IF NOT EXISTS sint_tokens (
+CREATE TABLE IF NOT EXISTS nosih_tokens (
   token_id          TEXT PRIMARY KEY,
   issuer            TEXT NOT NULL,
   subject           TEXT NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS sint_tokens (
   signature         TEXT NOT NULL
 );
 
-ALTER TABLE sint_tokens
+ALTER TABLE nosih_tokens
   ADD COLUMN IF NOT EXISTS model_constraints JSONB,
   ADD COLUMN IF NOT EXISTS attestation_requirements JSONB,
   ADD COLUMN IF NOT EXISTS verifiable_compute_requirements JSONB,
@@ -36,6 +36,6 @@ ALTER TABLE sint_tokens
   ADD COLUMN IF NOT EXISTS crypto_profile TEXT,
   ADD COLUMN IF NOT EXISTS post_quantum_signatures JSONB;
 
-CREATE INDEX IF NOT EXISTS idx_tokens_subject ON sint_tokens (subject);
-CREATE INDEX IF NOT EXISTS idx_tokens_issuer ON sint_tokens (issuer);
-CREATE INDEX IF NOT EXISTS idx_tokens_resource ON sint_tokens (resource);
+CREATE INDEX IF NOT EXISTS idx_tokens_subject ON nosih_tokens (subject);
+CREATE INDEX IF NOT EXISTS idx_tokens_issuer ON nosih_tokens (issuer);
+CREATE INDEX IF NOT EXISTS idx_tokens_resource ON nosih_tokens (resource);

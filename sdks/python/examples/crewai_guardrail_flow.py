@@ -1,5 +1,5 @@
 """
-CrewAI GuardrailProvider-compatible flow with SINT.
+CrewAI GuardrailProvider-compatible flow with NOSIH.
 
 Demonstrates mapping pre-tool-call checks to allow/deny/escalate contract.
 """
@@ -9,12 +9,12 @@ from __future__ import annotations
 import asyncio
 from datetime import datetime, timezone
 
-from sint import (
+from nosih import (
     CrewAIApprovalResolution,
     CrewAIGuardrailProviderCompat,
     GatewayClient,
     GatewayConfig,
-    SintRequest,
+    NosihRequest,
 )
 
 
@@ -29,7 +29,7 @@ async def main() -> None:
 
     async with GatewayClient(config) as client:
         guardrail = CrewAIGuardrailProviderCompat(client)
-        request = SintRequest(
+        request = NosihRequest(
             request_id="01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f7b1",
             timestamp=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "000Z",
             agent_id="crewai-agent-worker",
@@ -40,7 +40,7 @@ async def main() -> None:
             execution_context={"deploymentProfile": "warehouse-amr"},
         )
 
-        async def escalation_resolver(_req: SintRequest, _decision) -> CrewAIApprovalResolution:
+        async def escalation_resolver(_req: NosihRequest, _decision) -> CrewAIApprovalResolution:
             # Replace with your CrewAI reviewer workflow integration.
             return CrewAIApprovalResolution(
                 status="approved",

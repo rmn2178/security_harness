@@ -1,9 +1,9 @@
 /**
- * sint.click badge server
+ * nosih.click badge server
  * 
  * GET /badge/project/:id.svg
  *   ?status=verified|pending|failed
- *   ?label=SINT+Verified  (override label)
+ *   ?label=NOSIH+Verified  (override label)
  * 
  * Returns a shields.io-compatible flat badge SVG.
  * No auth. Stateless. Cache-friendly.
@@ -32,9 +32,9 @@ interface BadgeRecord {
 }
 
 const registry = new Map<string, BadgeRecord>([
-  ["sint-protocol", {
-    projectId: "sint-protocol",
-    projectName: "SINT Protocol",
+  ["nosih-protocol", {
+    projectId: "nosih-protocol",
+    projectName: "NOSIH Protocol",
     status: "verified",
     verifiedAt: "2026-04-04T06:45:00Z",
     testCount: 9,
@@ -134,7 +134,7 @@ app.get("/badge/project/:filename", (c) => {
 
   const record = registry.get(projectId);
   const status: BadgeStatus = statusOverride ?? (record?.status as BadgeStatus) ?? "unknown";
-  const label = labelOverride ?? "SINT";
+  const label = labelOverride ?? "NOSIH";
   const value = status === "verified"
     ? `verified ${record?.testCount ? `${record.testCount}/9` : ""} ${ICONS.verified}`.trim()
     : `${status} ${ICONS[status]}`.trim();
@@ -147,8 +147,8 @@ app.get("/badge/project/:filename", (c) => {
 
   c.header("Content-Type", "image/svg+xml");
   c.header("Cache-Control", "max-age=300, s-maxage=300");
-  c.header("X-SINT-Project", projectId);
-  c.header("X-SINT-Status", status);
+  c.header("X-NOSIH-Project", projectId);
+  c.header("X-NOSIH-Status", status);
 
   return c.body(svg, 200);
 });
@@ -180,7 +180,7 @@ app.post("/badge/claim", async (c) => {
   return c.json({ 
     projectId: body.projectId, 
     badgeUrl: `/badge/project/${body.projectId}.svg`,
-    markdownBadge: `[![SINT Verified](https://sint.click/badge/project/${body.projectId}.svg)](https://github.com/sint-ai/sint-protocol)`,
+    markdownBadge: `[![NOSIH Verified](https://nosih.click/badge/project/${body.projectId}.svg)](https://github.com/nosih-ai/nosih-protocol)`,
     status: "pending",
     message: "Badge claimed. Status will update to 'verified' after cross-verification tests pass."
   }, 201);
@@ -194,7 +194,7 @@ app.get("/badge/registry", (c) => {
     status: r.status,
     verifiedAt: r.verifiedAt,
     testCount: r.testCount,
-    badgeUrl: `https://sint.click/badge/project/${r.projectId}.svg`,
+    badgeUrl: `https://nosih.click/badge/project/${r.projectId}.svg`,
   }));
   return c.json({ count: entries.length, projects: entries });
 });

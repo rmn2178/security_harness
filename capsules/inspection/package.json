@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/capsule-inspection",
   "version": "1.0.0",
-  "description": "SINT Reference Capsule — Visual anomaly detection for manufacturing QA",
+  "description": "NOSIH Reference Capsule — Visual anomaly detection for manufacturing QA",
   "type": "module",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",

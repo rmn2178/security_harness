@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Evidence Ledger types.
+ * NOSIH Protocol — Evidence Ledger types.
  *
  * The Evidence Ledger is an append-only, immutable log of every action,
  * decision, approval, and outcome. It is the "black box flight recorder"
  * for robots. NO UPDATE or DELETE operations are permitted.
  *
- * @module @sint/core/types/evidence
+ * @module @nosih/core/types/evidence
  */
 
 import type {
@@ -17,10 +17,10 @@ import type {
 } from "./primitives.js";
 
 /**
- * All event types in the SINT Evidence Ledger.
+ * All event types in the NOSIH Evidence Ledger.
  * Uses dot-notation domain events per naming convention.
  */
-export type SintEventType =
+export type NosihEventType =
   // Lifecycle
   | "agent.registered"
   | "agent.capability.granted"
@@ -134,7 +134,7 @@ export type SintEventType =
  *
  * @example
  * ```ts
- * const event: SintLedgerEvent = {
+ * const event: NosihLedgerEvent = {
  *   eventId: "01905f7c-...",
  *   sequenceNumber: 42n,
  *   timestamp: "2026-03-16T10:00:00.000000Z",
@@ -147,7 +147,7 @@ export type SintEventType =
  * };
  * ```
  */
-export interface SintLedgerEvent {
+export interface NosihLedgerEvent {
   /** Unique event identifier (UUID v7). */
   readonly eventId: UUIDv7;
 
@@ -158,7 +158,7 @@ export interface SintLedgerEvent {
   readonly timestamp: ISO8601;
 
   /** Event type from the enumerated set. */
-  readonly eventType: SintEventType;
+  readonly eventType: NosihEventType;
 
   /** Agent identity (Ed25519 public key). */
   readonly agentId: Ed25519PublicKey;
@@ -188,7 +188,7 @@ export interface SintLedgerEvent {
  * A ProofReceipt provides cryptographic attestation of a ledger event.
  * Used for regulatory compliance (EU AI Act, IEC 62443).
  */
-export interface SintProofReceipt {
+export interface NosihProofReceipt {
   /** The event this receipt attests to. */
   readonly eventId: UUIDv7;
 
@@ -224,7 +224,7 @@ export interface SintProofReceipt {
  * Stage-specific receipt used for strong-tier flows that need both a gate receipt
  * before execution and a completion receipt after execution settles.
  */
-export interface SintBilateralProofReceipt extends SintProofReceipt {
+export interface NosihBilateralProofReceipt extends NosihProofReceipt {
   /** Stable cross-system correlation identifier for the governed action. */
   readonly actionRef: string;
   /** Whether this receipt captures the authorization gate or the execution result. */
@@ -240,15 +240,15 @@ export interface SintBilateralProofReceipt extends SintProofReceipt {
 /**
  * Linked receipt pair for strong-tier execution governance.
  */
-export interface SintBilateralProofReceiptPair {
+export interface NosihBilateralProofReceiptPair {
   /** Receipt emitted at the authorization gate (before execution). */
-  readonly gate: SintBilateralProofReceipt;
+  readonly gate: NosihBilateralProofReceipt;
   /** Receipt emitted at action completion (success, failure, or rollback). */
-  readonly completion: SintBilateralProofReceipt;
+  readonly completion: NosihBilateralProofReceipt;
 }
 
 /**
- * Formal DFA states for the SINT request lifecycle.
+ * Formal DFA states for the NOSIH request lifecycle.
  *
  * Models physical consequence severity of every request through a deterministic
  * finite automaton. The ACTING state is only reachable via POLICY_EVAL with a valid
@@ -270,7 +270,7 @@ export type RequestLifecycleState =
   | "ROLLEDBACK";    // E-stop or execution failure — returned to safe state
 
 /**
- * SINT Bridge per-topic/per-resource authorization state machine.
+ * NOSIH Bridge per-topic/per-resource authorization state machine.
  *
  * Each external protocol surface (ROS 2 topic, MCP server, A2A agent) maintains
  * an independent state. Only the ACTIVE state allows messages to traverse the bridge.
@@ -305,7 +305,7 @@ export interface CsmlCoefficients {
   readonly epsilon: number;
 }
 
-/** Default CSML coefficients per the SINT formal specification. */
+/** Default CSML coefficients per the NOSIH formal specification. */
 export const DEFAULT_CSML_COEFFICIENTS: CsmlCoefficients = {
   alpha: 0.4,
   beta: 0.2,
@@ -321,7 +321,7 @@ export interface LedgerQuery {
   /** Restrict results to events emitted for this agent. */
   readonly agentId?: Ed25519PublicKey;
   /** Restrict results to a specific event type. */
-  readonly eventType?: SintEventType;
+  readonly eventType?: NosihEventType;
   /** Inclusive lower bound on `sequenceNumber`. */
   readonly fromSequence?: bigint;
   /** Inclusive upper bound on `sequenceNumber`. */

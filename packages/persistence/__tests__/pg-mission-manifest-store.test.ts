@@ -56,8 +56,8 @@ describe("PgMissionManifestStore", () => {
     expect((await store.store(manifest())).status).toBe("stored");
     const sql = query.mock.calls.map(([statement]) => String(statement)).join("\n");
     expect(sql).toContain("pg_advisory_xact_lock");
-    expect(sql).toContain("INSERT INTO sint_mission_manifests");
-    expect(sql).toContain("INSERT INTO sint_mission_authority_heads");
+    expect(sql).toContain("INSERT INTO nosih_mission_manifests");
+    expect(sql).toContain("INSERT INTO nosih_mission_authority_heads");
     const [, values] = query.mock.calls[4] as [string, unknown[]];
     expect(values[5]).toBe(JSON.stringify(manifest()));
     expect(release).toHaveBeenCalledOnce();
@@ -114,7 +114,7 @@ describe("PgMissionManifestStore", () => {
 
     expect(await store.revoke(revocation)).toBe(true);
     const [sql, values] = query.mock.calls[0] as [string, unknown[]];
-    expect(sql).toContain("FROM sint_mission_manifests");
+    expect(sql).toContain("FROM nosih_mission_manifests");
     expect(sql).toContain("ON CONFLICT (manifest_id) DO NOTHING");
     expect(values).toEqual([
       MANIFEST_ID,
@@ -179,7 +179,7 @@ describe("PgMissionManifestStore", () => {
     const sql = query.mock.calls.map(([statement]) => String(statement)).join("\n");
     expect(sql).toContain("pg_advisory_xact_lock");
     expect(sql).toContain("COUNT(*)");
-    expect(sql).toContain("INSERT INTO sint_mission_action_claims");
+    expect(sql).toContain("INSERT INTO nosih_mission_action_claims");
     const [, values] = query.mock.calls[5] as [string, unknown[]];
     expect(values).toEqual([
       "action-1",
@@ -251,7 +251,7 @@ describe("PgMissionManifestStore", () => {
 
     expect((await store.finalizeAction(report)).status).toBe("finalized");
     const [sql, values] = query.mock.calls[0] as [string, unknown[]];
-    expect(sql).toContain("FROM sint_mission_action_claims");
+    expect(sql).toContain("FROM nosih_mission_action_claims");
     expect(sql).toContain("ON CONFLICT (action_ref) DO NOTHING");
     expect(values[4]).toBe(JSON.stringify(report));
   });

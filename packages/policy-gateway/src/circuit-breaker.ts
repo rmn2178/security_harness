@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Circuit Breaker (ASI10 / EU AI Act Art. 14(4)(e)).
+ * NOSIH Protocol — Circuit Breaker (ASI10 / EU AI Act Art. 14(4)(e)).
  *
  * Provides the "stop button" required by EU AI Act Article 14(4)(e) for
  * high-risk AI systems: human supervisors must be able to interrupt agent
@@ -15,7 +15,7 @@
  *   HALF_OPEN ──(failure)───────────▶ OPEN
  *   * ──(operator trip())───────────▶ OPEN  (immediate)
  *
- * @module @sint/gate-policy-gateway/circuit-breaker
+ * @module @nosih/gate-policy-gateway/circuit-breaker
  */
 
 /** Circuit state for a single agent. */

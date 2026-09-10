@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { EscalationManager } from "../../src/arbitration/escalation.js";
-import type { SintArbitrationDecision } from "@pshkv/core";
+import type { NosihArbitrationDecision } from "@pshkv/core";
 
-function makeOverrideDecision(): SintArbitrationDecision {
+function makeOverrideDecision(): NosihArbitrationDecision {
   return {
     s1Recommendation: {
       action: "move",
@@ -25,7 +25,7 @@ function makeOverrideDecision(): SintArbitrationDecision {
   };
 }
 
-function makeNonOverrideDecision(): SintArbitrationDecision {
+function makeNonOverrideDecision(): NosihArbitrationDecision {
   return {
     s1Recommendation: {
       action: "scan",

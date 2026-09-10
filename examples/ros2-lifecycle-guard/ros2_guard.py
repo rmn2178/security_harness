@@ -47,7 +47,7 @@ def try_intercept(gateway_url: str, request_body: dict) -> dict:
 
 
 def main() -> None:
-    gateway_url = os.environ.get("SINT_GATEWAY_URL", "http://localhost:3100").rstrip("/")
+    gateway_url = os.environ.get("NOSIH_GATEWAY_URL", "http://localhost:3100").rstrip("/")
 
     # Create issuer + agent keypairs via dev utility route.
     root = http_json("POST", f"{gateway_url}/v1/keypair", {})

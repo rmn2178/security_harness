@@ -13,7 +13,7 @@ import {
   sign,
   validateCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { computeSigningPayload } from "@pshkv/gate-capability-tokens";
 import { loadPostQuantumCryptoAgilityFixture } from "./fixture-loader.js";
 
@@ -26,7 +26,7 @@ describe("Post-quantum crypto agility fixture v1", () => {
   const fixture = loadPostQuantumCryptoAgilityFixture();
 
   function baseRequest(): {
-    request: SintCapabilityTokenRequest;
+    request: NosihCapabilityTokenRequest;
     issuerPrivateKey: string;
   } {
     const issuer = generateKeypair();
@@ -110,11 +110,11 @@ describe("Post-quantum crypto agility fixture v1", () => {
           signature: "pq-signature-placeholder",
         },
       ],
-    } as Omit<SintCapabilityToken, "signature">;
+    } as Omit<NosihCapabilityToken, "signature">;
     const hybrid = {
       ...unsignedHybrid,
       signature: sign(issuerPrivateKey, computeSigningPayload(unsignedHybrid)),
-    } as SintCapabilityToken;
+    } as NosihCapabilityToken;
 
     const validation = validateCapabilityToken(hybrid, {
       resource: request.resource,

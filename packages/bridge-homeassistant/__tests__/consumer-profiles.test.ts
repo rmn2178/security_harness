@@ -12,7 +12,7 @@ import {
 } from "../src/consumer-profiles.js";
 import {
   parseEntityId,
-  mapServiceCallToSint,
+  mapServiceCallToNosih,
   isSafetyCritical,
 } from "../src/resource-mapper.js";
 
@@ -70,7 +70,7 @@ describe("Resource Mapper", () => {
   
   it("should map lock.unlock to T2_ACT", () => {
     const entity = parseEntityId("lock.front_door");
-    const mapping = mapServiceCallToSint({ entity, service: "unlock" });
+    const mapping = mapServiceCallToNosih({ entity, service: "unlock" });
     
     expect(mapping.resource).toBe("ha://homeassistant.local/entity/lock.front_door");
     expect(mapping.action).toBe("unlock");
@@ -79,7 +79,7 @@ describe("Resource Mapper", () => {
   
   it("should map light.turn_on to T1_PREPARE", () => {
     const entity = parseEntityId("light.living_room");
-    const mapping = mapServiceCallToSint({ entity, service: "turn_on" });
+    const mapping = mapServiceCallToNosih({ entity, service: "turn_on" });
     
     expect(mapping.resource).toBe("ha://homeassistant.local/entity/light.living_room");
     expect(mapping.action).toBe("turn_on");
@@ -88,7 +88,7 @@ describe("Resource Mapper", () => {
   
   it("should include context in mapping", () => {
     const entity = parseEntityId("climate.living_room");
-    const mapping = mapServiceCallToSint({
+    const mapping = mapServiceCallToNosih({
       entity,
       service: "set_temperature",
       serviceData: { temperature: 72 },
@@ -102,7 +102,7 @@ describe("Resource Mapper", () => {
   
   it("should use custom HA host in resource URI", () => {
     const entity = parseEntityId("lock.back_door");
-    const mapping = mapServiceCallToSint(
+    const mapping = mapServiceCallToNosih(
       { entity, service: "lock" },
       "home.example.com"
     );

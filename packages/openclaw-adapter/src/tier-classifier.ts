@@ -1,7 +1,7 @@
 /**
  * Default tier classifier for OpenClaw actions.
  *
- * Maps OpenClaw tools, MCP calls, and node actions to SINT safety tiers:
+ * Maps OpenClaw tools, MCP calls, and node actions to NOSIH safety tiers:
  *   T0 — Observe only (read, search, status)
  *   T1 — Reversible digital actions (write files, edit, git)
  *   T2 — Requires approval (deploy, exec with elevated, delete, send messages)
@@ -12,7 +12,7 @@ import type {
   OpenClawToolCall,
   OpenClawMCPCall,
   OpenClawNodeAction,
-  SintTier,
+  NosihTier,
 } from "./types.js";
 
 /** T0: observe-only tools (always T0 regardless of action). */
@@ -84,9 +84,9 @@ const T3_NODE_ACTIONS = new Set([
 ]);
 
 /**
- * Classify an OpenClaw tool call into a SINT safety tier.
+ * Classify an OpenClaw tool call into a NOSIH safety tier.
  */
-export function classifyToolCall(call: OpenClawToolCall): SintTier {
+export function classifyToolCall(call: OpenClawToolCall): NosihTier {
   const { tool, params, elevated } = call;
 
   // Elevated always bumps to T2 minimum
@@ -127,7 +127,7 @@ export function classifyToolCall(call: OpenClawToolCall): SintTier {
  * Classify an MCP server tool call.
  * MCP calls are external tools — default T2, escalate to T3 if writing/executing.
  */
-export function classifyMCPCall(call: OpenClawMCPCall): SintTier {
+export function classifyMCPCall(call: OpenClawMCPCall): NosihTier {
   const toolLower = call.tool.toLowerCase();
 
   // Read-only MCP tools
@@ -173,7 +173,7 @@ export function classifyMCPCall(call: OpenClawMCPCall): SintTier {
  * Classify a node action (physical device).
  * All node actions are T3 by default (physical world interaction).
  */
-export function classifyNodeAction(action: OpenClawNodeAction): SintTier {
+export function classifyNodeAction(action: OpenClawNodeAction): NosihTier {
   // Status/describe are T0
   if (action.action === "status" || action.action === "describe") {
     return "T0";

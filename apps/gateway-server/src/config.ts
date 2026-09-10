@@ -1,13 +1,13 @@
 /**
- * SINT Gateway Server — Configuration.
+ * NOSIH Gateway Server — Configuration.
  *
  * Environment-based configuration for storage backends,
  * authentication, and server settings.
  *
- * @module @sint/gateway-server/config
+ * @module @nosih/gateway-server/config
  */
 
-export interface SintConfig {
+export interface NosihConfig {
   /** Runtime mode. Production mode enforces secure storage and auth defaults. */
   env: "development" | "test" | "production";
   /** Server port. Default: 3100. */
@@ -46,72 +46,72 @@ function parseBoolean(name: string, raw: string | undefined, fallback: boolean):
 }
 
 /** Load configuration from environment variables. */
-export function loadConfig(): SintConfig {
-  const env = (process.env.SINT_ENV ?? process.env.NODE_ENV ?? "development") as SintConfig["env"];
+export function loadConfig(): NosihConfig {
+  const env = (process.env.NOSIH_ENV ?? process.env.NODE_ENV ?? "development") as NosihConfig["env"];
   if (env !== "development" && env !== "test" && env !== "production") {
-    throw new Error(`Invalid SINT_ENV/NODE_ENV: "${env}" (expected "development", "test", or "production")`);
+    throw new Error(`Invalid NOSIH_ENV/NODE_ENV: "${env}" (expected "development", "test", or "production")`);
   }
 
-  const store = (process.env.SINT_STORE ?? "memory") as "memory" | "postgres";
-  const cache = (process.env.SINT_CACHE ?? "memory") as "memory" | "redis";
+  const store = (process.env.NOSIH_STORE ?? "memory") as "memory" | "postgres";
+  const cache = (process.env.NOSIH_CACHE ?? "memory") as "memory" | "redis";
 
   if (store !== "memory" && store !== "postgres") {
-    throw new Error(`Invalid SINT_STORE: "${store}" (expected "memory" or "postgres")`);
+    throw new Error(`Invalid NOSIH_STORE: "${store}" (expected "memory" or "postgres")`);
   }
   if (cache !== "memory" && cache !== "redis") {
-    throw new Error(`Invalid SINT_CACHE: "${cache}" (expected "memory" or "redis")`);
+    throw new Error(`Invalid NOSIH_CACHE: "${cache}" (expected "memory" or "redis")`);
   }
 
   const databaseUrl = process.env.DATABASE_URL;
   if (store === "postgres" && !databaseUrl) {
-    throw new Error("DATABASE_URL is required when SINT_STORE=postgres");
+    throw new Error("DATABASE_URL is required when NOSIH_STORE=postgres");
   }
 
   const redisUrl = process.env.REDIS_URL;
   if (cache === "redis" && !redisUrl) {
-    throw new Error("REDIS_URL is required when SINT_CACHE=redis");
+    throw new Error("REDIS_URL is required when NOSIH_CACHE=redis");
   }
 
-  const apiKey = process.env.SINT_API_KEY;
+  const apiKey = process.env.NOSIH_API_KEY;
   const requireSignatures = parseBoolean(
-    "SINT_REQUIRE_SIGNATURES",
-    process.env.SINT_REQUIRE_SIGNATURES,
+    "NOSIH_REQUIRE_SIGNATURES",
+    process.env.NOSIH_REQUIRE_SIGNATURES,
     false,
   );
   const wsAllowQueryApiKey = parseBoolean(
-    "SINT_WS_ALLOW_QUERY_API_KEY",
-    process.env.SINT_WS_ALLOW_QUERY_API_KEY,
+    "NOSIH_WS_ALLOW_QUERY_API_KEY",
+    process.env.NOSIH_WS_ALLOW_QUERY_API_KEY,
     true,
   );
 
   if (env === "production") {
     if (store !== "postgres") {
-      throw new Error("SINT_STORE=postgres is required when SINT_ENV/NODE_ENV=production");
+      throw new Error("NOSIH_STORE=postgres is required when NOSIH_ENV/NODE_ENV=production");
     }
     if (cache !== "redis") {
-      throw new Error("SINT_CACHE=redis is required when SINT_ENV/NODE_ENV=production");
+      throw new Error("NOSIH_CACHE=redis is required when NOSIH_ENV/NODE_ENV=production");
     }
     if (!apiKey) {
-      throw new Error("SINT_API_KEY is required when SINT_ENV/NODE_ENV=production");
+      throw new Error("NOSIH_API_KEY is required when NOSIH_ENV/NODE_ENV=production");
     }
     if (!requireSignatures) {
-      throw new Error("SINT_REQUIRE_SIGNATURES=true is required when SINT_ENV/NODE_ENV=production");
+      throw new Error("NOSIH_REQUIRE_SIGNATURES=true is required when NOSIH_ENV/NODE_ENV=production");
     }
     if (wsAllowQueryApiKey) {
-      throw new Error("SINT_WS_ALLOW_QUERY_API_KEY=false is required when SINT_ENV/NODE_ENV=production");
+      throw new Error("NOSIH_WS_ALLOW_QUERY_API_KEY=false is required when NOSIH_ENV/NODE_ENV=production");
     }
   }
 
   return {
     env,
-    port: parsePositiveInt("SINT_PORT", process.env.SINT_PORT ?? "3100"),
+    port: parsePositiveInt("NOSIH_PORT", process.env.NOSIH_PORT ?? "3100"),
     store,
     cache,
     databaseUrl,
     redisUrl,
     apiKey,
     requireSignatures,
-    rateLimitMax: parsePositiveInt("SINT_RATE_LIMIT", process.env.SINT_RATE_LIMIT ?? "100"),
+    rateLimitMax: parsePositiveInt("NOSIH_RATE_LIMIT", process.env.NOSIH_RATE_LIMIT ?? "100"),
     wsAllowQueryApiKey,
   };
 }

@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Resource monitor.
+ * NOSIH Protocol — Resource monitor.
  *
  * Periodically samples CPU and memory utilization, compares against
  * configurable thresholds, and emits callbacks when warning or critical
  * levels are exceeded.
  *
- * @module @sint/engine-hal/resource-monitor
+ * @module @nosih/engine-hal/resource-monitor
  */
 
 import os from "node:os";

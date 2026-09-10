@@ -2,12 +2,12 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { PerceptionPipeline } from "../src/perception-pipeline.js";
 import { SensorBus } from "../src/sensor-bus.js";
 import { OnnxExecutor } from "../src/onnx-executor.js";
-import type { SintSensorReading } from "@pshkv/core";
+import type { NosihSensorReading } from "@pshkv/core";
 
 function makeSensorBusWithData(): SensorBus {
   const bus = new SensorBus();
   bus.registerSensor({ sensorId: "cam0", modality: "camera_rgb", bufferSize: 10 });
-  const reading: SintSensorReading = {
+  const reading: NosihSensorReading = {
     sensorId: "cam0",
     modality: "camera_rgb",
     timestamp: "2026-03-17T10:00:00.000000Z",
@@ -56,7 +56,7 @@ describe("PerceptionPipeline", () => {
     expect(pipeline.isRunning()).toBe(false);
   });
 
-  it("runOnce returns SintWorldState with ok result", async () => {
+  it("runOnce returns NosihWorldState with ok result", async () => {
     const bus = makeSensorBusWithData();
     const mock = OnnxExecutor.createMock();
     await mock.loadModel("model.onnx");

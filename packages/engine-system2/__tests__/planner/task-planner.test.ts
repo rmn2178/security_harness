@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { TaskPlanner } from "../../src/planner/task-planner.js";
-import type { SintWorldState } from "@pshkv/core";
+import type { NosihWorldState } from "@pshkv/core";
 
-function makeWorldState(): SintWorldState {
+function makeWorldState(): NosihWorldState {
   return {
     timestamp: "2026-03-17T10:00:00.000000Z",
     objects: [],

@@ -1,5 +1,5 @@
 /**
- * SINT bridge-health — Differential Privacy Ledger
+ * NOSIH bridge-health — Differential Privacy Ledger
  *
  * Privacy-preserving aggregate health queries with epsilon budget tracking.
  * Implements Phase 5 differential privacy per Physical AI Governance

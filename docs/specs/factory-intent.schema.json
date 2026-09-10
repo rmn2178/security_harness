@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://docs.sint.gg/specs/factory-intent.schema.json",
+  "$id": "https://docs.nosih.gg/specs/factory-intent.schema.json",
   "title": "FactoryIntent",
   "description": "Structured planning intent for prompt-generated industrial automation.",
   "type": "object",

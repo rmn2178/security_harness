@@ -5,10 +5,10 @@
  * "if robot moving → deny fs.write"
  *
  * These are policies that span multiple subsystems —
- * the key differentiator between SINT and basic sandbox.
+ * the key differentiator between NOSIH and basic sandbox.
  */
 
-import type { CrossSystemPolicy, GovernanceResult, SintTier } from "./types.js";
+import type { CrossSystemPolicy, GovernanceResult, NosihTier } from "./types.js";
 
 /** Active system states tracked by the adapter. */
 export class SystemStateTracker {
@@ -50,7 +50,7 @@ export function evaluateCrossSystemPolicies(
   action: string,
   policies: CrossSystemPolicy[],
   stateTracker: SystemStateTracker,
-  tier: SintTier,
+  tier: NosihTier,
 ): GovernanceResult | null {
   for (const policy of policies) {
     if (!stateTracker.isActive(policy.whenActive)) continue;

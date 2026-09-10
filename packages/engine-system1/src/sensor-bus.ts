@@ -1,20 +1,20 @@
 /**
- * SINT Protocol — SensorBus for System 1 perception.
+ * NOSIH Protocol — SensorBus for System 1 perception.
  *
  * The SensorBus manages sensor registration, ring-buffered data ingestion,
  * and world-state fusion. Each sensor maintains its own ring buffer of
  * readings. The bus fuses the latest readings from all sensors into
- * a unified {@link SintWorldState}.
+ * a unified {@link NosihWorldState}.
  *
- * @module @sint/engine-system1/sensor-bus
+ * @module @nosih/engine-system1/sensor-bus
  */
 
 import type {
   Result,
-  SintPerceivedObject,
-  SintPose,
-  SintSensorReading,
-  SintWorldState,
+  NosihPerceivedObject,
+  NosihPose,
+  NosihSensorReading,
+  NosihWorldState,
 } from "@pshkv/core";
 import { err, ok } from "@pshkv/core";
 import type { SensorSource } from "./types.js";
@@ -24,7 +24,7 @@ import type { SensorSource } from "./types.js";
  */
 interface SensorEntry {
   readonly source: SensorSource;
-  buffer: SintSensorReading[];
+  buffer: NosihSensorReading[];
   writeIndex: number;
 }
 
@@ -63,7 +63,7 @@ export class SensorBus {
     }
     this.sensors.set(source.sensorId, {
       source,
-      buffer: new Array<SintSensorReading>(source.bufferSize),
+      buffer: new Array<NosihSensorReading>(source.bufferSize),
       writeIndex: 0,
     });
     return ok(undefined);
@@ -104,7 +104,7 @@ export class SensorBus {
    * });
    * ```
    */
-  pushReading(reading: SintSensorReading): Result<void, Error> {
+  pushReading(reading: NosihSensorReading): Result<void, Error> {
     const entry = this.sensors.get(reading.sensorId);
     if (!entry) {
       return err(new Error(`Sensor not registered: ${reading.sensorId}`));
@@ -129,7 +129,7 @@ export class SensorBus {
    * }
    * ```
    */
-  getLatestReading(sensorId: string): Result<SintSensorReading | null, Error> {
+  getLatestReading(sensorId: string): Result<NosihSensorReading | null, Error> {
     const entry = this.sensors.get(sensorId);
     if (!entry) {
       return err(new Error(`Sensor not registered: ${sensorId}`));
@@ -157,7 +157,7 @@ export class SensorBus {
    * }
    * ```
    */
-  getReadings(sensorId: string, count?: number): Result<readonly SintSensorReading[], Error> {
+  getReadings(sensorId: string, count?: number): Result<readonly NosihSensorReading[], Error> {
     const entry = this.sensors.get(sensorId);
     if (!entry) {
       return err(new Error(`Sensor not registered: ${sensorId}`));
@@ -167,7 +167,7 @@ export class SensorBus {
     const available = Math.min(totalWritten, bufferSize);
     const requestCount = count !== undefined ? Math.min(count, available) : available;
 
-    const readings: SintSensorReading[] = [];
+    const readings: NosihSensorReading[] = [];
     for (let i = requestCount; i > 0; i--) {
       const idx = (totalWritten - i) % bufferSize;
       const reading = entry.buffer[idx];
@@ -201,7 +201,7 @@ export class SensorBus {
    * determines a default robot pose, and sets anomaly flags to empty.
    * Full fusion with neural inference is handled by the PerceptionPipeline.
    *
-   * @returns A fused SintWorldState from all current sensor data
+   * @returns A fused NosihWorldState from all current sensor data
    *
    * @example
    * ```ts
@@ -211,8 +211,8 @@ export class SensorBus {
    * }
    * ```
    */
-  fuseWorldState(): Result<SintWorldState, Error> {
-    const objects: SintPerceivedObject[] = [];
+  fuseWorldState(): Result<NosihWorldState, Error> {
+    const objects: NosihPerceivedObject[] = [];
     let humanPresent = false;
     let latestTimestamp = new Date(0).toISOString() as string;
 
@@ -247,12 +247,12 @@ export class SensorBus {
       latestTimestamp = new Date().toISOString();
     }
 
-    const defaultPose: SintPose = {
+    const defaultPose: NosihPose = {
       position: { x: 0, y: 0, z: 0 },
       orientation: { roll: 0, pitch: 0, yaw: 0 },
     };
 
-    const worldState: SintWorldState = {
+    const worldState: NosihWorldState = {
       timestamp: latestTimestamp,
       objects,
       robotPose: defaultPose,
@@ -265,9 +265,9 @@ export class SensorBus {
 }
 
 /**
- * Type guard for SintPerceivedObject shape.
+ * Type guard for NosihPerceivedObject shape.
  */
-function isPerceivedObject(value: unknown): value is SintPerceivedObject {
+function isPerceivedObject(value: unknown): value is NosihPerceivedObject {
   if (typeof value !== "object" || value === null) {
     return false;
   }

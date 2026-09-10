@@ -51,7 +51,7 @@
       "sourceRobotId": "digit-07",
       "targetRobotId": "amr-17",
       "workspaceId": "zone-aisle-a17",
-      "payloadRef": "sint://payload/tote-4481",
+      "payloadRef": "nosih://payload/tote-4481",
       "approvalId": "approval-handoff-001",
       "operatorId": "operator-shift-a",
       "eventHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

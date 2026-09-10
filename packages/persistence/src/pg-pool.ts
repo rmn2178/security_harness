@@ -1,9 +1,9 @@
 /**
- * SINT Persistence — PostgreSQL Connection Pool.
+ * NOSIH Persistence — PostgreSQL Connection Pool.
  *
  * Thin wrapper around pg.Pool with sensible defaults.
  *
- * @module @sint/persistence/pg-pool
+ * @module @nosih/persistence/pg-pool
  */
 
 import pg from "pg";

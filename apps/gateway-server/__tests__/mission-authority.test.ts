@@ -3,7 +3,7 @@ import type { Hono } from "hono";
 import type {
   MissionActionProposal,
   MissionManifest,
-  SintCapabilityTokenRequest,
+  NosihCapabilityTokenRequest,
 } from "@pshkv/core";
 import {
   hashSha256,
@@ -97,7 +97,7 @@ describe("Mission Authority API", () => {
   }
 
   async function requestAndToken(requestId = REQUEST_ID) {
-    const tokenRequest: SintCapabilityTokenRequest = {
+    const tokenRequest: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///camera/front",
@@ -461,7 +461,7 @@ describe("Mission Authority API", () => {
         resource: "ros2:///payload/release",
         action: "execute",
       };
-      const tokenRequest: SintCapabilityTokenRequest = {
+      const tokenRequest: NosihCapabilityTokenRequest = {
         issuer: root.publicKey,
         subject: agent.publicKey,
         resource: effectRequest.resource,

@@ -3,11 +3,11 @@ import { MemoryBank } from "../memory-bank.js";
 import { WorkingMemory } from "../working-memory.js";
 import { OperatorMemory } from "../operator-memory.js";
 import type { LedgerWriterLike } from "../operator-memory.js";
-import type { SintEventType } from "@pshkv/core";
+import type { NosihEventType } from "@pshkv/core";
 
 function makeMockLedger(): LedgerWriterLike {
   return {
-    append: vi.fn((_input: { eventType: SintEventType; agentId: string; payload: Record<string, unknown> }) => ({
+    append: vi.fn((_input: { eventType: NosihEventType; agentId: string; payload: Record<string, unknown> }) => ({
       eventId: "mock-id",
     })),
   };

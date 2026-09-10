@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Anomaly Detector for System 1 perception.
+ * NOSIH Protocol — Anomaly Detector for System 1 perception.
  *
  * Detects anomalies in the fused world state using statistical analysis:
  * - Low confidence: objects below the confidence threshold
@@ -8,10 +8,10 @@
  * - Collision risk: objects within 0.5m of robot pose
  * - Human presence: flags when humans are detected
  *
- * @module @sint/engine-system1/anomaly-detector
+ * @module @nosih/engine-system1/anomaly-detector
  */
 
-import type { SintAnomalyFlag, SintWorldState, Point3D } from "@pshkv/core";
+import type { NosihAnomalyFlag, NosihWorldState, Point3D } from "@pshkv/core";
 import type { AnomalyConfig } from "./types.js";
 import { DEFAULT_ANOMALY_CONFIG } from "./types.js";
 
@@ -82,8 +82,8 @@ export class AnomalyDetector {
    * }
    * ```
    */
-  analyze(worldState: SintWorldState): SintAnomalyFlag[] {
-    const flags: SintAnomalyFlag[] = [];
+  analyze(worldState: NosihWorldState): NosihAnomalyFlag[] {
+    const flags: NosihAnomalyFlag[] = [];
 
     for (const obj of worldState.objects) {
       // Update running statistics with this confidence value

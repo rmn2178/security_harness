@@ -1,12 +1,12 @@
 version: "3.9"
 
-# SINT Protocol — local development / single-host deployment stack.
+# NOSIH Protocol — local development / single-host deployment stack.
 # Start everything:  docker compose up --build
 # Gateway only:      docker compose up gateway postgres redis
 
 services:
 
-  # ── SINT Policy Gateway ────────────────────────────────────────────────────
+  # ── NOSIH Policy Gateway ────────────────────────────────────────────────────
   gateway:
     build:
       context: .
@@ -14,16 +14,18 @@ services:
     ports:
       - "3100:3100"
     environment:
-      SINT_PORT: "3100"
-      SINT_STORE: postgres
-      SINT_CACHE: redis
-      DATABASE_URL: postgresql://sint:sint@postgres:5432/sint
-      REDIS_URL: redis://redis:6379
-      SINT_LOG_LEVEL: info
-      # SINT_API_KEY: change-me-in-production
-      # SINT_MAX_TIER: T3_COMMIT
-      # SINT_REQUIRE_SIGNATURES: "false"
-      # SINT_RATE_LIMIT: "100"
+      NOSIH_PORT: "${NOSIH_PORT:-3100}"
+      NOSIH_STORE: "${NOSIH_STORE:-postgres}"
+      NOSIH_CACHE: "${NOSIH_CACHE:-redis}"
+      # Legacy credentials are retained to preserve the existing pgdata volume.
+      DATABASE_URL: "${DATABASE_URL:-postgresql://sint:sint@postgres:5432/sint}"
+      REDIS_URL: "${REDIS_URL:-redis://redis:6379}"
+      NOSIH_LOG_LEVEL: "${NOSIH_LOG_LEVEL:-info}"
+      NOSIH_ENV: "${NOSIH_ENV:-development}"
+      NOSIH_API_KEY: "${NOSIH_API_KEY:-nosih-dev-key}"
+      # NOSIH_MAX_TIER: T3_COMMIT
+      # NOSIH_REQUIRE_SIGNATURES: "false"
+      # NOSIH_RATE_LIMIT: "100"
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,7 +39,7 @@ services:
       retries: 5
     restart: unless-stopped
 
-  # ── SINT Dashboard (React SPA via nginx) ───────────────────────────────────
+  # ── NOSIH Dashboard (React SPA via nginx) ───────────────────────────────────
   dashboard:
     build:
       context: .
@@ -53,18 +55,18 @@ services:
       gateway:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3201/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3201/"]
       interval: 15s
       timeout: 5s
       start_period: 5s
       retries: 3
     restart: unless-stopped
 
-  # ── SINT Operator Interface (Voice HUD via nginx) ─────────────────────────
-  sint-interface:
+  # ── NOSIH Operator Interface (Voice HUD via nginx) ─────────────────────────
+  nosih-interface:
     build:
       context: .
-      dockerfile: apps/sint-interface/Dockerfile
+      dockerfile: apps/nosih-interface/Dockerfile
     ports:
       - "3202:3202"
     environment:
@@ -73,7 +75,7 @@ services:
       gateway:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3202/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3202/"]
       interval: 15s
       timeout: 5s
       start_period: 5s
@@ -84,11 +86,12 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
+      # Must match the credentials used when the persistent volume was created.
       POSTGRES_USER: sint
       POSTGRES_PASSWORD: sint
       POSTGRES_DB: sint
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       # Auto-run SQL migrations on first start

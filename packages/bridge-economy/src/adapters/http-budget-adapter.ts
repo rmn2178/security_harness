@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — HTTP Budget Adapter.
+ * NOSIH Protocol — HTTP Budget Adapter.
  *
  * Implements IBudgetPort by calling the product API's budget endpoints:
  * - POST /budgets/check → checkBudget
  *
- * @module @sint/bridge-economy/adapters/http-budget-adapter
+ * @module @nosih/bridge-economy/adapters/http-budget-adapter
  */
 
 import { err, type Result } from "@pshkv/core";
@@ -17,7 +17,7 @@ import { HttpClient, type HttpClientConfig } from "./http-client.js";
  * @example
  * ```ts
  * const adapter = new HttpBudgetAdapter({
- *   baseUrl: "https://api.sint.gg",
+ *   baseUrl: "https://api.nosih.gg",
  *   authToken: keycloakToken,
  * });
  * const result = await adapter.checkBudget({ userId: "u1", estimatedCost: 9, ... });

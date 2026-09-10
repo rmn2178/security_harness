@@ -1,15 +1,15 @@
 /**
- * SINT Persistence — Redis Cache Store.
+ * NOSIH Persistence — Redis Cache Store.
  *
  * TTL-based caching using Redis for distributed cache.
  *
- * @module @sint/persistence/redis-cache
+ * @module @nosih/persistence/redis-cache
  */
 
 import type { Redis } from "ioredis";
 import type { CacheStore } from "./interfaces.js";
 
-const KEY_PREFIX = "sint:cache:";
+const KEY_PREFIX = "nosih:cache:";
 
 export class RedisCache implements CacheStore {
   constructor(private readonly redis: Redis) {}

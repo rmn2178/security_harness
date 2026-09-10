@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Audit Log Component.
+ * NOSIH Dashboard — Audit Log Component.
  *
  * Shows recent ledger events with chain integrity status.
  */

@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Safety Classifier.
+ * NOSIH Protocol — Safety Classifier.
  *
  * Pure function that classifies whether an action recommendation
  * is safety-relevant based on resource patterns, flags, and confidence.
  *
- * @module @sint/engine-system2/arbitration/safety-classifier
+ * @module @nosih/engine-system2/arbitration/safety-classifier
  */
 
-import type { SintActionRecommendation } from "@pshkv/core";
+import type { NosihActionRecommendation } from "@pshkv/core";
 
 /** Result of a safety classification. */
 export interface SafetyClassification {
@@ -52,7 +52,7 @@ const MIN_SAFE_CONFIDENCE = 0.5;
  * ```
  */
 export function classifyActionSafety(
-  recommendation: SintActionRecommendation,
+  recommendation: NosihActionRecommendation,
 ): SafetyClassification {
   // Check resource pattern
   for (const pattern of SAFETY_RELEVANT_PATTERNS) {

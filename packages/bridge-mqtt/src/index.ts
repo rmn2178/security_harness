@@ -1,7 +1,7 @@
 /**
- * SINT Protocol MQTT Bridge
+ * NOSIH Protocol MQTT Bridge
  *
- * Maps MQTT Quality of Service levels to SINT approval tiers for graduated
+ * Maps MQTT Quality of Service levels to NOSIH approval tiers for graduated
  * risk management of IoT device communications.
  *
  * @module @pshkv/bridge-mqtt

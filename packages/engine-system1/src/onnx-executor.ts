@@ -1,22 +1,22 @@
 /**
- * SINT Protocol — ONNX Model Executor for System 1 inference.
+ * NOSIH Protocol — ONNX Model Executor for System 1 inference.
  *
  * Provides an injectable ONNX inference executor that dynamically loads
  * onnxruntime-node at runtime. If the runtime is not installed, the
  * executor fails gracefully with a Result error. A static mock factory
  * is provided for testing without any ONNX dependencies.
  *
- * @module @sint/engine-system1/onnx-executor
+ * @module @nosih/engine-system1/onnx-executor
  */
 
-import type { Result, SintHardwareDeploymentProfile } from "@pshkv/core";
+import type { Result, NosihHardwareDeploymentProfile } from "@pshkv/core";
 import { err, ok } from "@pshkv/core";
 import type { OnnxModelExecutor } from "./types.js";
 
 /**
  * Maps deployment profiles to ONNX execution provider names.
  */
-const PROVIDER_MAP: Record<SintHardwareDeploymentProfile, string> = {
+const PROVIDER_MAP: Record<NosihHardwareDeploymentProfile, string> = {
   full: "cuda",
   edge: "cpu",
   split: "cpu",
@@ -44,7 +44,7 @@ const PROVIDER_MAP: Record<SintHardwareDeploymentProfile, string> = {
  * ```
  */
 export class OnnxExecutor implements OnnxModelExecutor {
-  private readonly deploymentProfile: SintHardwareDeploymentProfile;
+  private readonly deploymentProfile: NosihHardwareDeploymentProfile;
   private readonly provider: string;
   private session: unknown | null = null;
   private _modelLoaded = false;
@@ -59,7 +59,7 @@ export class OnnxExecutor implements OnnxModelExecutor {
    * const executor = new OnnxExecutor("full");
    * ```
    */
-  constructor(deploymentProfile: SintHardwareDeploymentProfile) {
+  constructor(deploymentProfile: NosihHardwareDeploymentProfile) {
     this.deploymentProfile = deploymentProfile;
     this.provider = PROVIDER_MAP[deploymentProfile]!;
   }
@@ -90,7 +90,7 @@ export class OnnxExecutor implements OnnxModelExecutor {
    * console.log(executor.getDeploymentProfile()); // "edge"
    * ```
    */
-  getDeploymentProfile(): SintHardwareDeploymentProfile {
+  getDeploymentProfile(): NosihHardwareDeploymentProfile {
     return this.deploymentProfile;
   }
 

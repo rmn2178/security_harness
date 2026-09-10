@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://docs.sint.gg/specs/factory-settlement.schema.json",
+  "$id": "https://docs.nosih.gg/specs/factory-settlement.schema.json",
   "title": "FactorySettlement",
   "description": "Settlement attribution profile for AI-generated industrial workcells, adapters, policy packs, and simulation templates.",
   "type": "object",

@@ -1,15 +1,15 @@
 /**
- * Enclave (AgentNexus) ↔ SINT Protocol capability token mapping
+ * Enclave (AgentNexus) ↔ NOSIH Protocol capability token mapping
  *
  * Maps Enclave's permission model (admin|member|viewer + Playbook stage constraints)
- * to SINT capability tokens (T0-T3 tier system + ConstraintEnvelope).
+ * to NOSIH capability tokens (T0-T3 tier system + ConstraintEnvelope).
  *
- * Ref: A2A#1716, SINT RFC-001, AgentNexus Enclave spec
+ * Ref: A2A#1716, NOSIH RFC-001, AgentNexus Enclave spec
  * Co-authored with @kevinkaylie (AgentNexus)
  */
 
 export type EnclaveRole = 'admin' | 'member' | 'viewer';
-export type SintTier = 'T0' | 'T1' | 'T2' | 'T3';
+export type NosihTier = 'T0' | 'T1' | 'T2' | 'T3';
 export type VersionBinding = 'capability' | 'exact';
 
 /** Enclave Playbook stage permission shape */
@@ -24,18 +24,18 @@ export interface EnclavePermission {
   owner_did?: string;
 }
 
-/** SINT capability token (RFC-001 §3.1 compatible) */
-export interface SintCapabilityToken {
+/** NOSIH capability token (RFC-001 §3.1 compatible) */
+export interface NosihCapabilityToken {
   subject: string;           // agent DID
   resource: string;          // skill URI (a2a://host/skills/name)
   actions: string[];         // ['invoke'] | ['observe']
-  tier: SintTier;
-  constraints: SintConstraints;
+  tier: NosihTier;
+  constraints: NosihConstraints;
   exp: number;               // Unix timestamp
   delegation_chain?: string; // parent token ID for monotonic narrowing
 }
 
-export interface SintConstraints {
+export interface NosihConstraints {
   input_keys: string[];
   output_key: string;
   version_binding: VersionBinding;
@@ -46,7 +46,7 @@ export interface SintConstraints {
 }
 
 /**
- * Enclave role → SINT tier mapping
+ * Enclave role → NOSIH tier mapping
  *
  * admin  → T2: operator approval required (consequential, can modify state)
  * member → T1: auto-execute (task execution, standard Playbook participant)
@@ -55,13 +55,13 @@ export interface SintConstraints {
  * Note: T3 (human sign-off, irreversible) is not reachable via role alone —
  * it requires explicit escalation in the Playbook definition.
  */
-const ROLE_TO_TIER: Record<EnclaveRole, SintTier> = {
+const ROLE_TO_TIER: Record<EnclaveRole, NosihTier> = {
   admin: 'T2',
   member: 'T1',
   viewer: 'T0',
 };
 
-const TIER_TO_ROLE: Record<SintTier, EnclaveRole> = {
+const TIER_TO_ROLE: Record<NosihTier, EnclaveRole> = {
   T0: 'viewer',
   T1: 'member',
   T2: 'admin',
@@ -69,18 +69,18 @@ const TIER_TO_ROLE: Record<SintTier, EnclaveRole> = {
 };
 
 /**
- * Convert an Enclave permission to a SINT capability token.
+ * Convert an Enclave permission to a NOSIH capability token.
  *
- * Monotonic narrowing is preserved: the resulting SINT token cannot
+ * Monotonic narrowing is preserved: the resulting NOSIH token cannot
  * exceed the scope of the Enclave permission it was derived from.
  */
-export function enclaveToSint(
+export function enclaveToNosih(
   permission: EnclavePermission,
   agentDid: string,
   skillUri: string,
   ttlSeconds = 3600,
   parentTokenId?: string,
-): SintCapabilityToken {
+): NosihCapabilityToken {
   const tier = ROLE_TO_TIER[permission.role];
 
   return {
@@ -100,10 +100,10 @@ export function enclaveToSint(
 }
 
 /**
- * Convert a SINT capability token back to an Enclave permission shape.
- * Used when an Enclave-originated agent receives a SINT-issued token.
+ * Convert a NOSIH capability token back to an Enclave permission shape.
+ * Used when an Enclave-originated agent receives a NOSIH-issued token.
  */
-export function sintToEnclave(token: SintCapabilityToken): EnclavePermission {
+export function nosihToEnclave(token: NosihCapabilityToken): EnclavePermission {
   return {
     role: TIER_TO_ROLE[token.tier],
     input_keys: token.constraints.input_keys,
@@ -115,17 +115,17 @@ export function sintToEnclave(token: SintCapabilityToken): EnclavePermission {
 
 /**
  * Validate that a child token is a strict subset of its parent.
- * Enforces monotonic narrowing across the Enclave→SINT boundary.
+ * Enforces monotonic narrowing across the Enclave→NOSIH boundary.
  *
  * Returns true if the child permission is valid (narrows or equals parent).
  * Returns false if the child attempts to escalate beyond the parent scope.
  */
 export function validateMonotonicNarrowing(
   parent: EnclavePermission,
-  child: SintCapabilityToken,
+  child: NosihCapabilityToken,
 ): { valid: boolean; reason?: string } {
   const parentTier = ROLE_TO_TIER[parent.role];
-  const tierOrder: SintTier[] = ['T0', 'T1', 'T2', 'T3'];
+  const tierOrder: NosihTier[] = ['T0', 'T1', 'T2', 'T3'];
 
   if (tierOrder.indexOf(child.tier) > tierOrder.indexOf(parentTier)) {
     return {

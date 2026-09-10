@@ -5,11 +5,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/sint-ai/sint-protocol/sdks/go/sintclient"
+	"github.com/nosih-ai/nosih-protocol/sdks/go/nosihclient"
 )
 
 func main() {
-	client := sintclient.New("http://localhost:3100", "dev-local-key").
+	client := nosihclient.New("http://localhost:3100", "dev-local-key").
 		WithRetry(2, 150*time.Millisecond)
 
 	var health map[string]any

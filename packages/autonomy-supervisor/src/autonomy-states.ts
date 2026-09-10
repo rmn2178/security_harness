@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Autonomy State Machine (managed-autonomy layer).
+ * NOSIH Protocol — Autonomy State Machine (managed-autonomy layer).
  *
  * Four-mode autonomy lifecycle (S/M/A/Rt) as a single mode-token model:
  * exactly one authority token resides in {S, M, A, Rt} at all times.

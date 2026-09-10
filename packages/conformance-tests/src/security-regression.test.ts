@@ -1,9 +1,9 @@
 /**
- * SINT Protocol — Security Regression Test Suite.
+ * NOSIH Protocol — Security Regression Test Suite.
  *
  * These 10 tests MUST pass on every PR that touches the
  * Policy Gateway or Bridge adapters. They encode the specific
- * attack patterns that SINT is designed to prevent.
+ * attack patterns that NOSIH is designed to prevent.
  *
  * Based on documented MCP breaches, SROS2 vulnerabilities,
  * and the Unitree BLE worm attack.
@@ -19,7 +19,7 @@ import {
 } from "@pshkv/gate-capability-tokens";
 import { PolicyGateway, checkForbiddenCombos } from "@pshkv/gate-policy-gateway";
 import { LedgerWriter } from "@pshkv/gate-evidence-ledger";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(hoursFromNow: number): string {
@@ -33,8 +33,8 @@ function pastISO(hoursAgo: number): string {
 }
 
 function makeRequest(
-  overrides: Partial<SintRequest> & { tokenId: string; agentId: string },
-): SintRequest {
+  overrides: Partial<NosihRequest> & { tokenId: string; agentId: string },
+): NosihRequest {
   return {
     requestId: "01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f6a7",
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -45,11 +45,11 @@ function makeRequest(
   };
 }
 
-describe("SINT Security Regression Tests", () => {
+describe("NOSIH Security Regression Tests", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let ledger: LedgerWriter;
 
@@ -72,8 +72,8 @@ describe("SINT Security Regression Tests", () => {
     });
   });
 
-  function issueAndStore(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+  function issueAndStore(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///cmd_vel",
@@ -142,7 +142,7 @@ describe("SINT Security Regression Tests", () => {
     const a5 = generateKeypair();
 
     // Root -> a1 (depth 0)
-    const req: SintCapabilityTokenRequest = {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: a1.publicKey,
       resource: "ros2:///cmd_vel",
@@ -308,7 +308,7 @@ describe("SINT Security Regression Tests", () => {
     const token = issueAndStore();
 
     // Tamper with the resource field
-    const tampered: SintCapabilityToken = {
+    const tampered: NosihCapabilityToken = {
       ...token,
       resource: "ros2:///evil_topic",
     };

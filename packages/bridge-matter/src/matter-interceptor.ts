@@ -1,7 +1,7 @@
 /**
- * SINT bridge-matter — Matter Protocol Interceptor
+ * NOSIH bridge-matter — Matter Protocol Interceptor
  *
- * Intercepts Matter device interactions and routes them through SINT Policy
+ * Intercepts Matter device interactions and routes them through NOSIH Policy
  * Gateway for tier-based authorization. Implements Phase 2 Matter protocol
  * support per Physical AI Governance Roadmap.
  *
@@ -11,7 +11,7 @@
 import type { PolicyGateway, PolicyContext } from "@pshkv/gate-policy-gateway";
 import { ApprovalTier } from "@pshkv/core";
 import {
-  mapMatterToSint,
+  mapMatterToNosih,
   isPhysicalActuatorCluster,
   type MatterAccessContext,
   type MatterClusterId,
@@ -19,7 +19,7 @@ import {
 } from "./cluster-mapper.js";
 
 export interface MatterInterceptorConfig {
-  /** SINT Policy Gateway instance */
+  /** NOSIH Policy Gateway instance */
   policyGateway: PolicyGateway;
   /** Agent DID (e.g., 'did:key:z6Mk...') */
   agentDid: string;
@@ -39,7 +39,7 @@ export interface MatterOperationResult {
  * Matter Protocol Interceptor.
  *
  * Wraps Matter device interactions and intercepts all commands/attribute writes.
- * Each operation is mapped to a SINT resource + action, checked against Policy
+ * Each operation is mapped to a NOSIH resource + action, checked against Policy
  * Gateway, and either allowed, denied, or escalated for human approval.
  *
  * @example
@@ -83,10 +83,10 @@ export class MatterInterceptor {
   async intercept(context: MatterAccessContext): Promise<MatterOperationResult> {
     this.log(`Intercepting Matter operation: ${context.commandOrAttribute} on cluster ${context.clusterId}`);
     
-    // Map to SINT resource
-    const mapping = mapMatterToSint(context);
+    // Map to NOSIH resource
+    const mapping = mapMatterToNosih(context);
     
-    this.log(`Mapped to SINT resource: ${mapping.resource}, action: ${mapping.action}, tier: ${mapping.tier}`);
+    this.log(`Mapped to NOSIH resource: ${mapping.resource}, action: ${mapping.action}, tier: ${mapping.tier}`);
     
     // Create Policy Gateway context
     const policyContext: PolicyContext = {
@@ -121,7 +121,7 @@ export class MatterInterceptor {
       case "deny":
         return {
           success: false,
-          error: `Access denied by SINT Policy Gateway: ${decision.reason ?? "Insufficient permissions"}`,
+          error: `Access denied by NOSIH Policy Gateway: ${decision.reason ?? "Insufficient permissions"}`,
         };
       
       case "escalate":
@@ -146,7 +146,7 @@ export class MatterInterceptor {
    * For now, returns a placeholder success response.
    *
    * @param context - Original Matter access context
-   * @param mapping - SINT resource mapping
+   * @param mapping - NOSIH resource mapping
    * @returns Operation execution result
    */
   private async executeMatterOperation(
@@ -206,7 +206,7 @@ export function createMatterCapabilityToken(
   commandOrAttribute: string,
   validUntil?: Date
 ) {
-  const mapping = mapMatterToSint({
+  const mapping = mapMatterToNosih({
     fabricId,
     nodeId,
     endpointId,

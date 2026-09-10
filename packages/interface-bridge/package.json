@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/interface-bridge",
   "version": "0.1.0",
-  "description": "Operator interface bridge for SINT Protocol — voice, HUD, memory, notification tools",
+  "description": "Operator interface bridge for NOSIH Protocol — voice, HUD, memory, notification tools",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

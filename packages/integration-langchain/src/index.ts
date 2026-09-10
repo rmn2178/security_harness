@@ -1,14 +1,14 @@
 /**
- * @sint/integration-langchain — SINT Protocol governance for LangChain.
+ * @nosih/integration-langchain — NOSIH Protocol governance for LangChain.
  *
  * Provides a callback handler and tool wrapper that enforce
  * capability tokens on every LangChain tool invocation.
  *
  * Usage (LangChain JS/TS):
  *
- *   import { SintGovernanceHandler } from "@pshkv/integration-langchain";
+ *   import { NosihGovernanceHandler } from "@pshkv/integration-langchain";
  *
- *   const handler = new SintGovernanceHandler({
+ *   const handler = new NosihGovernanceHandler({
  *     gatewayUrl: "http://localhost:4100",
  *     agentId: "my-agent",
  *     token: capabilityToken,
@@ -16,17 +16,17 @@
  *
  *   const agent = createReactAgent({ llm, tools, callbacks: [handler] });
  *
- * Every tool call will be intercepted by SINT's Policy Gateway.
- * Denied actions throw SintDeniedError with the denial reason.
+ * Every tool call will be intercepted by NOSIH's Policy Gateway.
+ * Denied actions throw NosihDeniedError with the denial reason.
  *
- * @module @sint/integration-langchain
+ * @module @nosih/integration-langchain
  */
 
-export { SintGovernanceHandler } from "./handler.js";
-export { sintGovernedTool, wrapToolsWithGovernance } from "./tool-wrapper.js";
-export { SintDeniedError } from "./errors.js";
+export { NosihGovernanceHandler } from "./handler.js";
+export { nosihGovernedTool, wrapToolsWithGovernance } from "./tool-wrapper.js";
+export { NosihDeniedError } from "./errors.js";
 export type {
-  SintGovernanceConfig,
-  SintInterceptResult,
-  SintToolCallContext,
+  NosihGovernanceConfig,
+  NosihInterceptResult,
+  NosihToolCallContext,
 } from "./types.js";

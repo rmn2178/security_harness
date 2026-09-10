@@ -57,7 +57,7 @@ const template = `# AAIF Evidence Item: ${slug}
 - Independent from current co-design network: yes/no
 - Public URL:
 - Date range: ${date} to
-- SINT component used:
+- NOSIH component used:
 - Verification method:
 - Contact or accountable owner:
 

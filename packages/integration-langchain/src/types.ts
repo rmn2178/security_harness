@@ -1,10 +1,10 @@
 /**
- * Type definitions for SINT LangChain integration.
+ * Type definitions for NOSIH LangChain integration.
  */
 
-/** Configuration for the SINT governance handler. */
-export interface SintGovernanceConfig {
-  /** URL of the SINT Protocol gateway server (e.g., "http://localhost:4100"). */
+/** Configuration for the NOSIH governance handler. */
+export interface NosihGovernanceConfig {
+  /** URL of the NOSIH Protocol gateway server (e.g., "http://localhost:4100"). */
   gatewayUrl: string;
 
   /** Agent identifier (Ed25519 public key hex or friendly name). */
@@ -22,18 +22,18 @@ export interface SintGovernanceConfig {
   /** Whether to log evidence to the ledger. Default: true. */
   logEvidence?: boolean;
 
-  /** Custom resource mapper: maps tool name → SINT resource identifier. */
+  /** Custom resource mapper: maps tool name → NOSIH resource identifier. */
   resourceMapper?: (toolName: string) => string;
 
-  /** Custom action mapper: maps tool name → SINT action identifier. */
+  /** Custom action mapper: maps tool name → NOSIH action identifier. */
   actionMapper?: (toolName: string) => string;
 
   /** Timeout for gateway requests in milliseconds. Default: 5000. */
   timeoutMs?: number;
 }
 
-/** Result of a SINT intercept call. */
-export interface SintInterceptResult {
+/** Result of a NOSIH intercept call. */
+export interface NosihInterceptResult {
   /** Whether the action was approved. */
   approved: boolean;
 
@@ -54,7 +54,7 @@ export interface SintInterceptResult {
 }
 
 /** Context passed to the tool call interceptor. */
-export interface SintToolCallContext {
+export interface NosihToolCallContext {
   /** LangChain tool name. */
   toolName: string;
 
@@ -67,9 +67,9 @@ export interface SintToolCallContext {
   /** Parent run ID (if nested). */
   parentRunId?: string;
 
-  /** Mapped SINT resource. */
+  /** Mapped NOSIH resource. */
   resource: string;
 
-  /** Mapped SINT action. */
+  /** Mapped NOSIH action. */
   action: string;
 }

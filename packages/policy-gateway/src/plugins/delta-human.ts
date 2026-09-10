@@ -1,5 +1,5 @@
 /**
- * SINT Policy Gateway — Δ_human Occupancy Plugin (Phase 2)
+ * NOSIH Policy Gateway — Δ_human Occupancy Plugin (Phase 2)
  *
  * Reads Home Assistant occupancy state and escalates tier when humans are
  * detected near physical actuators. Implements human-aware tier escalation
@@ -25,7 +25,7 @@ export interface OccupancyState {
 }
 
 export interface DeltaHumanContext {
-  /** SINT resource URI being accessed */
+  /** NOSIH resource URI being accessed */
   resource: string;
   /** Action being performed */
   action: string;
@@ -240,7 +240,7 @@ export async function computeDeltaHuman(
  * Check if a resource URI represents a physical actuator.
  * Physical actuators include robots, locks, garage doors, vacuums, etc.
  *
- * @param resource - SINT resource URI
+ * @param resource - NOSIH resource URI
  * @returns true if resource is a physical actuator
  */
 export function isPhysicalActuatorResource(resource: string): boolean {

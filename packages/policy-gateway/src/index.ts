@@ -93,4 +93,4 @@ export type {
 // Compatibility re-exports for bridge packages (Home Assistant, Matter, etc.).
 // The source of truth for these types lives in @pshkv/core, but downstream code
 // commonly imports them from the gateway package.
-export type { SintRequest as PolicyContext, PolicyDecision } from "@pshkv/core";
+export type { NosihRequest as PolicyContext, PolicyDecision } from "@pshkv/core";

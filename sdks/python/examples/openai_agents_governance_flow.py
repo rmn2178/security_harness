@@ -1,5 +1,5 @@
 """
-OpenAI Agents SDK + SINT governance flow example.
+OpenAI Agents SDK + NOSIH governance flow example.
 
 Demonstrates:
 1) pre-tool-call authorization
@@ -15,16 +15,16 @@ from __future__ import annotations
 import asyncio
 from datetime import datetime, timezone
 
-from sint import (
+from nosih import (
     ApprovalResolution,
     GatewayClient,
     GatewayConfig,
     OpenAIAgentsGovernanceAdapter,
-    SintApprovalDeniedError,
-    SintApprovalRequiredError,
-    SintApprovalTimeoutError,
-    SintDeniedError,
-    SintRequest,
+    NosihApprovalDeniedError,
+    NosihApprovalRequiredError,
+    NosihApprovalTimeoutError,
+    NosihDeniedError,
+    NosihRequest,
 )
 
 
@@ -41,7 +41,7 @@ async def main() -> None:
     async with GatewayClient(config) as client:
         adapter = OpenAIAgentsGovernanceAdapter(client)
 
-        request = SintRequest(
+        request = NosihRequest(
             request_id="01905f7c-4e8a-7b3d-9a1e-f2c3d4e5f7a1",
             timestamp=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "000Z",
             agent_id="openai-agents-worker",
@@ -56,7 +56,7 @@ async def main() -> None:
             },
         )
 
-        async def operator_resolver(_req: SintRequest, decision):
+        async def operator_resolver(_req: NosihRequest, decision):
             # Plug your human-in-the-loop workflow here (UI, pager, ticket, etc).
             if decision.assigned_tier.value in ("T2_act", "T3_commit"):
                 return ApprovalResolution(
@@ -82,13 +82,13 @@ async def main() -> None:
             for evt in evidence[:5]:
                 print(" -", evt.event_type, evt.event_id)
 
-        except SintDeniedError as e:
+        except NosihDeniedError as e:
             print("DENIED:", e.policy_violated, e.reason)
-        except SintApprovalRequiredError as e:
+        except NosihApprovalRequiredError as e:
             print("ESCALATED:", e.required_tier.value, "request_id=", e.approval_request_id)
-        except SintApprovalTimeoutError as e:
+        except NosihApprovalTimeoutError as e:
             print("TIMEOUT:", e.approval_request_id, "after", e.timeout_s, "seconds")
-        except SintApprovalDeniedError as e:
+        except NosihApprovalDeniedError as e:
             print("APPROVAL DENIED:", e.approval_request_id, e.reason)
 
 

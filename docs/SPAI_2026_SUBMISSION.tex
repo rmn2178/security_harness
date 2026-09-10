@@ -1,4 +1,4 @@
-% SINT Protocol — SPAI 2026 Short Paper (4 pages + references)
+% NOSIH Protocol — SPAI 2026 Short Paper (4 pages + references)
 % 1st IJCAI Workshop on Safe Physical AI (SPAI 2026)
 % IEEE two-column format (required by SPAI CFP)
 % Submit at: https://openreview.net/group?id=ijcai.org/IJCAI-ECAI/2026/Workshop/SPAI
@@ -19,12 +19,12 @@
 
 \begin{document}
 
-\title{SINT Protocol: Runtime Authorization as a\\Safety Shield for LLM-Driven Physical Agents}
+\title{NOSIH Protocol: Runtime Authorization as a\\Safety Shield for LLM-Driven Physical Agents}
 
 \author{
   \IEEEauthorblockN{Illia Pashkov}
   \IEEEauthorblockA{Independent Researcher\\
-  \url{https://github.com/sint-ai/sint-protocol}}
+  \url{https://github.com/nosih-ai/nosih-protocol}}
 }
 
 \maketitle
@@ -36,10 +36,10 @@ robots, drones, or industrial actuators---introduce a safety failure mode
 addressed by neither classical robot safety standards nor LLM alignment research:
 \emph{an authenticated, aligned agent issuing a physically irreversible command
 without appropriate human oversight, in a degraded environment.}
-We present SINT Protocol, an open-source runtime authorization framework that
+We present NOSIH Protocol, an open-source runtime authorization framework that
 interposes a cryptographically enforced safety shield at every agent--actuator
 boundary.
-SINT enforces six invariants: (1)~capability confinement via signed Ed25519
+NOSIH enforces six invariants: (1)~capability confinement via signed Ed25519
 tokens with physical constraint envelopes; (2)~graduated human oversight across
 four approval tiers; (3)~behavioral drift detection that makes the empirically
 observed 4.8$\times$ inter-model action-proposal variance~\cite{rosclaw}
@@ -100,7 +100,7 @@ We identify three open problems at this intersection:
   actions) or too permissive (allowing dangerous ones).
 \end{enumerate}
 
-SINT Protocol addresses all three by interposing a runtime safety shield at the
+NOSIH Protocol addresses all three by interposing a runtime safety shield at the
 agent--actuator boundary.
 Every action flows through a single \texttt{PolicyGateway.intercept()} choke point
 that enforces capability tokens, approval tiers, behavioral drift detection, and
@@ -123,7 +123,7 @@ alert volume.
 
 \subsection{Safety Invariants}
 
-SINT enforces six safety invariants at every action boundary:
+NOSIH enforces six safety invariants at every action boundary:
 
 \textbf{I-1: Capability Confinement.}
 Every action requires presentation of a signed, expiring Ed25519 capability
@@ -229,7 +229,7 @@ amortized after $\sim$120 iterations.
 
 \subsection{Test Coverage and Conformance}
 
-SINT is tested across 1,772~test cases covering:
+NOSIH is tested across 1,772~test cases covering:
 
 \begin{table}[h]
 \centering
@@ -255,13 +255,13 @@ Integration + end-to-end & 186 \\
 The OWASP conformance suite contains 29 machine-readable fixture pairs
 (attack vector + safe-case control) covering all 10 Agentic Security
 Initiative categories~\cite{owasp-asi}.
-Each fixture specifies a \texttt{SintRequest}, token scope, and expected
+Each fixture specifies a \texttt{NosihRequest}, token scope, and expected
 gateway decision (\texttt{allow}/\texttt{deny}/\texttt{escalate}).
 
 \subsection{Bridge Protocol Coverage}
 
-SINT bridges 12 physical and agent protocols, each with a protocol-specific
-resource mapper that translates native identifiers into SINT URIs and extracts
+NOSIH bridges 12 physical and agent protocols, each with a protocol-specific
+resource mapper that translates native identifiers into NOSIH URIs and extracts
 physical context:
 
 \smallskip
@@ -281,7 +281,7 @@ We identify five limitations of the current approach and propose directions
 for each:
 
 \textbf{L-1: No formal verification.}
-SINT's invariants (I-1 through I-6) are enforced by runtime code, not by
+NOSIH's invariants (I-1 through I-6) are enforced by runtime code, not by
 formal proof.
 A TLA+ or Coq mechanization of the gateway state machine would provide
 stronger guarantees.
@@ -321,13 +321,13 @@ adapt to deployment-specific risk profiles and reduce false escalations.
 IEC~62443~\cite{iec62443} and ISO~10218~\cite{iso10218} define security
 requirements for industrial control systems and robotic devices, but assume
 deterministic, trusted controllers.
-SINT extends these standards to the LLM-driven agent case by treating the
+NOSIH extends these standards to the LLM-driven agent case by treating the
 controller as \emph{untrusted} and interposing a runtime authorization layer.
 
 \textbf{Safety shields.}
 Alshiekh et al.~\cite{shields} formalize safety shields as runtime monitors
 that override unsafe actions in reinforcement learning.
-SINT shares this ``interposition'' architecture but operates at a higher
+NOSIH shares this ``interposition'' architecture but operates at a higher
 abstraction level (capability tokens and approval tiers vs.\ state-action
 shielding) and supports multi-protocol, multi-agent deployments.
 
@@ -336,19 +336,19 @@ The OWASP Agentic Security Initiative~\cite{owasp-asi} identifies 10 risk
 categories for autonomous AI agents.
 The Microsoft Agent Governance Toolkit (2026) addresses these for
 digital/software agents.
-SINT is, to our knowledge, the first framework to provide verified coverage
+NOSIH is, to our knowledge, the first framework to provide verified coverage
 of all 10 ASI categories specifically for \emph{physical} agents with
 real-world actuators.
 
 \textbf{Capability-based security.}
 The object-capability model~\cite{miller-ocap} provides the theoretical
-foundation for SINT's token design.
+foundation for NOSIH's token design.
 Unlike ambient-authority RBAC systems, capability tokens are unforgeable,
 attenuatable, and revocable---properties critical for delegation in multi-agent
 physical deployments.
 
 \textbf{LLM-driven robotics.}
-ROSClaw~\cite{rosclaw} provides the empirical foundation for SINT's behavioral
+ROSClaw~\cite{rosclaw} provides the empirical foundation for NOSIH's behavioral
 drift detection, demonstrating measurable inter-model safety variance.
 SayCan~\cite{saycan} and Code-as-Policies~\cite{codeaspolicies} demonstrate
 LLM-to-robot pipelines but include no runtime authorization layer.
@@ -357,7 +357,7 @@ LLM-to-robot pipelines but include no runtime authorization layer.
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented SINT Protocol, a runtime safety shield for LLM-driven physical
+We presented NOSIH Protocol, a runtime safety shield for LLM-driven physical
 agents that enforces capability confinement, graduated human oversight,
 behavioral drift detection, environment-adaptive constraints, active threat
 detection, and emergency stop---at sub-5\,ms steady-state p99 latency on a
@@ -368,8 +368,8 @@ Our core position: safe physical AI requires authorization as a
 agent--actuator boundary, not as a deployment configuration or prompt
 engineering strategy.
 
-SINT is open source (Apache~2.0) at
-\url{https://github.com/sint-ai/sint-protocol}.
+NOSIH is open source (Apache~2.0) at
+\url{https://github.com/nosih-ai/nosih-protocol}.
 
 % =====================================================================
 

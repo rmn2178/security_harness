@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — Capsule content hash verification.
+ * NOSIH Protocol — Capsule content hash verification.
  *
  * Computes a SHA-256 hash of capsule content and compares it against
  * the expected hash declared in the manifest. Uses `@noble/hashes`
  * for audited, zero-dependency hashing.
  *
- * @module @sint/engine-capsule-sandbox/content-verifier
+ * @module @nosih/engine-capsule-sandbox/content-verifier
  */
 
 import type { Result } from "@pshkv/core";

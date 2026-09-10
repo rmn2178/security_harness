@@ -9,9 +9,9 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 import type {
-  SintCapabilityToken,
-  SintCapabilityTokenRequest,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihCapabilityTokenRequest,
+  NosihRequest,
 } from "@pshkv/core";
 import {
   generateKeypair,
@@ -65,13 +65,13 @@ describe("AgentSkill Delegated Authority Fixture Conformance", () => {
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
 
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
   function issueAndStore(
-    overrides: Partial<SintCapabilityTokenRequest>,
-  ): SintCapabilityToken {
-    const req: SintCapabilityTokenRequest = {
+    overrides: Partial<NosihCapabilityTokenRequest>,
+  ): NosihCapabilityToken {
+    const req: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: fixture.tokenTemplate.resource,
@@ -110,7 +110,7 @@ describe("AgentSkill Delegated Authority Fixture Conformance", () => {
 
   it("enforces delegated authority scenarios at the AgentSkill boundary", async () => {
     for (const scenario of fixture.cases) {
-      const overrides: Partial<SintCapabilityTokenRequest> = {
+      const overrides: Partial<NosihCapabilityTokenRequest> = {
         ...(scenario.tokenOverrides?.resource !== undefined
           ? { resource: scenario.tokenOverrides.resource }
           : {}),
@@ -154,7 +154,7 @@ describe("AgentSkill Delegated Authority Fixture Conformance", () => {
         resource: scenario.request.resource,
         action: scenario.request.action,
         params: scenario.request.params ?? {},
-        executionContext: scenario.request.executionContext as SintRequest["executionContext"],
+        executionContext: scenario.request.executionContext as NosihRequest["executionContext"],
       });
 
       expect(decision.action).toBe(scenario.expected.decisionAction);

@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — kinetic envelope types.
+ * NOSIH Protocol — kinetic envelope types.
  *
  * Kinetic envelopes are opt-in runtime checks for physics-aware supervision.
  * They may tighten executable constraints and raise supervision, but they never
  * widen capability-token authority.
  *
- * @module @sint/core/types/kinetic-envelope
+ * @module @nosih/core/types/kinetic-envelope
  */
 
-import type { ApprovalTier, SintRequest } from "./policy.js";
+import type { ApprovalTier, NosihRequest } from "./policy.js";
 
 /** Distinct deny code for physics vetoes where autonomy demand exceeds capacity. */
 export const KINETIC_CAPACITY_EXCEEDED = "KINETIC_CAPACITY_EXCEEDED" as const;
@@ -60,7 +60,7 @@ export interface KineticEnvelopeResult {
 
 /** Opt-in plugin surface. No plugin registered means no gateway behavior change. */
 export interface KineticEnvelopePlugin {
-  computeEnvelope(request: SintRequest): Promise<KineticEnvelopeResult>;
+  computeEnvelope(request: NosihRequest): Promise<KineticEnvelopeResult>;
 }
 
 /** Evidence receipt shape for the kinetic-envelope decision. */

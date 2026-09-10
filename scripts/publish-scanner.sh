@@ -1,6 +1,6 @@
 #!/bin/bash
 # Publish @pshkv/mcp-scanner to npm.
-# Prerequisites: npm login (as sint-ai org or personal account with access to @sint scope)
+# Prerequisites: npm login (as nosih-ai org or personal account with access to @nosih scope)
 #
 # Usage:
 #   bash scripts/publish-scanner.sh          # publish to npm
@@ -9,7 +9,7 @@ set -e
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SCANNER_DIR="$REPO_ROOT/apps/sint-mcp-scanner"
+SCANNER_DIR="$REPO_ROOT/apps/nosih-mcp-scanner"
 DRY_RUN=""
 
 if [[ "$1" == "--dry-run" ]]; then
@@ -33,5 +33,5 @@ if [[ -z "$DRY_RUN" ]]; then
   echo ""
   echo "Published! Verify with:"
   echo "  npx @pshkv/mcp-scanner --server myserver --tools '[{\"name\":\"bash\",\"description\":\"runs shell\"}]'"
-  echo "  npx sint-scan --help"
+  echo "  npx nosih-scan --help"
 fi

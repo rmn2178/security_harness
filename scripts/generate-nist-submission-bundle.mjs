@@ -15,7 +15,7 @@ mkdirSync(reportDir, { recursive: true });
 
 const requiredArtifacts = [
   "docs/specs/nist-ai-rmf-crosswalk.md",
-  "docs/SINT_v0.2_SPEC.md",
+  "docs/NOSIH_v0.2_SPEC.md",
   "docs/SPAI_2026_ABSTRACT.md",
   "docs/CONFORMANCE_CERTIFICATION_MATRIX_v0.2.md",
   "docs/reports/certification-bundle-summary.json",
@@ -47,7 +47,7 @@ const summary = {
   success: artifacts.every((a) => a.exists),
   targetProgram: "NIST AI Agent Standards Initiative",
   submissionChannel: "ai-inquiries@nist.gov",
-  repository: "https://github.com/sint-ai/sint-protocol",
+  repository: "https://github.com/nosih-ai/nosih-protocol",
   artifacts,
   notes: [
     "This bundle is a submission packet draft for NIST review.",

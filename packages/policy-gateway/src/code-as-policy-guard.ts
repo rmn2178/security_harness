@@ -1,11 +1,11 @@
 /**
- * SINT Protocol — code-as-policy robot-agent guard.
+ * NOSIH Protocol — code-as-policy robot-agent guard.
  *
  * Guards the hierarchy used by robot coding agents:
  * fixed primitives -> agent-created skills -> generated task programs.
  */
 
-import { ApprovalTier, RiskTier, type PolicyDecision, type SintCapabilityToken, type SintRequest } from "@pshkv/core";
+import { ApprovalTier, RiskTier, type PolicyDecision, type NosihCapabilityToken, type NosihRequest } from "@pshkv/core";
 
 export interface CodeAsPolicyMetadata {
   readonly programRef?: string;
@@ -38,8 +38,8 @@ export interface CodeAsPolicyGuardConfig {
 
 export interface CodeAsPolicyGuardPlugin {
   verify(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): CodeAsPolicyGuardResult;
 }
 
@@ -96,7 +96,7 @@ function extractMetadata(params: Record<string, unknown>): CodeAsPolicyMetadata 
   };
 }
 
-function isCodeAsPolicyRequest(request: SintRequest): boolean {
+function isCodeAsPolicyRequest(request: NosihRequest): boolean {
   if (isRecord(request.params.codeAsPolicy)) {
     return true;
   }
@@ -104,7 +104,7 @@ function isCodeAsPolicyRequest(request: SintRequest): boolean {
 }
 
 function denyDecision(
-  request: SintRequest,
+  request: NosihRequest,
   policyViolated: string,
   reason: string,
 ): PolicyDecision {
@@ -134,7 +134,7 @@ export class DefaultCodeAsPolicyGuard implements CodeAsPolicyGuardPlugin {
     this.maxTrialBudget = config.maxTrialBudget;
   }
 
-  verify(request: SintRequest, _token: SintCapabilityToken): CodeAsPolicyGuardResult {
+  verify(request: NosihRequest, _token: NosihCapabilityToken): CodeAsPolicyGuardResult {
     if (!isCodeAsPolicyRequest(request)) {
       return {
         verified: true,
@@ -216,7 +216,7 @@ export class DefaultCodeAsPolicyGuard implements CodeAsPolicyGuardPlugin {
 }
 
 export function decisionForCodeAsPolicyViolation(
-  request: SintRequest,
+  request: NosihRequest,
   result: CodeAsPolicyGuardResult,
 ): PolicyDecision {
   const reason = `Code-as-policy guard violation: ${result.violations.join("; ")}`;

@@ -1,16 +1,16 @@
 /**
- * SINT ↔ APS Cross-Verification Test
+ * NOSIH ↔ APS Cross-Verification Test
  *
- * Proves that SINT Protocol and Agent Passport System (APS) arrive at
+ * Proves that NOSIH Protocol and Agent Passport System (APS) arrive at
  * identical did:key identifiers from the same Ed25519 public key.
  *
  * The test has two directions:
- *   SINT→APS: SINT signs a canonical message; APS-compatible raw Ed25519
+ *   NOSIH→APS: NOSIH signs a canonical message; APS-compatible raw Ed25519
  *             verify confirms the signature using the public key extracted
- *             from the did:key — no SINT-specific code.
+ *             from the did:key — no NOSIH-specific code.
  *
- *   APS→SINT: Given only a did:key and an Ed25519 signature over a message,
- *             SINT's `didToKey()` + `verify()` confirms the signature —
+ *   APS→NOSIH: Given only a did:key and an Ed25519 signature over a message,
+ *             NOSIH's `didToKey()` + `verify()` confirms the signature —
  *             no APS-specific code.
  *
  * If both directions pass, the protocols are interoperable at the identity
@@ -44,7 +44,7 @@ ed25519Noble.etc.sha512Sync = (...m: Uint8Array[]) => {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Verify an Ed25519 signature using ONLY @noble/ed25519 — no SINT wrappers.
+/** Verify an Ed25519 signature using ONLY @noble/ed25519 — no NOSIH wrappers.
  *  This is what APS (or any W3C DID-compatible verifier) would call. */
 function rawEd25519Verify(
   publicKeyHex: string,
@@ -66,7 +66,7 @@ interface ApsAttestation {
 }
 
 /** Simulate APS-side verification: resolve the did:key to a public key,
- *  then verify the signature — no knowledge of SINT internals. */
+ *  then verify the signature — no knowledge of NOSIH internals. */
 function simulateApsVerify(att: ApsAttestation): boolean {
   // APS v1.32.0 `fromDIDKey()` does this resolution
   const publicKey = didToKey(att.did);
@@ -76,7 +76,7 @@ function simulateApsVerify(att: ApsAttestation): boolean {
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
-describe("SINT ↔ APS cross-verification", () => {
+describe("NOSIH ↔ APS cross-verification", () => {
 
   // ── 1. DID derivation — identical on both sides ───────────────────────────
 
@@ -127,9 +127,9 @@ describe("SINT ↔ APS cross-verification", () => {
     expect(recoveredHex).toBe(publicKey);
   });
 
-  // ── 2. SINT→APS direction: APS verifies a SINT-signed message ────────────
+  // ── 2. NOSIH→APS direction: APS verifies a NOSIH-signed message ────────────
 
-  it("APS-compatible raw Ed25519 verify confirms a SINT capability token signature", () => {
+  it("APS-compatible raw Ed25519 verify confirms a NOSIH capability token signature", () => {
     const issuer = generateKeypair();
     const agent = generateKeypair();
 
@@ -152,10 +152,10 @@ describe("SINT ↔ APS cross-verification", () => {
 
     const token = result.value;
 
-    // Reconstruct the canonical signing payload (same as what SINT signed)
+    // Reconstruct the canonical signing payload (same as what NOSIH signed)
     const payload = computeSigningPayload(token);
 
-    // APS verification: use ONLY raw @noble/ed25519 — no SINT code
+    // APS verification: use ONLY raw @noble/ed25519 — no NOSIH code
     // This is what APS `importExternalAttestation()` would do:
     //   1. Resolve issuer did:key → raw public key
     //   2. Verify Ed25519 signature over the canonical payload
@@ -166,7 +166,7 @@ describe("SINT ↔ APS cross-verification", () => {
     expect(valid).toBe(true);
   });
 
-  it("SINT token subject is a valid did:key — APS can use it as agent identity without adapter", () => {
+  it("NOSIH token subject is a valid did:key — APS can use it as agent identity without adapter", () => {
     const issuer = generateKeypair();
     const agent = generateKeypair();
     const agentDid = keyToDid(agent.publicKey);
@@ -175,17 +175,17 @@ describe("SINT ↔ APS cross-verification", () => {
     // APS would read token.subject → derive/confirm the agent's did:key
     expect(isValidDid(agentDid)).toBe(true);
 
-    // APS `toDIDKey()` and SINT `keyToDid()` must produce the same string
+    // APS `toDIDKey()` and NOSIH `keyToDid()` must produce the same string
     // for the same raw public key — verified by round-trip
     const roundTripped = didToKey(agentDid)!;
     expect(roundTripped).toBe(agent.publicKey);
   });
 
-  // ── 3. APS→SINT direction: SINT verifies a simulated APS attestation ─────
+  // ── 3. APS→NOSIH direction: NOSIH verifies a simulated APS attestation ─────
 
-  it("SINT verifies a simulated APS attestation (did:key + signed message) with no APS code", () => {
+  it("NOSIH verifies a simulated APS attestation (did:key + signed message) with no APS code", () => {
     // Simulate: APS issues a signed attestation for an agent
-    // The only information SINT receives is the did:key, message, and signature
+    // The only information NOSIH receives is the did:key, message, and signature
     const apsAgent = generateKeypair();
     const agentDid = keyToDid(apsAgent.publicKey);
 
@@ -201,19 +201,19 @@ describe("SINT ↔ APS cross-verification", () => {
     // APS signs the message with the agent's Ed25519 key
     const apsSignature = sign(apsAgent.privateKey, message);
 
-    // SINT receives: { did, message, signature } — no APS SDK needed
+    // NOSIH receives: { did, message, signature } — no APS SDK needed
     const attestation: ApsAttestation = {
       did: agentDid,
       message,
       signature: apsSignature,
     };
 
-    // SINT verifies using didToKey() + verify() — zero APS-specific code
-    const sintVerified = simulateApsVerify(attestation);
-    expect(sintVerified).toBe(true);
+    // NOSIH verifies using didToKey() + verify() — zero APS-specific code
+    const nosihVerified = simulateApsVerify(attestation);
+    expect(nosihVerified).toBe(true);
   });
 
-  it("APS attestation with wrong key fails SINT verification", () => {
+  it("APS attestation with wrong key fails NOSIH verification", () => {
     const apsAgent = generateKeypair();
     const impostor = generateKeypair();
 
@@ -229,13 +229,13 @@ describe("SINT ↔ APS cross-verification", () => {
       signature: impostorSignature,  // signed by impostor's key ≠ DID
     };
 
-    const sintVerified = simulateApsVerify(tampered);
-    expect(sintVerified).toBe(false);  // correctly rejected
+    const nosihVerified = simulateApsVerify(tampered);
+    expect(nosihVerified).toBe(false);  // correctly rejected
   });
 
   // ── 4. Delegation chain — attenuation invariant composes across protocols ─
 
-  it("SINT delegated token scope ⊆ parent scope (I-T1) holds regardless of did:key subject", () => {
+  it("NOSIH delegated token scope ⊆ parent scope (I-T1) holds regardless of did:key subject", () => {
     const authority = generateKeypair();
     const fleet = generateKeypair();
     const robot = generateKeypair();
@@ -295,7 +295,7 @@ describe("SINT ↔ APS cross-verification", () => {
       expect(fleetActions.has(action)).toBe(true);
     }
 
-    // Both tokens independently verifiable by either SINT or APS raw verify
+    // Both tokens independently verifiable by either NOSIH or APS raw verify
     const fleetPayload = computeSigningPayload(fleetToken);
     const robotPayload = computeSigningPayload(robotToken);
     expect(rawEd25519Verify(authority.publicKey, fleetToken.signature, fleetPayload)).toBe(true);
@@ -304,14 +304,14 @@ describe("SINT ↔ APS cross-verification", () => {
 
   // ── 5. Protocol convergence summary ───────────────────────────────────────
 
-  it("convergence proof: same keypair → identical did:key on SINT and any W3C-compliant resolver", () => {
+  it("convergence proof: same keypair → identical did:key on NOSIH and any W3C-compliant resolver", () => {
     // Generate a deterministic keypair by signing a known seed
-    // (in practice, both SINT and APS would receive the same raw 32-byte key)
+    // (in practice, both NOSIH and APS would receive the same raw 32-byte key)
     const { publicKey, privateKey } = generateKeypair();
 
-    // SINT path
-    const sintDid = keyToDid(publicKey);
-    expect(sintDid).toMatch(/^did:key:z6Mk/);
+    // NOSIH path
+    const nosihDid = keyToDid(publicKey);
+    expect(nosihDid).toMatch(/^did:key:z6Mk/);
 
     // W3C-compliant path (any verifier following the spec):
     // multicodec [0xed, 0x01] prepended to 32-byte key, base58btc-encoded, 'z' prefix
@@ -329,10 +329,10 @@ describe("SINT ↔ APS cross-verification", () => {
     const w3cDid = `did:key:z${b58}`;
 
     // Proof of independent convergence: same DID, zero shared code
-    expect(sintDid).toBe(w3cDid);
+    expect(nosihDid).toBe(w3cDid);
 
     // The key recoverable from either DID is identical
-    expect(didToKey(sintDid)).toBe(publicKey);
+    expect(didToKey(nosihDid)).toBe(publicKey);
     expect(didToKey(w3cDid)).toBe(publicKey);
   });
 });

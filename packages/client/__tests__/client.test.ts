@@ -1,11 +1,11 @@
 /**
- * SINT Client SDK — Tests.
+ * NOSIH Client SDK — Tests.
  *
- * Tests the SintClient against a real Hono app instance (no network).
+ * Tests the NosihClient against a real Hono app instance (no network).
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
-import { SintClient } from "../src/sint-client.js";
+import { NosihClient } from "../src/nosih-client.js";
 import {
   createApp,
   createContext,
@@ -20,7 +20,7 @@ import {
 } from "@pshkv/gate-capability-tokens";
 import type {
   MissionManifest,
-  SintCapabilityTokenRequest,
+  NosihCapabilityTokenRequest,
 } from "@pshkv/core";
 import {
   computeMissionManifestPolicyPayload,
@@ -33,19 +33,19 @@ function futureISO(hoursFromNow: number): string {
   return d.toISOString().replace(/\.(\d{3})Z$/, ".$1000Z");
 }
 
-describe("SintClient", () => {
+describe("NosihClient", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   let ctx: ServerContext;
   let app: Hono;
-  let client: SintClient;
+  let client: NosihClient;
 
   beforeEach(() => {
     ctx = createContext();
     app = createApp(ctx);
 
     // Create a client that uses Hono's built-in request() as fetch
-    client = new SintClient({
+    client = new NosihClient({
       baseUrl: "http://localhost",
       fetch: (input, init) => app.request(
         typeof input === "string" ? input.replace("http://localhost", "") : input,
@@ -54,8 +54,8 @@ describe("SintClient", () => {
     });
   });
 
-  async function issueAndStoreToken(overrides?: Partial<SintCapabilityTokenRequest>) {
-    const request: SintCapabilityTokenRequest = {
+  async function issueAndStoreToken(overrides?: Partial<NosihCapabilityTokenRequest>) {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "ros2:///camera/front",
@@ -75,7 +75,7 @@ describe("SintClient", () => {
   it("health() returns server status", async () => {
     const result = await client.health();
     expect(result.status).toBe("ok");
-    expect(result.protocol).toBe("SINT Gate");
+    expect(result.protocol).toBe("NOSIH Gate");
   });
 
   it("intercept() evaluates a request", async () => {

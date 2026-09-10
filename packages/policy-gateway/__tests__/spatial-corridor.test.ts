@@ -1,22 +1,22 @@
 /**
- * SINT Protocol — StaticSpatialCorridorVerifier tests.
+ * NOSIH Protocol — StaticSpatialCorridorVerifier tests.
  */
 
 import { describe, expect, it } from "vitest";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 import { StaticSpatialCorridorVerifier } from "../src/spatial-corridor.js";
 
 const token = {
   executionEnvelope: {
     corridorId: "aisle-7",
   },
-} as SintCapabilityToken;
+} as NosihCapabilityToken;
 
 function requestAt(
   x: number,
   y: number,
   headingDeg?: number,
-): SintRequest {
+): NosihRequest {
   return {
     physicalContext: {
       currentPosition: { x, y, z: 0 },
@@ -28,7 +28,7 @@ function requestAt(
         expiresAt: "2026-06-04T12:00:00.000000Z",
       },
     },
-  } as SintRequest;
+  } as NosihRequest;
 }
 
 describe("StaticSpatialCorridorVerifier", () => {
@@ -79,7 +79,7 @@ describe("StaticSpatialCorridorVerifier", () => {
   it("fails verification for unknown corridor IDs", async () => {
     const result = await verifier.verifyCorridor(
       requestAt(4, 0, 90),
-      { executionEnvelope: { corridorId: "missing" } } as SintCapabilityToken,
+      { executionEnvelope: { corridorId: "missing" } } as NosihCapabilityToken,
     );
 
     expect(result.verified).toBe(false);

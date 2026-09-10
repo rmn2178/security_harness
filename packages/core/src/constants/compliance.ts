@@ -1,28 +1,28 @@
 /**
- * SINT Protocol — OWASP Agentic Top 10 coverage map.
+ * NOSIH Protocol — OWASP Agentic Top 10 coverage map.
  *
- * Formal declaration of which OWASP ASI categories SINT addresses,
+ * Formal declaration of which OWASP ASI categories NOSIH addresses,
  * at what coverage level, and via which components.
  *
- * @module @sint/core/constants/compliance
+ * @module @nosih/core/constants/compliance
  */
 
 import { ApprovalTier } from "../types/policy.js";
 import {
   OwaspAsi,
   type OwaspCoverageEntry,
-  type SintTierComplianceCrosswalkEntry,
+  type NosihTierComplianceCrosswalkEntry,
 } from "../types/compliance.js";
 
 /**
- * SINT Protocol OWASP Agentic Top 10 coverage.
+ * NOSIH Protocol OWASP Agentic Top 10 coverage.
  *
  * Coverage summary:
  *   Full    (8/10): ASI01, ASI02, ASI03, ASI04, ASI07, ASI08, ASI09, ASI10
  *   Partial (2/10): ASI05, ASI06
  *   None    (0/10)
  */
-export const SINT_OWASP_COVERAGE: readonly OwaspCoverageEntry[] = [
+export const NOSIH_OWASP_COVERAGE: readonly OwaspCoverageEntry[] = [
   {
     category: OwaspAsi.ASI01_GOAL_HIJACK,
     level: "full",
@@ -124,7 +124,7 @@ export const SINT_OWASP_COVERAGE: readonly OwaspCoverageEntry[] = [
       "A2A bridge validates the sender's capability token before processing " +
       "any inter-agent message. Each agent's identity is a did:key — " +
       "spoofed messages from unknown or unauthorized senders are rejected. " +
-      "APS↔SINT interop mapping covers cross-org agent communication.",
+      "APS↔NOSIH interop mapping covers cross-org agent communication.",
   },
   {
     category: OwaspAsi.ASI08_CASCADE,
@@ -172,13 +172,13 @@ export const SINT_OWASP_COVERAGE: readonly OwaspCoverageEntry[] = [
 ] as const;
 
 /**
- * SINT approval-tier mapping to NIST AI RMF / ISO 42001 / EU AI Act obligations.
+ * NOSIH approval-tier mapping to NIST AI RMF / ISO 42001 / EU AI Act obligations.
  *
  * This is an implementation-focused crosswalk for agentic/physical AI deployments.
  * It is not legal advice; organizations should still validate obligations against
  * their sector and deployment context.
  */
-export const SINT_TIER_COMPLIANCE_CROSSWALK: readonly SintTierComplianceCrosswalkEntry[] = [
+export const NOSIH_TIER_COMPLIANCE_CROSSWALK: readonly NosihTierComplianceCrosswalkEntry[] = [
   {
     tier: ApprovalTier.T0_OBSERVE,
     consequenceClass: "monitoring",
@@ -187,19 +187,19 @@ export const SINT_TIER_COMPLIANCE_CROSSWALK: readonly SintTierComplianceCrosswal
         framework: "nist-ai-rmf-1.0",
         reference: "MAP + MEASURE + MANAGE (low-consequence monitoring path)",
         requirement: "Continuously monitor model behavior and retain traceable records.",
-        sintEnforcement: "Auto-approved T0 requests are still ledgered with immutable evidence events.",
+        nosihEnforcement: "Auto-approved T0 requests are still ledgered with immutable evidence events.",
       },
       {
         framework: "iso-iec-42001-2023",
         reference: "Clause 9 (performance evaluation) + Clause 8 (operational controls)",
         requirement: "Monitor AI system performance and keep auditable operational controls.",
-        sintEnforcement: "Per-request policy decisions and evidence telemetry provide operational monitoring baselines.",
+        nosihEnforcement: "Per-request policy decisions and evidence telemetry provide operational monitoring baselines.",
       },
       {
         framework: "eu-ai-act-2024-1689",
         reference: "Article 12 (record-keeping) + Article 13 (transparency)",
         requirement: "Maintain logs and transparent technical documentation for AI behavior.",
-        sintEnforcement: "Read-path decisions are hash-chained and queryable via ledger/discovery endpoints.",
+        nosihEnforcement: "Read-path decisions are hash-chained and queryable via ledger/discovery endpoints.",
       },
     ],
   },
@@ -211,19 +211,19 @@ export const SINT_TIER_COMPLIANCE_CROSSWALK: readonly SintTierComplianceCrosswal
         framework: "nist-ai-rmf-1.0",
         reference: "GOVERN + MANAGE (controlled low-impact action path)",
         requirement: "Apply governance controls before low-impact state mutation.",
-        sintEnforcement: "Capability tokens, scoped actions, and rate limits gate bounded write operations.",
+        nosihEnforcement: "Capability tokens, scoped actions, and rate limits gate bounded write operations.",
       },
       {
         framework: "iso-iec-42001-2023",
         reference: "Clause 8.1/8.2 (operational planning and AI risk treatment)",
         requirement: "Treat operational AI risk before deployment-stage actions.",
-        sintEnforcement: "Tier assignment and constraints are evaluated before every write-style request.",
+        nosihEnforcement: "Tier assignment and constraints are evaluated before every write-style request.",
       },
       {
         framework: "eu-ai-act-2024-1689",
         reference: "Article 9 (risk management) + Article 12 (logging)",
         requirement: "Keep risk controls active and auditable during operation.",
-        sintEnforcement: "Gateway policy checks and ledger evidence enforce and document bounded action controls.",
+        nosihEnforcement: "Gateway policy checks and ledger evidence enforce and document bounded action controls.",
       },
     ],
   },
@@ -235,19 +235,19 @@ export const SINT_TIER_COMPLIANCE_CROSSWALK: readonly SintTierComplianceCrosswal
         framework: "nist-ai-rmf-1.0",
         reference: "MANAGE (risk response) + GOVERN (accountability for high-impact operation)",
         requirement: "Escalate and govern physical-impact actions with human accountability.",
-        sintEnforcement: "T2 actions require escalation to approval flow; optional quorum and attestation are enforced.",
+        nosihEnforcement: "T2 actions require escalation to approval flow; optional quorum and attestation are enforced.",
       },
       {
         framework: "iso-iec-42001-2023",
         reference: "Clause 8 (operational control) + Clause 6 (risk planning)",
         requirement: "Apply explicit controls for AI operations that alter physical state.",
-        sintEnforcement: "Physical constraints (force/velocity/geofence) are enforced at token and gateway levels.",
+        nosihEnforcement: "Physical constraints (force/velocity/geofence) are enforced at token and gateway levels.",
       },
       {
         framework: "eu-ai-act-2024-1689",
         reference: "Article 14 (human oversight) + Article 15 (accuracy/robustness/cybersecurity)",
         requirement: "Maintain effective human oversight and robust behavior for high-impact AI actions.",
-        sintEnforcement: "T2 escalation, dynamic envelopes, and deterministic deny paths enforce fail-safe oversight.",
+        nosihEnforcement: "T2 escalation, dynamic envelopes, and deterministic deny paths enforce fail-safe oversight.",
       },
     ],
   },
@@ -259,19 +259,19 @@ export const SINT_TIER_COMPLIANCE_CROSSWALK: readonly SintTierComplianceCrosswal
         framework: "nist-ai-rmf-1.0",
         reference: "GOVERN + MANAGE (highest-consequence decision authority)",
         requirement: "Apply strongest accountability and control to irreversible actions.",
-        sintEnforcement: "T3 requires explicit human sign-off (with optional M-of-N quorum) before commit.",
+        nosihEnforcement: "T3 requires explicit human sign-off (with optional M-of-N quorum) before commit.",
       },
       {
         framework: "iso-iec-42001-2023",
         reference: "Clause 8.3 (risk treatment implementation) + Clause 10 (continual improvement)",
         requirement: "Execute highest-severity controls and corrective feedback loops.",
-        sintEnforcement: "Commit-tier actions require evidence-backed approvals and post-incident traceability.",
+        nosihEnforcement: "Commit-tier actions require evidence-backed approvals and post-incident traceability.",
       },
       {
         framework: "eu-ai-act-2024-1689",
         reference: "Article 14(4)(e) (human override/stop) + Articles 9/12/15",
         requirement: "Support immediate human intervention with rigorous logging and safety robustness.",
-        sintEnforcement: "Circuit-breaker stop control, T3 approval gates, and tamper-evident ledger receipts are mandatory controls.",
+        nosihEnforcement: "Circuit-breaker stop control, T3 approval gates, and tamper-evident ledger receipts are mandatory controls.",
       },
     ],
   },

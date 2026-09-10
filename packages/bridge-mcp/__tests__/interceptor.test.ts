@@ -1,7 +1,7 @@
 /**
- * SINT Bridge-MCP — Interceptor unit tests.
+ * NOSIH Bridge-MCP — Interceptor unit tests.
  *
- * Tests the full MCP → SINT security gate pipeline.
+ * Tests the full MCP → NOSIH security gate pipeline.
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -12,7 +12,7 @@ import {
   issueCapabilityToken,
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintCapabilityTokenRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 import type { MCPToolCall } from "../src/types.js";
 
@@ -40,7 +40,7 @@ describe("MCPInterceptor", () => {
   const root = generateKeypair();
   const agent = generateKeypair();
   const revocationStore = new RevocationStore();
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
   let interceptor: MCPInterceptor;
 
@@ -56,8 +56,8 @@ describe("MCPInterceptor", () => {
     interceptor = new MCPInterceptor({ gateway });
   });
 
-  function issueToken(overrides?: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-    const request: SintCapabilityTokenRequest = {
+  function issueToken(overrides?: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+    const request: NosihCapabilityTokenRequest = {
       issuer: root.publicKey,
       subject: agent.publicKey,
       resource: "mcp://filesystem/readFile",

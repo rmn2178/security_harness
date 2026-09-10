@@ -19,7 +19,7 @@ describe("LeRobot policy actuation receipts fixture v1", () => {
       bridge: "ros2",
       projectContext: "lerobot",
       boundary: "learned policy rollout to hardware actuation",
-      goal: "Test whether learned-policy execution can carry auditable policy receipts without making SINT a required LeRobot runtime dependency.",
+      goal: "Test whether learned-policy execution can carry auditable policy receipts without making NOSIH a required LeRobot runtime dependency.",
       nonGoal: "This fixture does not propose changes to LeRobot training pipelines or model architectures.",
     });
     expect(fixture.requirements).toEqual({

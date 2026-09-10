@@ -1,5 +1,5 @@
 /**
- * SINT Bridge-ROS2 — Resource Mapper unit tests.
+ * NOSIH Bridge-ROS2 — Resource Mapper unit tests.
  */
 
 import { describe, it, expect } from "vitest";

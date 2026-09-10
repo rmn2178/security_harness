@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Zod validation schemas for capability tokens.
+ * NOSIH Protocol — Zod validation schemas for capability tokens.
  *
  * All security-critical inputs MUST be validated through these schemas
  * before processing. These schemas are the enforcement boundary.
  *
- * @module @sint/core/schemas/capability-token
+ * @module @nosih/core/schemas/capability-token
  */
 
 import { z } from "zod";

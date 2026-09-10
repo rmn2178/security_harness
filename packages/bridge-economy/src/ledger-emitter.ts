@@ -1,14 +1,14 @@
 /**
- * SINT Protocol — Economy Ledger Emitter.
+ * NOSIH Protocol — Economy Ledger Emitter.
  *
  * Typed helpers for emitting economic events to the Evidence Ledger.
  * All 9 new economic event types have dedicated emit methods with
  * structured payloads.
  *
- * @module @sint/bridge-economy/ledger-emitter
+ * @module @nosih/bridge-economy/ledger-emitter
  */
 
-import type { SintEventType } from "@pshkv/core";
+import type { NosihEventType } from "@pshkv/core";
 import type { LedgerEmitter } from "@pshkv/gate-policy-gateway";
 
 /**
@@ -132,7 +132,7 @@ export class EconomyLedgerEmitter {
   // ─── Internal ──────────────────────────────────────────────
 
   private emitTyped(
-    eventType: SintEventType,
+    eventType: NosihEventType,
     agentId: string,
     tokenId: string | undefined,
     payload: Record<string, unknown>,

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — AutonomySupervisor (pre-gate).
+ * NOSIH Protocol — AutonomySupervisor (pre-gate).
  *
  * Runs BEFORE PolicyGateway.intercept(). Adds the authority axis. Composed rule:
  *   external action <=> AutonomyState == STABLE && token valid && constraints pass

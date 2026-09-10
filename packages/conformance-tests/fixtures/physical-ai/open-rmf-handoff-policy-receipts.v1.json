@@ -5,7 +5,7 @@
   "scope": {
     "bridge": "open-rmf",
     "boundary": "fleet handoff and facility workflow",
-    "goal": "Test whether handoff and facility-control actions can carry auditable policy receipts without making SINT a required Open-RMF runtime dependency.",
+    "goal": "Test whether handoff and facility-control actions can carry auditable policy receipts without making NOSIH a required Open-RMF runtime dependency.",
     "nonGoal": "This fixture does not propose changes to Open-RMF core APIs."
   },
   "requirements": {
@@ -21,7 +21,7 @@
     "sourceRobotId": "humanoid-07",
     "targetRobotId": "amr-17",
     "workspaceId": "transfer-cell-a",
-    "payloadRef": "sint://payload/tote-4481"
+    "payloadRef": "nosih://payload/tote-4481"
   },
   "receiptSchema": {
     "requiredFields": [
@@ -49,7 +49,7 @@
       "operation": "task.dispatch",
       "decision": "escalate",
       "assignedTier": "T2_act",
-      "payloadRef": "sint://payload/tote-4481",
+      "payloadRef": "nosih://payload/tote-4481",
       "sourceFleet": "humanoid-fleet",
       "targetFleet": "amr-fleet",
       "sourceRobotId": "humanoid-07",

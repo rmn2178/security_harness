@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Deployment profile selection.
+ * NOSIH Protocol — Deployment profile selection.
  *
  * Pure functions that map hardware specifications to the appropriate
- * SINT deployment profile. No side effects, no I/O.
+ * NOSIH deployment profile. No side effects, no I/O.
  *
- * @module @sint/engine-hal/profiler
+ * @module @nosih/engine-hal/profiler
  */
 
-import type { SintHardwareDeploymentProfile } from "@pshkv/core";
+import type { NosihHardwareDeploymentProfile } from "@pshkv/core";
 
 /**
  * Hardware specifications used for deployment profile selection.
@@ -21,7 +21,7 @@ export interface HardwareSpecs {
 }
 
 /**
- * Select the optimal SINT deployment profile based on detected hardware.
+ * Select the optimal NOSIH deployment profile based on detected hardware.
  *
  * Selection logic:
  * - darwin (any) -> "edge" (development machine)
@@ -48,7 +48,7 @@ export interface HardwareSpecs {
  * // profile === "full"
  * ```
  */
-export function selectDeploymentProfile(specs: HardwareSpecs): SintHardwareDeploymentProfile {
+export function selectDeploymentProfile(specs: HardwareSpecs): NosihHardwareDeploymentProfile {
   // darwin (macOS) is always treated as a development machine
   if (specs.platform === "darwin") {
     return "edge";
@@ -96,6 +96,6 @@ export function selectDeploymentProfile(specs: HardwareSpecs): SintHardwareDeplo
  * canRunOnnx("lite");  // false
  * ```
  */
-export function canRunOnnx(profile: SintHardwareDeploymentProfile): boolean {
+export function canRunOnnx(profile: NosihHardwareDeploymentProfile): boolean {
   return profile === "full" || profile === "edge";
 }

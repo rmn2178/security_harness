@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Capsule Sandbox.
+ * NOSIH Protocol — Capsule Sandbox.
  *
  * WASM/TS capsule loading, validation, and sandboxed execution
- * for the SINT Protocol Engine Layer (L3).
+ * for the NOSIH Protocol Engine Layer (L3).
  *
- * @module @sint/engine-capsule-sandbox
+ * @module @nosih/engine-capsule-sandbox
  */
 
 export * from "./types.js";

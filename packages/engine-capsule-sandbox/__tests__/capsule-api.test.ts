@@ -1,24 +1,24 @@
 /**
- * SINT Protocol — Capsule API unit tests.
+ * NOSIH Protocol — Capsule API unit tests.
  *
  * Tests the restricted API surface factory function.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { createCapsuleImports } from "../src/capsule-api.js";
-import type { SintCapsuleManifest, SintSensorReading } from "@pshkv/core";
+import type { NosihCapsuleManifest, NosihSensorReading } from "@pshkv/core";
 
 const CAPSULE_ID = "01905f7c-0000-7000-8000-000000000001";
 const VALID_HASH = "a".repeat(64);
 
 function makeManifest(
-  sensors: SintCapsuleManifest["sensors"] = ["camera_rgb"],
-): SintCapsuleManifest {
+  sensors: NosihCapsuleManifest["sensors"] = ["camera_rgb"],
+): NosihCapsuleManifest {
   return {
     capsuleId: CAPSULE_ID,
     version: "1.0.0",
     name: "test-capsule",
-    author: "sint-labs",
+    author: "nosih-labs",
     sensors,
     actuators: [],
     safetyDeclarations: {},
@@ -34,8 +34,8 @@ function makeManifest(
 }
 
 function makeSensorReading(
-  modality: SintSensorReading["modality"],
-): SintSensorReading {
+  modality: NosihSensorReading["modality"],
+): NosihSensorReading {
   return {
     sensorId: `sensor_${modality}`,
     modality,

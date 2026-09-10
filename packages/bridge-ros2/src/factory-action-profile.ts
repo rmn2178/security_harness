@@ -1,10 +1,10 @@
 /**
- * SINT Bridge-ROS2 — Factory Action Profile mapping.
+ * NOSIH Bridge-ROS2 — Factory Action Profile mapping.
  *
  * Converts the vendor-neutral RobotActionProfile into a ROS 2 command envelope
  * that can still flow through the normal PolicyGateway interception path.
  *
- * @module @sint/bridge-ros2/factory-action-profile
+ * @module @nosih/bridge-ros2/factory-action-profile
  */
 
 import { z } from "zod";
@@ -67,7 +67,7 @@ export interface FactoryRobotActionRos2Options {
 }
 
 export const FACTORY_ROBOT_ACTION_TOPIC = "/joint_commands";
-export const FACTORY_ROBOT_ACTION_MESSAGE_TYPE = "sint_msgs/msg/FactoryRobotAction";
+export const FACTORY_ROBOT_ACTION_MESSAGE_TYPE = "nosih_msgs/msg/FactoryRobotAction";
 
 export function factoryRobotActionToRos2TopicName(
   options: FactoryRobotActionRos2Options = {},

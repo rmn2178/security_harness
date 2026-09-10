@@ -1,12 +1,12 @@
 import type { MemoryEntry } from "./types.js";
 import { generateUUIDv7, nowISO8601 } from "@pshkv/gate-capability-tokens";
-import type { SintEventType } from "@pshkv/core";
+import type { NosihEventType } from "@pshkv/core";
 
 // Minimal interface for what we need from LedgerWriter
 // (avoids tight coupling to evidence-ledger internals)
 export interface LedgerWriterLike {
   append(input: {
-    eventType: SintEventType;
+    eventType: NosihEventType;
     agentId: string;
     payload: Record<string, unknown>;
   }): { eventId: string } | Promise<{ eventId: string }> | unknown;

@@ -1,17 +1,17 @@
-"""Tests for sint.types — Pydantic model round-trips."""
+"""Tests for nosih.types — Pydantic model round-trips."""
 
 from __future__ import annotations
 
 import pytest
 from pydantic import ValidationError
 
-from sint.types import (
+from nosih.types import (
     ApprovalTier,
     GatewayConfig,
     LedgerEvent,
     PolicyDecision,
     RiskTier,
-    SintRequest,
+    NosihRequest,
 )
 
 
@@ -41,7 +41,7 @@ class TestRiskTier:
 
 
 # ---------------------------------------------------------------------------
-# SintRequest
+# NosihRequest
 # ---------------------------------------------------------------------------
 
 
@@ -56,22 +56,22 @@ _MINIMAL_REQUEST_CAMEL = {
 }
 
 
-class TestSintRequest:
+class TestNosihRequest:
     def test_parse_camel_case(self) -> None:
-        req = SintRequest.model_validate(_MINIMAL_REQUEST_CAMEL)
+        req = NosihRequest.model_validate(_MINIMAL_REQUEST_CAMEL)
         assert req.request_id == "01905f7c-0000-7000-8000-000000000001"
         assert req.agent_id == "a" * 64
         assert req.resource == "mcp://filesystem/readFile"
 
     def test_to_gateway_dict_roundtrip(self) -> None:
-        req = SintRequest.model_validate(_MINIMAL_REQUEST_CAMEL)
+        req = NosihRequest.model_validate(_MINIMAL_REQUEST_CAMEL)
         d = req.to_gateway_dict()
         assert d["requestId"] == req.request_id
         assert d["agentId"] == req.agent_id
         assert "physicalContext" not in d  # None fields excluded
 
     def test_snake_case_construction(self) -> None:
-        req = SintRequest(
+        req = NosihRequest(
             request_id="01905f7c-0000-7000-8000-000000000003",
             timestamp="2026-04-04T12:00:00.000000Z",
             agent_id="b" * 64,
@@ -84,7 +84,7 @@ class TestSintRequest:
 
     def test_missing_required_field_raises(self) -> None:
         with pytest.raises(ValidationError):
-            SintRequest.model_validate({"requestId": "x"})  # missing many fields
+            NosihRequest.model_validate({"requestId": "x"})  # missing many fields
 
 
 # ---------------------------------------------------------------------------
@@ -108,7 +108,7 @@ _DENY_DECISION = {
     "assignedRisk": "T2_stateful",
     "denial": {
         "reason": "Human detected in workspace",
-        "policyViolated": "SINT-P-001",
+        "policyViolated": "NOSIH-P-001",
         "suggestedAlternative": "Wait for clearance",
     },
 }
@@ -141,7 +141,7 @@ class TestPolicyDecision:
         assert d.denied is True
         assert d.denial is not None
         assert d.denial.reason == "Human detected in workspace"
-        assert d.denial.policy_violated == "SINT-P-001"
+        assert d.denial.policy_violated == "NOSIH-P-001"
         assert d.denial.suggested_alternative == "Wait for clearance"
 
     def test_escalate_decision(self) -> None:

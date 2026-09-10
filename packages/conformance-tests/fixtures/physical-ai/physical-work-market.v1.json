@@ -1,5 +1,5 @@
 {
-  "fixtureId": "sint.physical-ai.physical-work-market.v1",
+  "fixtureId": "nosih.physical-ai.physical-work-market.v1",
   "schemaVersion": "2026-06-21",
   "description": "Executable governance fixture for physical-work markets: task broadcast, collateralized robot bids, simulation proof, deployment escalation, PoPW evidence bundles, validator quorum, and settlement replay protection.",
   "profile": {

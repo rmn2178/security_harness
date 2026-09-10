@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Spatial integrity policy.
+ * NOSIH Protocol — Spatial integrity policy.
  *
  * Deployment-profile guard for fielded physical AI. Token execution envelopes
  * remain the source of truth for per-token spatial proof, while this policy
@@ -12,8 +12,8 @@ import {
   RiskTier,
   DEFAULT_APPROVAL_TIMEOUT_MS,
   type PolicyDecision,
-  type SintCapabilityToken,
-  type SintRequest,
+  type NosihCapabilityToken,
+  type NosihRequest,
 } from "@pshkv/core";
 
 export interface SpatialIntegrityProfile {
@@ -40,8 +40,8 @@ export interface SpatialIntegrityPolicyContext {
 
 export interface SpatialIntegrityPolicyPlugin {
   evaluate(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     context: SpatialIntegrityPolicyContext,
   ): Promise<PolicyDecision | undefined> | PolicyDecision | undefined;
 }
@@ -96,8 +96,8 @@ export class DefaultSpatialIntegrityPolicy implements SpatialIntegrityPolicyPlug
   }
 
   evaluate(
-    request: SintRequest,
-    _token: SintCapabilityToken,
+    request: NosihRequest,
+    _token: NosihCapabilityToken,
     context: SpatialIntegrityPolicyContext,
   ): PolicyDecision | undefined {
     const profile = this.profileFor(request);
@@ -161,7 +161,7 @@ export class DefaultSpatialIntegrityPolicy implements SpatialIntegrityPolicyPlug
     return undefined;
   }
 
-  private profileFor(request: SintRequest): SpatialIntegrityProfile | undefined {
+  private profileFor(request: NosihRequest): SpatialIntegrityProfile | undefined {
     const deploymentProfile = request.executionContext?.deploymentProfile;
     if (!deploymentProfile) {
       return undefined;
@@ -171,7 +171,7 @@ export class DefaultSpatialIntegrityPolicy implements SpatialIntegrityPolicyPlug
 }
 
 function isPhysicalAction(
-  request: SintRequest,
+  request: NosihRequest,
   profile: SpatialIntegrityProfile,
 ): boolean {
   if (request.action === "subscribe" || request.action === "observe") {

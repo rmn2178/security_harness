@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "openai-agents-fail-closed",
-  "description": "Fail-closed starter policy profile for OpenAI Agents SDK tool governance with SINT.",
+  "description": "Fail-closed starter policy profile for OpenAI Agents SDK tool governance with NOSIH.",
   "defaults": {
     "fallbackAction": "deny",
     "approvalTimeoutMs": 30000,

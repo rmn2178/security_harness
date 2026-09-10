@@ -1,5 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sint.gg/industrial/schemas/simulation-receipt.schema.json",
-  "$ref": "../../docs/specs/simulation-receipt.schema.json"
-}

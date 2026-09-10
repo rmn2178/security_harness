@@ -39,7 +39,7 @@ export function rmfFacilityResourceUri(
   return `open-rmf://site/${encode(siteId)}/${kind}/${encode(id)}`;
 }
 
-/** Map RMF operation to SINT action semantics. */
+/** Map RMF operation to NOSIH action semantics. */
 export function rmfOperationToAction(
   operation: RmfOperation,
 ): "observe" | "prepare" | "call" | "override" {

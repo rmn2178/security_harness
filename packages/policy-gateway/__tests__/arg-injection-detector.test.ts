@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI05 Argument Injection Detector Tests.
+ * NOSIH Protocol — ASI05 Argument Injection Detector Tests.
  *
  * Tests the DefaultArgInjectionDetector for:
  * - Shell metacharacter detection
@@ -19,7 +19,7 @@ import {
   generateUUIDv7,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -34,7 +34,7 @@ const agent = generateKeypair();
 function makeToken(overrides?: {
   resource?: string;
   actions?: string[];
-}): SintCapabilityToken {
+}): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -53,10 +53,10 @@ function makeToken(overrides?: {
 }
 
 function makeRequest(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   params: Record<string, unknown>,
   resource?: string,
-): SintRequest {
+): NosihRequest {
   return {
     requestId: generateUUIDv7(),
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),
@@ -425,7 +425,7 @@ describe("DefaultArgInjectionDetector", () => {
 // ── Integration: PolicyGateway with argInjectionDetector ──────────────────
 
 describe("PolicyGateway + argInjectionDetector (ASI05)", () => {
-  let tokenStore: Map<string, SintCapabilityToken>;
+  let tokenStore: Map<string, NosihCapabilityToken>;
   let gateway: PolicyGateway;
 
   beforeEach(() => {
@@ -436,7 +436,7 @@ describe("PolicyGateway + argInjectionDetector (ASI05)", () => {
     });
   });
 
-  function storeToken(token: SintCapabilityToken): void {
+  function storeToken(token: NosihCapabilityToken): void {
     tokenStore.set(token.tokenId, token);
   }
 

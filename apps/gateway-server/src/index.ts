@@ -1,10 +1,10 @@
 /**
- * SINT Gate — Standalone Policy Gateway HTTP Server.
+ * NOSIH Gate — Standalone Policy Gateway HTTP Server.
  *
  * Exposes the Policy Gateway as an HTTP API using Hono.
- * This is the entry point for deploying SINT Gate as a service.
+ * This is the entry point for deploying NOSIH Gate as a service.
  *
- * @module @sint/gateway-server
+ * @module @nosih/gateway-server
  */
 
 import { serve } from "@hono/node-server";
@@ -24,7 +24,7 @@ async function main(): Promise<void> {
   const server = serve({ fetch: app.fetch, port: config.port }, (info) => {
     console.log(`
   ╔═══════════════════════════════════════════════╗
-  ║         SINT GATE — Policy Gateway            ║
+  ║         NOSIH GATE — Policy Gateway            ║
   ║         Security Wedge for Physical AI        ║
   ╠═══════════════════════════════════════════════╣
   ║  Server:  http://localhost:${info.port}              ║
@@ -46,6 +46,6 @@ async function main(): Promise<void> {
 }
 
 void main().catch((err) => {
-  console.error("[SINT] gateway startup failed", err);
+  console.error("[NOSIH] gateway startup failed", err);
   process.exit(1);
 });

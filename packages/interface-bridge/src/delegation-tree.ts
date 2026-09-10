@@ -1,12 +1,12 @@
 /**
- * SINT — Delegation tree tracker.
+ * NOSIH — Delegation tree tracker.
  *
  * Tracks the active multi-agent delegation hierarchy:
  * root operator token → sub-agent tokens (attenuation only).
  *
  * Each DelegationNode represents one issued child token. The tree is
  * in-memory; token issuance/revocation also writes ledger events via
- * the sint__delegate_to_agent and sint__revoke_delegation_tree tools.
+ * the nosih__delegate_to_agent and nosih__revoke_delegation_tree tools.
  *
  * Max depth: 3 hops (enforced at issuance).
  */

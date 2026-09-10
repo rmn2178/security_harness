@@ -18,7 +18,7 @@ import {
   missionActionOutcomeReportSchema,
   missionClassSchema,
   missionManifestSchema,
-  sintRequestSchema,
+  nosihRequestSchema,
   uuidV7Schema,
   iso8601Schema,
 } from "@pshkv/core";
@@ -28,7 +28,7 @@ import type {
   MissionActionOutcomeReport,
   MissionManifest,
   MissionManifestRevocation,
-  SintRequest,
+  NosihRequest,
   UUIDv7,
 } from "@pshkv/core";
 import type { MissionManifestStore } from "@pshkv/persistence";
@@ -37,7 +37,7 @@ import type { ServerContext } from "../server.js";
 const evaluationSchema = z.object({
   manifestId: uuidV7Schema,
   proposal: missionActionProposalSchema,
-  request: sintRequestSchema,
+  request: nosihRequestSchema,
 }).strict();
 
 const revocationSchema = z.object({
@@ -103,7 +103,7 @@ function appendEvent(
 ): ReturnType<ServerContext["ledger"]["append"]> {
   const written = ctx.ledger.append(event);
   ctx.ledgerStore.append(written).catch((error) => {
-    console.error("[SINT] Failed to persist mission authority event:", error);
+    console.error("[NOSIH] Failed to persist mission authority event:", error);
   });
   return written;
 }
@@ -355,7 +355,7 @@ export function missionAuthorityRoutes(ctx: ServerContext): Hono {
         reason: `Manifest was superseded by authority version ${supersededBy.manifestVersion}`,
       };
     }
-    const policyDecision = await ctx.gateway.intercept(parsed.data.request as SintRequest);
+    const policyDecision = await ctx.gateway.intercept(parsed.data.request as NosihRequest);
     let executable = authorityDecision.action === "allow"
       && policyDecision.action === "allow";
     let executionClaim;

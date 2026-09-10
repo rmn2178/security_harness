@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { classifyActionSafety } from "../../src/arbitration/safety-classifier.js";
-import type { SintActionRecommendation } from "@pshkv/core";
+import type { NosihActionRecommendation } from "@pshkv/core";
 
-function makeRec(overrides: Partial<SintActionRecommendation> = {}): SintActionRecommendation {
+function makeRec(overrides: Partial<NosihActionRecommendation> = {}): NosihActionRecommendation {
   return {
     action: "publish",
     resource: "ros2:///camera/image",

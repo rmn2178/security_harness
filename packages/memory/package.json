@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/memory",
   "version": "0.1.0",
-  "description": "Persistent operator memory with ledger-backed audit trail for SINT Protocol",
+  "description": "Persistent operator memory with ledger-backed audit trail for NOSIH Protocol",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

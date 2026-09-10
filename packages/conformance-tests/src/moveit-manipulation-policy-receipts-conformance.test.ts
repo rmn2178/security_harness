@@ -20,7 +20,7 @@ describe("MoveIt manipulation policy receipts fixture v1", () => {
       bridge: "ros2",
       projectContext: "moveit",
       boundary: "manipulation plan to physical execution",
-      goal: "Test whether manipulation execution requests can carry auditable policy receipts without making SINT a required MoveIt runtime dependency.",
+      goal: "Test whether manipulation execution requests can carry auditable policy receipts without making NOSIH a required MoveIt runtime dependency.",
       nonGoal: "This fixture does not propose changes to MoveIt core APIs.",
     });
     expect(fixture.requirements).toEqual({

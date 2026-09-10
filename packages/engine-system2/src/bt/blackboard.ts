@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Behavior Tree Blackboard.
+ * NOSIH Protocol — Behavior Tree Blackboard.
  *
  * A typed key-value store shared between all nodes in a behavior tree.
  * Provides the communication mechanism for nodes to share state.
  *
- * @module @sint/engine-system2/bt/blackboard
+ * @module @nosih/engine-system2/bt/blackboard
  */
 
 /**

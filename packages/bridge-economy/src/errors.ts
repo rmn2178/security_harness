@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — Economy Bridge error types.
+ * NOSIH Protocol — Economy Bridge error types.
  *
  * Typed errors for economy-related failures. Each extends Error
  * with structured fields for programmatic handling.
  *
- * @module @sint/bridge-economy/errors
+ * @module @nosih/bridge-economy/errors
  */
 
 /**

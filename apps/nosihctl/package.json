@@ -1,0 +1,36 @@
+{
+  "name": "@pshkv/nosihctl",
+  "version": "0.1.0",
+  "description": "NOSIH operator CLI for token, approval, ledger, and intercept workflows",
+  "type": "module",
+  "bin": {
+    "nosihctl": "dist/cli.js"
+  },
+  "files": [
+    "dist/cli.js",
+    "dist/cli.d.ts",
+    "dist/cli.d.ts.map",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc --build && node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nosih-ai/nosih-protocol.git",
+    "directory": "apps/nosihctl"
+  },
+  "homepage": "https://github.com/nosih-ai/nosih-protocol#nosihctl",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

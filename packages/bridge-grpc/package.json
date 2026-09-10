@@ -1,7 +1,7 @@
 {
   "name": "@pshkv/bridge-grpc",
   "version": "0.1.0",
-  "description": "SINT Bridge — gRPC profile adapter for service/method governance with tier defaults",
+  "description": "NOSIH Bridge — gRPC profile adapter for service/method governance with tier defaults",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

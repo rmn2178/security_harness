@@ -1,5 +1,5 @@
 /**
- * SINT Protocol - Human authority types.
+ * NOSIH Protocol - Human authority types.
  *
  * These types carry privacy-preserving human provenance and delegation scope
  * for high-consequence actions, approval flows, agent payments, and

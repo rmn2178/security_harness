@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Evidence Ledger Writer unit tests.
+ * NOSIH Protocol — Evidence Ledger Writer unit tests.
  *
  * Tests the append-only, hash-chained audit log.
  */

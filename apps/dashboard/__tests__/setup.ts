@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — Test Setup.
+ * NOSIH Dashboard — Test Setup.
  *
  * Configures jsdom environment and testing-library matchers.
  */

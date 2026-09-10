@@ -19,7 +19,7 @@ describe("Solar field operations policy receipts fixture v1", () => {
       bridge: "ros2",
       projectContext: "solar-field-operations",
       boundary: "inspection, cleaning, and installation actuation",
-      goal: "Test whether solar field inspection, cleaning, and installation actions can carry auditable policy receipts without making SINT a required runtime dependency for field robots.",
+      goal: "Test whether solar field inspection, cleaning, and installation actions can carry auditable policy receipts without making NOSIH a required runtime dependency for field robots.",
       nonGoal: "This fixture does not propose changes to any vendor-specific robot controller.",
     });
     expect(fixture.requirements).toEqual({

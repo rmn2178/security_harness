@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI04 Supply Chain Verification.
+ * NOSIH Protocol — ASI04 Supply Chain Verification.
  *
  * Verifies tool/capsule/model provenance at request time.
  * Checks:
@@ -11,7 +11,7 @@
  *    and request comes with bridgeProtocol "ros2", flag as suspicious
  */
 
-import type { SintRequest, SintCapabilityToken } from "@pshkv/core";
+import type { NosihRequest, NosihCapabilityToken } from "@pshkv/core";
 
 export interface SupplyChainVerificationResult {
   readonly verified: boolean;
@@ -21,15 +21,15 @@ export interface SupplyChainVerificationResult {
 
 export interface SupplyChainVerifierPlugin {
   verify(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): SupplyChainVerificationResult;
 }
 
 export class DefaultSupplyChainVerifier implements SupplyChainVerifierPlugin {
   verify(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): SupplyChainVerificationResult {
     const violations: string[] = [];
     let maxSeverity: "low" | "medium" | "high" = "low";

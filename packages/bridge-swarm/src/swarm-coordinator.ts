@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Swarm Coordinator.
+ * NOSIH Protocol — Swarm Coordinator.
  *
  * Enforces collective constraints across a fleet of physical agents.
  * Works as a wrapper around individual PolicyGateway calls — every agent
@@ -26,11 +26,11 @@
  * concurrently. The coordinator uses optimistic locking — it reads state,
  * checks, then updates. Under high contention, add a mutex per swarm.
  *
- * @module @sint/bridge-swarm/swarm-coordinator
+ * @module @nosih/bridge-swarm/swarm-coordinator
  */
 
 import { ApprovalTier } from "@pshkv/core";
-import type { SintRequest, PolicyDecision } from "@pshkv/core";
+import type { NosihRequest, PolicyDecision } from "@pshkv/core";
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import type {
   SwarmConstraints,
@@ -114,7 +114,7 @@ export interface SwarmCoordinatorConfig {
  * coordinator.updateAgentState("drone-01", { velocityMps: 3.0, massKg: 2.5, ... });
  *
  * // Request action — checks swarm constraints THEN individual gateway
- * const result = await coordinator.requestAction("drone-01", sintRequest);
+ * const result = await coordinator.requestAction("drone-01", nosihRequest);
  * ```
  */
 export class SwarmCoordinator {
@@ -149,7 +149,7 @@ export class SwarmCoordinator {
    */
   async requestAction(
     agentId: string,
-    request: SintRequest,
+    request: NosihRequest,
   ): Promise<{ decision: PolicyDecision; swarmCheck: SwarmConstraintResult }> {
     // 1. Check collective constraints
     const swarmCheck = this.checkSwarmConstraints(agentId, request);
@@ -193,7 +193,7 @@ export class SwarmCoordinator {
    */
   checkSwarmConstraints(
     agentId: string,
-    request: SintRequest,
+    request: NosihRequest,
   ): SwarmConstraintResult {
     const violations: string[] = [];
     const states = this.agentStates;

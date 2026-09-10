@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Static spatial corridor verifier.
+ * NOSIH Protocol — Static spatial corridor verifier.
  *
  * Reference implementation for PolicyGateway spatial mission envelopes. It
  * verifies local-frame corridor polygons and optional centerline/heading facts
@@ -8,8 +8,8 @@
 
 import type {
   GeoPolygon,
-  SintCapabilityToken,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihRequest,
 } from "@pshkv/core";
 import { isPointInPolygon } from "@pshkv/gate-capability-tokens";
 import type { SpatialCorridorVerifierPlugin } from "./gateway.js";
@@ -32,7 +32,7 @@ export interface StaticCorridorGeometry {
 
 export type StaticCorridorResolver =
   | Readonly<Record<string, StaticCorridorGeometry>>
-  | ((corridorId: string, request: SintRequest, token: SintCapabilityToken) => StaticCorridorGeometry | undefined);
+  | ((corridorId: string, request: NosihRequest, token: NosihCapabilityToken) => StaticCorridorGeometry | undefined);
 
 export class StaticSpatialCorridorVerifier implements SpatialCorridorVerifierPlugin {
   private readonly resolver: StaticCorridorResolver;
@@ -42,8 +42,8 @@ export class StaticSpatialCorridorVerifier implements SpatialCorridorVerifierPlu
   }
 
   async verifyCorridor(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): Promise<{
     readonly verified: boolean;
     readonly insideCorridor?: boolean;
@@ -90,8 +90,8 @@ export class StaticSpatialCorridorVerifier implements SpatialCorridorVerifierPlu
 
   private resolve(
     corridorId: string,
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): StaticCorridorGeometry | undefined {
     if (typeof this.resolver === "function") {
       return this.resolver(corridorId, request, token);

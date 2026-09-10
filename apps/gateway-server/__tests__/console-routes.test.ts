@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Console routes tests.
+ * NOSIH Gateway Server — Console routes tests.
  *
  * Tests /v1/memory, /v1/delegations, and /v1/csml endpoints
  * using Hono's built-in test client.

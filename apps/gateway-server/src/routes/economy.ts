@@ -1,5 +1,5 @@
 /**
- * SINT Gateway Server — Economy routes.
+ * NOSIH Gateway Server — Economy routes.
  *
  * Provides HTTP endpoints for economy-related queries:
  * - GET  /v1/economy/balance/:agentId  → balance check
@@ -10,7 +10,7 @@
  *
  * These routes are only available when an economy plugin is configured.
  *
- * @module @sint/gateway-server/routes/economy
+ * @module @nosih/gateway-server/routes/economy
  */
 
 import { Hono } from "hono";

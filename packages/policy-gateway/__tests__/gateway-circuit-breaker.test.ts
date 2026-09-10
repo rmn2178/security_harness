@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — PolicyGateway CircuitBreakerPlugin tests.
+ * NOSIH Protocol — PolicyGateway CircuitBreakerPlugin tests.
  *
  * Validates the ASI10 (Rogue Agent) + EU AI Act Article 14(4)(e) stop button.
  *
@@ -29,7 +29,7 @@ import {
   generateKeypair,
   issueCapabilityToken,
 } from "@pshkv/gate-capability-tokens";
-import type { SintCapabilityToken, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihRequest } from "@pshkv/core";
 import { ApprovalTier } from "@pshkv/core";
 
 function futureISO(h = 1): string {
@@ -42,7 +42,7 @@ const root = generateKeypair();
 const agent = generateKeypair();
 const agent2 = generateKeypair();
 
-function makeToken(agentKey = agent.publicKey): SintCapabilityToken {
+function makeToken(agentKey = agent.publicKey): NosihCapabilityToken {
   const result = issueCapabilityToken(
     {
       issuer: root.publicKey,
@@ -62,9 +62,9 @@ function makeToken(agentKey = agent.publicKey): SintCapabilityToken {
 
 let _reqSeq = 0;
 function makeRequest(
-  token: SintCapabilityToken,
+  token: NosihCapabilityToken,
   agentId = agent.publicKey,
-): SintRequest {
+): NosihRequest {
   // UUID v7 format: version digit must be '7' (position 14)
   const seq = String(++_reqSeq).padStart(4, "0");
   return {

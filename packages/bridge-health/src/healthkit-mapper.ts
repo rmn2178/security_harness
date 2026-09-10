@@ -1,7 +1,7 @@
 /**
- * SINT bridge-health — HealthKit / Health Connect Mapper
+ * NOSIH bridge-health — HealthKit / Health Connect Mapper
  *
- * Maps Apple HealthKit and Google Health Connect data types to SINT
+ * Maps Apple HealthKit and Google Health Connect data types to NOSIH
  * resource URIs with on-device governance. Implements Phase 5 health
  * fabric with differential privacy and user-owned keys.
  *
@@ -89,12 +89,12 @@ export interface HealthKitAccessContext {
 }
 
 /**
- * SINT resource mapping for HealthKit access.
+ * NOSIH resource mapping for HealthKit access.
  */
 export interface HealthKitResourceMapping {
-  /** SINT resource URI (e.g., healthkit://local/HKQuantityTypeIdentifierStepCount) */
+  /** NOSIH resource URI (e.g., healthkit://local/HKQuantityTypeIdentifierStepCount) */
   resource: string;
-  /** SINT action (read, write, share) */
+  /** NOSIH action (read, write, share) */
   action: string;
   /** Minimum required approval tier */
   tier: ApprovalTier;
@@ -150,14 +150,14 @@ export const HEALTHKIT_SENSITIVITY_DEFAULTS: Record<HealthKitDataType, DataSensi
 };
 
 /**
- * Map a HealthKit data access to a SINT resource URI and action.
+ * Map a HealthKit data access to a NOSIH resource URI and action.
  *
  * @param context - HealthKit access context
- * @returns SINT resource mapping with tier and sensitivity
+ * @returns NOSIH resource mapping with tier and sensitivity
  *
  * @example
  * ```ts
- * const mapping = mapHealthKitToSint({
+ * const mapping = mapHealthKitToNosih({
  *   dataType: 'HKQuantityTypeIdentifierHeartRate',
  *   permission: 'read',
  *   aggregation: 'daily',
@@ -174,10 +174,10 @@ export const HEALTHKIT_SENSITIVITY_DEFAULTS: Record<HealthKitDataType, DataSensi
  * // }
  * ```
  */
-export function mapHealthKitToSint(context: HealthKitAccessContext): HealthKitResourceMapping {
+export function mapHealthKitToNosih(context: HealthKitAccessContext): HealthKitResourceMapping {
   const { dataType, permission, aggregation, destination } = context;
   
-  // Construct SINT resource URI
+  // Construct NOSIH resource URI
   const resource = `healthkit://local/${dataType}`;
   
   // Get base sensitivity for data type

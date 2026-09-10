@@ -1,13 +1,13 @@
 /**
- * SINT Protocol — Capsule manifest validation.
+ * NOSIH Protocol — Capsule manifest validation.
  *
- * Validates capsule manifests using the Zod schema from `@sint/core`.
+ * Validates capsule manifests using the Zod schema from `@nosih/core`.
  * Returns a typed `Result` — never throws.
  *
- * @module @sint/engine-capsule-sandbox/manifest-validator
+ * @module @nosih/engine-capsule-sandbox/manifest-validator
  */
 
-import type { Result, SintCapsuleManifest } from "@pshkv/core";
+import type { Result, NosihCapsuleManifest } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 import { capsuleManifestSchema } from "@pshkv/core";
 import type { CapsuleError } from "./types.js";
@@ -15,11 +15,11 @@ import type { CapsuleError } from "./types.js";
 /**
  * Validate a raw manifest object against the SCS-1 schema.
  *
- * Uses `capsuleManifestSchema` from `@sint/core` for Zod validation.
+ * Uses `capsuleManifestSchema` from `@nosih/core` for Zod validation.
  * Pure function with no side effects.
  *
  * @param manifest - Unknown input to validate.
- * @returns `ok(SintCapsuleManifest)` on success, `err(CapsuleError)` on failure.
+ * @returns `ok(NosihCapsuleManifest)` on success, `err(CapsuleError)` on failure.
  *
  * @example
  * ```ts
@@ -29,7 +29,7 @@ import type { CapsuleError } from "./types.js";
  *   capsuleId: "01905f7c-0000-7000-8000-000000000001",
  *   version: "1.0.0",
  *   name: "visual-inspection",
- *   author: "sint-labs",
+ *   author: "nosih-labs",
  *   sensors: ["camera_rgb"],
  *   actuators: [],
  *   safetyDeclarations: {},
@@ -48,7 +48,7 @@ import type { CapsuleError } from "./types.js";
  */
 export function validateManifest(
   manifest: unknown,
-): Result<SintCapsuleManifest, CapsuleError> {
+): Result<NosihCapsuleManifest, CapsuleError> {
   const parsed = capsuleManifestSchema.safeParse(manifest);
 
   if (!parsed.success) {
@@ -62,5 +62,5 @@ export function validateManifest(
     });
   }
 
-  return ok(parsed.data as SintCapsuleManifest);
+  return ok(parsed.data as NosihCapsuleManifest);
 }

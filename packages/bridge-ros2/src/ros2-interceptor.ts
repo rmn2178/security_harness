@@ -1,13 +1,13 @@
 /**
- * SINT Bridge-ROS2 — Interceptor.
+ * NOSIH Bridge-ROS2 — Interceptor.
  *
  * Intercepts ROS 2 topic publishes, subscriptions, service calls,
- * and action goals through the SINT Policy Gateway.
+ * and action goals through the NOSIH Policy Gateway.
  *
- * @module @sint/bridge-ros2/ros2-interceptor
+ * @module @nosih/bridge-ros2/ros2-interceptor
  */
 
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 import type { PolicyGateway } from "@pshkv/gate-policy-gateway";
 import { generateUUIDv7, nowISO8601 } from "@pshkv/gate-capability-tokens";
 import type {
@@ -25,7 +25,7 @@ import {
 
 /** Configuration for the ROS 2 interceptor. */
 export interface ROS2InterceptorConfig {
-  /** The SINT Policy Gateway instance. */
+  /** The NOSIH Policy Gateway instance. */
   readonly gateway: PolicyGateway;
   /** Agent ID (Ed25519 public key). */
   readonly agentId: string;
@@ -44,13 +44,13 @@ export interface ROS2InterceptorConfig {
   readonly differentialDriveNormalize?: boolean;
   /**
    * Wheel radius in meters for differential-drive wheel commands.
-   * When set, SINT can estimate linear speed from custom wheel messages.
+   * When set, NOSIH can estimate linear speed from custom wheel messages.
    */
   readonly differentialDriveWheelRadiusM?: number;
 }
 
 /**
- * ROS 2 Interceptor — routes all robot operations through the SINT security gate.
+ * ROS 2 Interceptor — routes all robot operations through the NOSIH security gate.
  *
  * @example
  * ```ts
@@ -99,7 +99,7 @@ export class ROS2Interceptor {
       differentialDriveWheelRadiusM: this.differentialDriveWheelRadiusM,
     });
 
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -126,7 +126,7 @@ export class ROS2Interceptor {
    * Intercept a topic subscribe operation.
    */
   async interceptSubscribe(topicName: string): Promise<ROS2InterceptResult> {
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -147,7 +147,7 @@ export class ROS2Interceptor {
    * Intercept a service call.
    */
   async interceptServiceCall(serviceCall: ROS2ServiceCall): Promise<ROS2InterceptResult> {
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -164,7 +164,7 @@ export class ROS2Interceptor {
    * Intercept an action goal submission.
    */
   async interceptActionGoal(actionGoal: ROS2ActionGoal): Promise<ROS2InterceptResult> {
-    const request: SintRequest = {
+    const request: NosihRequest = {
       requestId: generateUUIDv7(),
       timestamp: nowISO8601(),
       agentId: this.agentId,
@@ -177,7 +177,7 @@ export class ROS2Interceptor {
     return this.evaluate(request, actionGoal.actionName);
   }
 
-  private async evaluate(request: SintRequest, resourceName: string): Promise<ROS2InterceptResult> {
+  private async evaluate(request: NosihRequest, resourceName: string): Promise<ROS2InterceptResult> {
     const decision = await this.gateway.intercept(request);
 
     const result: ROS2InterceptResult = {

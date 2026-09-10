@@ -1,10 +1,10 @@
 /**
- * SINT Protocol — In-Memory Budget Adapter.
+ * NOSIH Protocol — In-Memory Budget Adapter.
  *
  * Testing implementation of IBudgetPort that enforces a simple
  * per-user budget limit with running usage tracking.
  *
- * @module @sint/bridge-economy/adapters/in-memory-budget-adapter
+ * @module @nosih/bridge-economy/adapters/in-memory-budget-adapter
  */
 
 import { ok, type Result } from "@pshkv/core";

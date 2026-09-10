@@ -1,10 +1,10 @@
 /**
- * SINT Bridge-MCP — Session Manager.
+ * NOSIH Bridge-MCP — Session Manager.
  *
  * Manages per-agent MCP sessions with token binding and
  * recent action tracking for forbidden combo detection.
  *
- * @module @sint/bridge-mcp/mcp-session
+ * @module @nosih/bridge-mcp/mcp-session
  */
 
 import type { Ed25519PublicKey, ISO8601, UUIDv7 } from "@pshkv/core";

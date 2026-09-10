@@ -1,5 +1,5 @@
 /**
- * SINT Dashboard — API Client Tests.
+ * NOSIH Dashboard — API Client Tests.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -21,7 +21,7 @@ describe("API Client", () => {
       json: async () => ({
         status: "ok",
         version: "0.1.0",
-        protocol: "SINT Gate",
+        protocol: "NOSIH Gate",
         tokens: 3,
         ledgerEvents: 42,
         revokedTokens: 1,

@@ -1,21 +1,21 @@
 /**
- * SINT Protocol — Policy Gateway.
+ * NOSIH Protocol — Policy Gateway.
  *
  * THE SINGLE CHOKE POINT. Every agent action — tool call, ROS 2 topic
  * publish, actuator command, capsule execution — flows through here.
  *
  * No action ever bypasses the Policy Gateway.
  *
- * @module @sint/gate-policy-gateway/gateway
+ * @module @nosih/gate-policy-gateway/gateway
  */
 
 import {
   type ApprovalTier,
   type PolicyDecision,
   type RateLimitStore,
-  type SintCapabilityToken,
-  type SintRequest,
-  sintRequestSchema,
+  type NosihCapabilityToken,
+  type NosihRequest,
+  nosihRequestSchema,
   DEFAULT_APPROVAL_TIMEOUT_MS,
 } from "@pshkv/core";
 import {
@@ -46,7 +46,7 @@ const INDUSTRIAL_DEPLOYMENT_PROFILES = new Set(["warehouse-amr", "industrial-cel
 const MAX_HARDWARE_SAFETY_STALENESS_MS = 5_000;
 
 /** Token resolver — looks up a capability token by ID (sync or async). */
-export type TokenResolver = (tokenId: string) => SintCapabilityToken | undefined | Promise<SintCapabilityToken | undefined>;
+export type TokenResolver = (tokenId: string) => NosihCapabilityToken | undefined | Promise<NosihCapabilityToken | undefined>;
 
 /** Event emitter for ledger integration. */
 export type LedgerEmitter = (event: {
@@ -64,9 +64,9 @@ export type LedgerEmitter = (event: {
  */
 export interface EconomyPluginHooks {
   /** Called before tier assignment. Return PolicyDecision to short-circuit, undefined to proceed. */
-  preIntercept(request: SintRequest): Promise<PolicyDecision | undefined>;
+  preIntercept(request: NosihRequest): Promise<PolicyDecision | undefined>;
   /** Called after final decision. Used for billing on allow. */
-  postIntercept(request: SintRequest, decision: PolicyDecision): Promise<void>;
+  postIntercept(request: NosihRequest, decision: PolicyDecision): Promise<void>;
 }
 
 /**
@@ -78,15 +78,15 @@ export interface EconomyPluginHooks {
  */
 export interface AutonomySupervisorPlugin {
   preIntercept(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): Promise<PolicyDecision | undefined>;
 }
 
 /** Policy Gateway configuration. */
 /**
  * CSML escalation hook — called after tier assignment to optionally bump the tier.
- * Provided by @sint/avatar's CsmlEscalator. Decoupled via interface to avoid circular dep.
+ * Provided by @nosih/avatar's CsmlEscalator. Decoupled via interface to avoid circular dep.
  */
 /**
  * Dynamic envelope plugin — environment-adaptive safety constraint tightening.
@@ -114,7 +114,7 @@ export interface DynamicEnvelopePlugin {
    * All returned limits MUST be ≤ the corresponding token constraint.
    * The gateway enforces min(token, override) — returning a looser value is a no-op.
    */
-  computeEnvelope(request: SintRequest): Promise<{
+  computeEnvelope(request: NosihRequest): Promise<{
     maxVelocityMps?: number;
     maxForceNewtons?: number;
     reason?: string;
@@ -130,8 +130,8 @@ export interface DynamicEnvelopePlugin {
  */
 export interface SpatialCorridorVerifierPlugin {
   verifyCorridor(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
   ): Promise<{
     readonly verified: boolean;
     readonly insideCorridor?: boolean;
@@ -167,7 +167,7 @@ export interface EdgeControlPlanePlugin {
    * Return `allowed: false` to fail-closed while central authority is unavailable.
    */
   checkCentralEscalation(
-    request: SintRequest,
+    request: NosihRequest,
     decision: PolicyDecision,
   ): Promise<{ readonly allowed: boolean; readonly reason?: string }> | { readonly allowed: boolean; readonly reason?: string };
 
@@ -207,8 +207,8 @@ export interface EdgeControlPlanePlugin {
  */
 export interface VerifiableComputePlugin {
   verify(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     assignedTier: ApprovalTier,
   ): Promise<{
     readonly verified: boolean;
@@ -374,12 +374,12 @@ export class PolicyGateway {
    * This is the ONLY entry point for all agent actions.
    * NOTHING bypasses this method.
    */
-  async intercept(request: SintRequest): Promise<PolicyDecision> {
+  async intercept(request: NosihRequest): Promise<PolicyDecision> {
     const timestamp = nowISO8601();
     const requestId = request.requestId;
 
     // 1. Validate request schema
-    const parsed = sintRequestSchema.safeParse(request);
+    const parsed = nosihRequestSchema.safeParse(request);
     if (!parsed.success) {
       return this.deny(requestId, timestamp, "MALFORMED_REQUEST", "Request failed schema validation");
     }
@@ -738,7 +738,7 @@ export class PolicyGateway {
     if (this.config.rateLimitStore && token.constraints.rateLimit) {
       const { maxCalls, windowMs } = token.constraints.rateLimit;
       const bucket = Math.floor(Date.now() / windowMs);
-      const key = `sint:rate:${token.tokenId}:${bucket}`;
+      const key = `nosih:rate:${token.tokenId}:${bucket}`;
       try {
         const count = await this.config.rateLimitStore.increment(key, windowMs);
         if (count > maxCalls) {
@@ -1179,7 +1179,7 @@ export class PolicyGateway {
    * Back-compat alias for older bridge code.
    * Prefer `intercept()` in new code.
    */
-  async evaluatePolicy(request: SintRequest): Promise<PolicyDecision> {
+  async evaluatePolicy(request: NosihRequest): Promise<PolicyDecision> {
     return this.intercept(request);
   }
 
@@ -1286,7 +1286,7 @@ export class PolicyGateway {
 
   private attachApprovalQuorum(
     decision: PolicyDecision,
-    token: SintCapabilityToken,
+    token: NosihCapabilityToken,
   ): PolicyDecision {
     const quorum = token.constraints.quorum;
     if (!quorum || decision.action !== "escalate" || !decision.escalation) {
@@ -1305,8 +1305,8 @@ export class PolicyGateway {
   }
 
   private async evaluateSpatialMissionEnvelope(
-    request: SintRequest,
-    token: SintCapabilityToken,
+    request: NosihRequest,
+    token: NosihCapabilityToken,
     requestId: string,
     timestamp: string,
   ): Promise<PolicyDecision | undefined> {
@@ -1481,7 +1481,7 @@ export class PolicyGateway {
   }
 
   private evaluateHardwareSafetyHandshake(
-    request: SintRequest,
+    request: NosihRequest,
     assignedTier: ApprovalTier,
     requestId: string,
     timestamp: string,

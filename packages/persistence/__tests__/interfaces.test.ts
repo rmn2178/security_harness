@@ -1,5 +1,5 @@
 /**
- * SINT Persistence — Interface contract tests.
+ * NOSIH Persistence — Interface contract tests.
  *
  * Tests the in-memory implementations to verify they satisfy
  * the storage contracts. Any adapter (PG, Redis) must pass
@@ -14,14 +14,14 @@ import { InMemoryRevocationBus } from "../src/in-memory-revocation-bus.js";
 import { InMemoryMissionManifestStore } from "../src/in-memory-mission-manifest-store.js";
 import type {
   MissionManifest,
-  SintLedgerEvent,
-  SintCapabilityToken,
+  NosihLedgerEvent,
+  NosihCapabilityToken,
 } from "@pshkv/core";
 
 function makeLedgerEvent(
   seq: number,
-  overrides?: Partial<SintLedgerEvent>,
-): SintLedgerEvent {
+  overrides?: Partial<NosihLedgerEvent>,
+): NosihLedgerEvent {
   return {
     eventId: `01905f7c-${String(seq).padStart(4, "0")}-7000-8000-000000000000`,
     sequenceNumber: BigInt(seq),
@@ -32,10 +32,10 @@ function makeLedgerEvent(
     previousHash: "0".repeat(64),
     hash: `${String(seq).padStart(2, "0")}${"f".repeat(62)}`,
     ...overrides,
-  } as SintLedgerEvent;
+  } as NosihLedgerEvent;
 }
 
-function makeToken(id: string): SintCapabilityToken {
+function makeToken(id: string): NosihCapabilityToken {
   return {
     tokenId: id,
     version: "1.0.0",
@@ -49,7 +49,7 @@ function makeToken(id: string): SintCapabilityToken {
     expiresAt: new Date(Date.now() + 3600_000).toISOString(),
     revocable: true,
     signature: "c".repeat(128),
-  } as SintCapabilityToken;
+  } as NosihCapabilityToken;
 }
 
 function makeManifest(): MissionManifest {
@@ -263,7 +263,7 @@ describe("InMemoryTokenStore", () => {
 
   it("getBySubject returns all tokens for subject", async () => {
     await store.store(makeToken("t1"));
-    await store.store({ ...makeToken("t2"), subject: "d".repeat(64) } as SintCapabilityToken);
+    await store.store({ ...makeToken("t2"), subject: "d".repeat(64) } as NosihCapabilityToken);
     await store.store(makeToken("t3"));
 
     const results = await store.getBySubject("b".repeat(64));

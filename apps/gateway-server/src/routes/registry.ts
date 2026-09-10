@@ -1,7 +1,7 @@
 /**
- * SINT Gateway — Token Registry API routes.
+ * NOSIH Gateway — Token Registry API routes.
  *
- * Exposes @sint/token-registry RegistryStore operations as REST endpoints
+ * Exposes @nosih/token-registry RegistryStore operations as REST endpoints
  * for ecosystem token verification and publishing.
  *
  * GET  /v1/registry          — list registry entries (filterable by ?issuer= and ?resource=)

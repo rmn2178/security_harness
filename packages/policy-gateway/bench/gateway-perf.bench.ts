@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — PolicyGateway performance benchmarks.
+ * NOSIH Protocol — PolicyGateway performance benchmarks.
  *
  * Measures PolicyGateway.intercept() latency at p50/p99 for all hot paths.
  * Goal: prove the gateway adds <1ms p99 overhead to robotics control loops.
@@ -17,7 +17,7 @@ import {
   RevocationStore,
 } from "@pshkv/gate-capability-tokens";
 import { InMemoryRateLimitStore } from "@pshkv/persistence";
-import type { SintCapabilityToken, SintCapabilityTokenRequest, SintRequest } from "@pshkv/core";
+import type { NosihCapabilityToken, NosihCapabilityTokenRequest, NosihRequest } from "@pshkv/core";
 
 // ── Shared setup (runs once, not per iteration) ─────────────────────────────
 
@@ -34,8 +34,8 @@ function pastISO(hoursAgo: number): string {
 const root = generateKeypair();
 const agent = generateKeypair();
 
-function issueToken(overrides: Partial<SintCapabilityTokenRequest>): SintCapabilityToken {
-  const req: SintCapabilityTokenRequest = {
+function issueToken(overrides: Partial<NosihCapabilityTokenRequest>): NosihCapabilityToken {
+  const req: NosihCapabilityTokenRequest = {
     issuer: root.publicKey,
     subject: agent.publicKey,
     resource: "ros2:///camera/front",
@@ -103,7 +103,7 @@ const expiredToken = {
 const revocationStore = new RevocationStore();
 const rateLimitStore = new InMemoryRateLimitStore();
 
-const tokenStore = new Map<string, SintCapabilityToken>([
+const tokenStore = new Map<string, NosihCapabilityToken>([
   [t0Token.tokenId, t0Token],
   [t1Token.tokenId, t1Token],
   [t2Token.tokenId, t2Token],
@@ -127,8 +127,8 @@ function makeRequest(
   resource: string,
   action: string,
   params: Record<string, unknown> = {},
-  physicalContext?: SintRequest["physicalContext"],
-): SintRequest {
+  physicalContext?: NosihRequest["physicalContext"],
+): NosihRequest {
   return {
     requestId: generateUUIDv7(),
     timestamp: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000Z"),

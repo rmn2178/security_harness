@@ -1,5 +1,5 @@
 /**
- * SINT Persistence — Redis Store tests.
+ * NOSIH Persistence — Redis Store tests.
  *
  * These tests require a running Redis instance.
  * Set REDIS_URL env var to run them.

@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — Physical Constraint Checker.
+ * NOSIH Protocol — Physical Constraint Checker.
  *
  * Validates that a request's parameters don't violate the
  * physical constraints in the agent's capability token.
@@ -7,13 +7,13 @@
  * This is called BEFORE every physical action. Skipping
  * this check is a safety hazard.
  *
- * @module @sint/gate-policy-gateway/constraint-checker
+ * @module @nosih/gate-policy-gateway/constraint-checker
  */
 
 import type {
   Result,
-  SintCapabilityToken,
-  SintRequest,
+  NosihCapabilityToken,
+  NosihRequest,
 } from "@pshkv/core";
 import { ok, err } from "@pshkv/core";
 import {
@@ -30,12 +30,12 @@ export interface ConstraintViolation {
 }
 
 /**
- * Extract physical action context from a SINT request.
+ * Extract physical action context from a NOSIH request.
  * Maps request params and physical context to the format
  * expected by the constraint validator.
  */
 export function extractPhysicalContext(
-  request: SintRequest,
+  request: NosihRequest,
 ): PhysicalActionContext {
   return {
     commandedForceNewtons:
@@ -82,8 +82,8 @@ export interface EnvelopeOverrides {
  * ```
  */
 export function checkConstraints(
-  token: SintCapabilityToken,
-  request: SintRequest,
+  token: NosihCapabilityToken,
+  request: NosihRequest,
   overrides?: EnvelopeOverrides,
 ): Result<true, ConstraintViolation[]> {
   const context = extractPhysicalContext(request);

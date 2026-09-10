@@ -1,5 +1,5 @@
 /**
- * SINT Protocol — ASI06 Memory Integrity Check.
+ * NOSIH Protocol — ASI06 Memory Integrity Check.
  *
  * Detects signs of memory/context poisoning in agent requests.
  * Checks recentActions history for anomalies:
@@ -13,7 +13,7 @@
  * 8. Action velocity loop (>15 actions with last 5 all on identical resource → hallucination loop)
  */
 
-import type { SintRequest } from "@pshkv/core";
+import type { NosihRequest } from "@pshkv/core";
 
 export interface MemoryIntegrityResult {
   readonly poisoned: boolean;
@@ -22,7 +22,7 @@ export interface MemoryIntegrityResult {
 }
 
 export interface MemoryIntegrityPlugin {
-  check(request: SintRequest): MemoryIntegrityResult;
+  check(request: NosihRequest): MemoryIntegrityResult;
 }
 
 /** Patterns that indicate unauthorized privilege claims in history strings. */
@@ -232,7 +232,7 @@ export class DefaultMemoryIntegrityChecker implements MemoryIntegrityPlugin {
     this.maxRepetitions = config?.maxRepetitions ?? 5;
   }
 
-  check(request: SintRequest): MemoryIntegrityResult {
+  check(request: NosihRequest): MemoryIntegrityResult {
     const anomalies: string[] = [];
     let highSeverity = false;
     let mediumSeverity = false;
